@@ -15,9 +15,6 @@
             android:name=".SavedBuildsActivity"
             android:exported="false" />
         <activity
-            android:name=".SkillDetailsActivity"
-            android:exported="false" />
-        <activity
             android:name=".SkillListActivity"
             android:exported="false" />
         <activity
