@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kodegoskillsimulatorapp.adapter.SkillAdapter
 import com.example.kodegoskillsimulatorapp.dao.SkillDAO
 import com.example.kodegoskillsimulatorapp.dao.SkillDAOSQLImpl
@@ -16,30 +17,25 @@ class SkillListActivity : AppCompatActivity() {
     private lateinit var dao: SkillDAO
     private var skills: ArrayList<Skill> = ArrayList()
     private val maxSkillPoints = 49
-    private var jobclassData: Int = 1
-    private var jobclassData2: String = "Knight"
+    private var jobclassData: Int = 0
+    private var jobclassName: String = "Knight"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySkillListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        val bundle = intent.extras
-//        jobclassData =  bundle!!.getInt("itemposition",0)
-//        jobclassData2 =  bundle!!.getString("jobclassname","Knight")
+        val bundle = intent.extras
+        jobclassData =  bundle!!.getInt("item_position",0)
+        jobclassName =  bundle!!.getString("jobclass_name","Knight")
 
-        supportActionBar?.title = "Class Name"
+        supportActionBar?.title = jobclassName
 
 //        binding.skillpointsTotal.text = " / ${maxSkillPoints.toString()}"
 
         dao = SkillDAOSQLImpl(applicationContext)
         skillSimulatorSetup(dao, jobclassData)
 
-        binding.tempbutton.setOnClickListener{
-            val goToNextActivity = Intent(this, SavedBuildsActivity::class.java)
-            startActivity(goToNextActivity)
-            finish()
-        }
     }
 
 //    override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -61,7 +57,8 @@ class SkillListActivity : AppCompatActivity() {
     private fun skillSimulatorSetup(dao: SkillDAO, jobclassData: Int) {
         skills = jobclassData.let { dao.getSkillPerJob(it) }!!
         skillAdapter = SkillAdapter(skills, this)
-        binding.skillList.layoutManager = GridLayoutManager(applicationContext,2)
+//        binding.skillList.layoutManager = GridLayoutManager(applicationContext,2)
+        binding.skillList.layoutManager = LinearLayoutManager(applicationContext)
         binding.skillList.adapter = skillAdapter
 //        setSkillPointsLabelToDefault()
     }

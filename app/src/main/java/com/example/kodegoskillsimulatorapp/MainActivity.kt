@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
         binding.spinnerSelectGame.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 gameSelectedId = position
-                Log.i("game_selected", gameSelected)
+                Log.i("game_selected", parent.selectedItemPosition.toString())
                 Log.i("game_id", position.toString())
             }
 
@@ -52,14 +52,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
-
         binding.btnContinue.setOnClickListener{
             val goToNextActivity = Intent(this, SelectClassActivity::class.java)
             goToNextActivity.putExtra("data_game_name", gameSelected)
             goToNextActivity.putExtra("data_game_id", gameSelectedId)
             startActivity(goToNextActivity)
-            finish()
         }
     }
 }

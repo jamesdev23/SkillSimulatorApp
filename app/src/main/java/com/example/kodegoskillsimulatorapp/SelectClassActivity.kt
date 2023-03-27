@@ -21,21 +21,14 @@ class SelectClassActivity : AppCompatActivity() {
         binding = ActivitySelectClassBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        var gameID = intent!!.getIntExtra("data_game_id",0)
-
+        val bundle = intent.extras
+        val gameID = bundle!!.getInt("data_game_id",0)
         supportActionBar?.title = "Select Class"
 
         dao = JobClassDAOSQLImpl(applicationContext)
         jobClasses = dao.getJobclassPerGame(gameID)
-
         jobClassAdapter = JobClassAdapter(jobClasses, this)
         binding.classList.layoutManager = LinearLayoutManager(applicationContext)
         binding.classList.adapter = jobClassAdapter
-
-        binding.tempbutton.setOnClickListener{
-            val goToNextActivity = Intent(this, SkillListActivity::class.java)
-            startActivity(goToNextActivity)
-            finish()
-        }
     }
 }

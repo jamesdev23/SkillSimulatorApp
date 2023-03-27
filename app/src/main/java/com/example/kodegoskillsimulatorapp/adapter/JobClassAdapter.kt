@@ -55,8 +55,8 @@ class JobClassAdapter (var jobClasses: ArrayList<JobClass>, var activity: Activi
             val intent = Intent(activity.applicationContext, SkillListActivity::class.java)
 
             val bundle = Bundle()
-            bundle.putInt("itemposition", position)
-            bundle.putString("jobclassname", jobClasses[position].name)
+            bundle.putInt("item_position", position)
+            bundle.putString("jobclass_name", jobClasses[position].name)
             intent.putExtras(bundle)
 
             activity.startActivity(intent)
@@ -82,6 +82,5 @@ class JobClassAdapter (var jobClasses: ArrayList<JobClass>, var activity: Activi
         override fun onClick(v: View?) {
             // onClick code goes here...
         }
-//        private fun toast(text:String) = Toast.makeText(activity.applicationContext, text, Toast.LENGTH_SHORT).show()
     }
 }
