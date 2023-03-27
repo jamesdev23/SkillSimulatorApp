@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.recyclerview.widget.RecyclerView
-import com.example.kodegoskillsimulatorapp.SkillListActivity
 import com.example.kodegoskillsimulatorapp.databinding.SkillItemBinding
 import com.example.kodegoskillsimulatorapp.model.Skill
 //var observer: SkillBarObserver
@@ -69,14 +68,14 @@ class SkillAdapter(var skills: ArrayList<Skill>, var activity: Activity, )
             this.skill = skill
 
             if(skill.skillType1.equals("Quest", ignoreCase = true)){
-                itemBinding.skillBar.progress = skill.level
+                itemBinding.skillBar.progress = skill.maxLevel
                 itemBinding.skillBar.isClickable = false
                 Log.d("value of quest skill", skill.skillType1.toString())
             }
 
             itemBinding.skillName.text = skill.name
             itemBinding.skillBar.progress = skill.currentLevel
-            itemBinding.skillBar.max = skill.level
+            itemBinding.skillBar.max = skill.maxLevel
             itemBinding.skillIcon.setImageBitmap(skill.icon)
             itemBinding.skillValue.text = skill.currentLevel.toString()
 

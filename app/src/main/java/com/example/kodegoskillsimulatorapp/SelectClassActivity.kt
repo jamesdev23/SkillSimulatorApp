@@ -21,10 +21,12 @@ class SelectClassActivity : AppCompatActivity() {
         binding = ActivitySelectClassBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        var gameID = intent!!.getIntExtra("data_game_id",0)
+
         supportActionBar?.title = "Select Class"
 
         dao = JobClassDAOSQLImpl(applicationContext)
-        jobClasses = dao.getJobclass()
+        jobClasses = dao.getJobclassPerGame(gameID)
 
         jobClassAdapter = JobClassAdapter(jobClasses, this)
         binding.classList.layoutManager = LinearLayoutManager(applicationContext)

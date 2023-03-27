@@ -11,7 +11,7 @@ import com.example.kodegoskillsimulatorapp.model.JobClass
 
 interface JobClassDAO {
     fun addJobclass(jobClass: JobClass)
-    fun getJobclass(): ArrayList<JobClass>
+    fun getJobclassPerGame(gameId: Int): ArrayList<JobClass>
     fun updateJobClass(jobClassId: Int, jobClass: JobClass)
     fun deleteJobClass(jobClassId: Int)
     fun getImage(cursor: Cursor, jobClass: JobClass)
@@ -30,7 +30,7 @@ class JobClassDAOSQLImpl(var context: Context): JobClassDAO {
         db.close()
     }
 
-    override fun getJobclass(): ArrayList<JobClass> {
+    override fun getJobclassPerGame(gameId: Int): ArrayList<JobClass> {
         val jobClassList: ArrayList<JobClass> = ArrayList()
 
         var databaseHandler: DatabaseHandler = DatabaseHandler(context)
@@ -41,16 +41,17 @@ class JobClassDAOSQLImpl(var context: Context): JobClassDAO {
             DatabaseHandler.jobclassId,
             DatabaseHandler.jobclassName,
             DatabaseHandler.jobclassType,
-            DatabaseHandler.jobclassImage,
-            DatabaseHandler.jobclassDescription
+            DatabaseHandler.jobclassDescription,
+            DatabaseHandler.jobclassImage
         )
 
         try{
+            val values = arrayOf("$gameId")
             cursor = db.query(
                 DatabaseHandler.tableJobclasses,
                 columns,
-                null,
-                null,
+                "${DatabaseHandler.classGameId} = ?",
+                values,
                 null,
                 null,
                 null
@@ -68,12 +69,10 @@ class JobClassDAOSQLImpl(var context: Context): JobClassDAO {
                 jobClass.id = cursor.getInt(0)
                 jobClass.name = cursor.getString(1)
                 jobClass.type = cursor.getString(2)
+                jobClass.description = cursor.getString(3)
 
                 // calls function to get image and process it to bitmap
                 getImage(cursor,jobClass)
-
-                jobClass.description = cursor.getString(4)
-
 
                 jobClassList.add(jobClass)
 
@@ -85,7 +84,7 @@ class JobClassDAOSQLImpl(var context: Context): JobClassDAO {
     }
 
     override fun updateJobClass(jobClassId: Int, jobClass: JobClass) {
-        var databaseHandler: DatabaseHandler = DatabaseHandler(context)
+        val databaseHandler: DatabaseHandler = DatabaseHandler(context)
         val db = databaseHandler.writableDatabase
 
         val contentValues = ContentValues()

@@ -26,7 +26,7 @@ class SkillDAOSQLImpl(var context: Context): SkillDAO {
 
         val contentValues = ContentValues()
         contentValues.put(DatabaseHandler.skillName, skill.name)
-        contentValues.put(DatabaseHandler.skillMaxLevel, skill.level)
+        contentValues.put(DatabaseHandler.skillMaxLevel, skill.maxLevel)
 
         val success = db.insert(DatabaseHandler.tableSkills,null,contentValues)
         db.close()
@@ -66,7 +66,7 @@ class SkillDAOSQLImpl(var context: Context): SkillDAO {
                 skill = Skill()
                 skill.id = cursor.getInt(2)
                 skill.name = cursor.getString(0)
-                skill.level = cursor.getInt(1)
+                skill.maxLevel = cursor.getInt(1)
 
                 skillList.add(skill)
             }while(cursor.moveToNext())
@@ -118,7 +118,7 @@ class SkillDAOSQLImpl(var context: Context): SkillDAO {
                 skill.id = cursor.getInt(0)
                 skill.jobClassSkillID = cursor.getInt(1)
                 skill.name = cursor.getString(2)
-                skill.level = cursor.getInt(3)
+                skill.maxLevel = cursor.getInt(3)
                 getIcon(cursor,skill)
 
                 skillList.add(skill)
@@ -135,7 +135,7 @@ class SkillDAOSQLImpl(var context: Context): SkillDAO {
 
         val contentValues = ContentValues()
         contentValues.put(DatabaseHandler.skillName, skill.name)
-        contentValues.put(DatabaseHandler.skillMaxLevel, skill.level)
+        contentValues.put(DatabaseHandler.skillMaxLevel, skill.maxLevel)
 
         val values = arrayOf("$skillId")
         val success = db.update(
