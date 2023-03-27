@@ -17,6 +17,7 @@ class SavedBuildsActivity : AppCompatActivity() {
         binding.tempbutton.setOnClickListener{
             val goToNextActivity = Intent(this, MainActivity::class.java)
             startActivity(goToNextActivity)
+            finish()
         }
     }
 }
