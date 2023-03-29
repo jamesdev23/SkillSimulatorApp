@@ -28,7 +28,6 @@ class GameDAOSQLImpl(var context: Context): GameDAO {
 
         val contentValues = ContentValues()
         contentValues.put(DatabaseHandler.gameName, game.name)
-        // temporary game icon
         contentValues.put(DatabaseHandler.gameIconText, defaultGameIcon)
 
         val success = db.insert(DatabaseHandler.tableGames,null,contentValues)

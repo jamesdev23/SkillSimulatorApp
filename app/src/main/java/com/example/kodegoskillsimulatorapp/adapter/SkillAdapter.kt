@@ -7,8 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.recyclerview.widget.RecyclerView
+import com.example.kodegoskillsimulatorapp.dao.JobClassDAO
+import com.example.kodegoskillsimulatorapp.dao.JobClassDAOSQLImpl
+import com.example.kodegoskillsimulatorapp.dao.SkillDAO
+import com.example.kodegoskillsimulatorapp.dao.SkillDAOSQLImpl
 import com.example.kodegoskillsimulatorapp.databinding.SkillItemBinding
 import com.example.kodegoskillsimulatorapp.model.Skill
+import com.google.android.material.snackbar.Snackbar
+
 //var observer: SkillBarObserver
 class SkillAdapter(var skills: ArrayList<Skill>, var activity: Activity, )
     : RecyclerView.Adapter<SkillAdapter.SkillViewHolder>() {
@@ -67,19 +73,25 @@ class SkillAdapter(var skills: ArrayList<Skill>, var activity: Activity, )
         fun bindSkill(skill: Skill) {
             this.skill = skill
 
-            if(skill.skillType.equals("Quest", ignoreCase = true)){
-                itemBinding.skillBar.progress = skill.maxLevel
-                itemBinding.skillBar.isClickable = false
-                Log.d("value of quest skill", skill.skillType.toString())
-            }
-
             itemBinding.skillName.text = skill.name
             itemBinding.skillBar.progress = skill.currentLevel
             itemBinding.skillBar.max = skill.maxLevel
             itemBinding.skillIcon.setImageBitmap(skill.icon)
             itemBinding.skillValue.text = skill.currentLevel.toString()
+            itemBinding.btnDeleteRow.setOnClickListener {
+                Snackbar.make(
+                    itemBinding.root,
+                    "Delete by button",
+                    Snackbar.LENGTH_SHORT
+                ).show()
 
-            skillPointsList[adapterPosition] = itemBinding.skillBar.progress
+                var dao: SkillDAO = SkillDAOSQLImpl(it.context)
+                bindSkill(skill)
+                dao.deleteSkill(skill.id)
+                removeSkill(adapterPosition)
+            }
+
+//            skillPointsList[adapterPosition] = itemBinding.skillBar.progress
 
             Log.i("skill 1 progress value", skillPointsList[0].toString())
             Log.i("skill 2 progress value", skillPointsList[1].toString())
@@ -88,14 +100,14 @@ class SkillAdapter(var skills: ArrayList<Skill>, var activity: Activity, )
             itemBinding.skillBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
 
-                    if (fromUser) {
-                        saveSkillBarProgress(itemBinding, adapterPosition, progress)
-                    }
+//                    if (fromUser) {
+//                        saveSkillBarProgress(itemBinding, adapterPosition, progress)
+//                    }
                 }
 
                 override fun onStartTrackingTouch(seekBar: SeekBar?) {}
                 override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                    setSeekbarWhenOutOfScreen(adapterPosition, seekBar!!.progress)
+//                    setSeekbarWhenOutOfScreen(adapterPosition, seekBar!!.progress)
                 }
 
 

@@ -8,8 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kodegoskillsimulatorapp.SkillListActivity
+import com.example.kodegoskillsimulatorapp.dao.GameDAO
+import com.example.kodegoskillsimulatorapp.dao.GameDAOSQLImpl
+import com.example.kodegoskillsimulatorapp.dao.JobClassDAO
+import com.example.kodegoskillsimulatorapp.dao.JobClassDAOSQLImpl
 import com.example.kodegoskillsimulatorapp.databinding.JobClassItemBinding
 import com.example.kodegoskillsimulatorapp.model.JobClass
+import com.google.android.material.snackbar.Snackbar
 
 class JobClassAdapter (var jobClasses: ArrayList<JobClass>, var activity: Activity)
     : RecyclerView.Adapter<JobClassAdapter.JobClassViewHolder>() {
@@ -55,10 +60,10 @@ class JobClassAdapter (var jobClasses: ArrayList<JobClass>, var activity: Activi
             val intent = Intent(activity.applicationContext, SkillListActivity::class.java)
 
             val bundle = Bundle()
-            bundle.putInt("item_position", position)
-            bundle.putString("jobclass_name", jobClasses[position].name)
+            bundle.putInt("data_jobclass_id", position)
+            bundle.putInt("data_game_id", jobClasses[position].gameId)
+            bundle.putString("data_jobclass_name", jobClasses[position].name)
             intent.putExtras(bundle)
-
             activity.startActivity(intent)
         }
     }
@@ -76,7 +81,19 @@ class JobClassAdapter (var jobClasses: ArrayList<JobClass>, var activity: Activi
             this.jobClass = jobClass
 
             itemBinding.jobclassName.text = "${jobClass.name}"
-//            itemBinding.jobclassPicture.setImageBitmap(jobClass.img)
+            itemBinding.jobclassPicture.setImageBitmap(jobClass.img)
+            itemBinding.btnDeleteRow.setOnClickListener {
+                Snackbar.make(
+                    itemBinding.root,
+                    "Delete by button",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+
+                var dao: JobClassDAO = JobClassDAOSQLImpl(it.context)
+                bindJobClass(jobClass)
+                dao.deleteJobClass(jobClass.id)
+                removeJobClass(adapterPosition)
+            }
         }
 
         override fun onClick(v: View?) {

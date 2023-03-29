@@ -35,7 +35,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        supportActionBar?.hide()
+        supportActionBar?.title = "Skill Simulator - Select a Game"
+        supportActionBar?.displayOptions
 
         dao = GameDAOSQLImpl(applicationContext)
         games = dao.getGames()
@@ -44,10 +45,21 @@ class MainActivity : AppCompatActivity() {
         binding.gameList.layoutManager = LinearLayoutManager(applicationContext)
         binding.gameList.adapter = gameAdapter
 
-        binding.btnAddGame.setOnClickListener {
-            dialogAddGame(it.context)
-        }
+    }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_add_game -> {
+                dialogAddGame(this)
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
     }
 
     private fun dialogAddGame(context: Context){
@@ -55,10 +67,6 @@ class MainActivity : AppCompatActivity() {
             val builder = android.app.AlertDialog.Builder(it)
             val dialogAddGameBinding: DialogAddGameBinding =
                 DialogAddGameBinding.inflate(LayoutInflater.from(it))
-
-            with(dialogAddGameBinding) {
-                textGameName.setText("Custom Game")
-            }
 
             with(builder) {
                 setPositiveButton("Add", DialogInterface.OnClickListener { _, _ ->

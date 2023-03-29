@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:padding="5sp"
-        android:text="Add Class"
+        android:text="Add Skill"
         android:textSize="20sp" />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -18,11 +18,11 @@
         android:padding="5sp">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edit_class_name"
+            android:id="@+id/edit_skill_name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="Class Name"
-            android:text="Class Name"
+            android:hint="Skill Name"
+            android:text="Skill Name"
             android:maxLines="1" />
 
 
@@ -34,11 +34,12 @@
         android:padding="5sp">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edit_class_type"
+            android:id="@+id/edit_skill_max_level"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="Class Type"
-            android:text="Type"
+            android:inputType="number"
+            android:hint="Max. Level"
+            android:text="10"
             android:maxLines="1" />
 
 
@@ -50,11 +51,28 @@
         android:padding="5sp">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edit_class_description"
+            android:id="@+id/edit_skill_min_level"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="Class Description"
-            android:text="Description"
+            android:inputType="number"
+            android:hint="Min. Level"
+            android:text="1"
+            android:maxLines="1" />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5sp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_skill_description"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Description"
+            android:text="Skill Description"
             android:maxLines="1" />
 
 
