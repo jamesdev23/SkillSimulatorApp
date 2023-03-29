@@ -76,7 +76,7 @@ class JobClassAdapter (var jobClasses: ArrayList<JobClass>, var activity: Activi
             this.jobClass = jobClass
 
             itemBinding.jobclassName.text = "${jobClass.name}"
-            itemBinding.jobclassPicture.setImageBitmap(jobClass.img)
+//            itemBinding.jobclassPicture.setImageBitmap(jobClass.img)
         }
 
         override fun onClick(v: View?) {

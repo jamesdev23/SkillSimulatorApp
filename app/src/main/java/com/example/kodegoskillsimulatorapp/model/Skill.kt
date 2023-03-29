@@ -11,7 +11,6 @@ class Skill {
     var minLevel: Int = 0
     var currentLevel: Int = 0
     var jobClassSkillID: Int = 0
-    var skillType1: String = "Skill Type 1"
-    var skillType2: String = "Skill Type 2"
+    var skillType: String = "Skill Type"
 
 }

@@ -6,6 +6,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteException
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.provider.ContactsContract.Data
 import android.util.Log
 import com.example.kodegoskillsimulatorapp.model.Game
 import com.example.kodegoskillsimulatorapp.model.JobClass
@@ -29,7 +30,11 @@ class JobClassDAOSQLImpl(var context: Context): JobClassDAO {
 
         val contentValues = ContentValues()
         contentValues.put(DatabaseHandler.jobclassName, jobClass.name)
+        contentValues.put(DatabaseHandler.classGameId, jobClass.gameId)
+        contentValues.put(DatabaseHandler.jobclassType, jobClass.type)
+        contentValues.put(DatabaseHandler.jobclassDescription, jobClass.description)
         contentValues.put(DatabaseHandler.jobclassImage, defaultClassImage)
+
 
 
         val success = db.insert(DatabaseHandler.tableJobclasses,null,contentValues)

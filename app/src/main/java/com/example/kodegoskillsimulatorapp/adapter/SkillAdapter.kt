@@ -67,10 +67,10 @@ class SkillAdapter(var skills: ArrayList<Skill>, var activity: Activity, )
         fun bindSkill(skill: Skill) {
             this.skill = skill
 
-            if(skill.skillType1.equals("Quest", ignoreCase = true)){
+            if(skill.skillType.equals("Quest", ignoreCase = true)){
                 itemBinding.skillBar.progress = skill.maxLevel
                 itemBinding.skillBar.isClickable = false
-                Log.d("value of quest skill", skill.skillType1.toString())
+                Log.d("value of quest skill", skill.skillType.toString())
             }
 
             itemBinding.skillName.text = skill.name
