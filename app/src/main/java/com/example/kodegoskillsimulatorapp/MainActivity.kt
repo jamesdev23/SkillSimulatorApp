@@ -1,24 +1,34 @@
 package com.example.kodegoskillsimulatorapp
 
-import android.content.Intent
+import android.content.Context
+import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.kodegoskillsimulatorapp.adapter.GameAdapter
 import com.example.kodegoskillsimulatorapp.dao.GameDAO
 import com.example.kodegoskillsimulatorapp.dao.GameDAOSQLImpl
+import com.example.kodegoskillsimulatorapp.dao.JobClassDAO
+import com.example.kodegoskillsimulatorapp.dao.JobClassDAOSQLImpl
 import com.example.kodegoskillsimulatorapp.databinding.ActivityMainBinding
+import com.example.kodegoskillsimulatorapp.databinding.DialogAddGameBinding
 import com.example.kodegoskillsimulatorapp.model.Game
+import com.example.kodegoskillsimulatorapp.model.JobClass
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+
     private lateinit var dao: GameDAO
+    private lateinit var gameAdapter: GameAdapter
     private var games: ArrayList<Game> = ArrayList()
     private var gameNames: ArrayList<String> = ArrayList()
-    private var gameSelected: String = ""
-    private var gameSelectedId: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,34 +39,50 @@ class MainActivity : AppCompatActivity() {
 
         dao = GameDAOSQLImpl(applicationContext)
         games = dao.getGames()
-        for (game in games) {
-            gameNames.add(game.name)
+        gameAdapter = GameAdapter(games, this)
+        Log.d("game list", games.toString())
+        binding.gameList.layoutManager = LinearLayoutManager(applicationContext)
+        binding.gameList.adapter = gameAdapter
+
+        binding.btnAddGame.setOnClickListener {
+            dialogAddGame(it.context)
         }
 
-        val gameListAdapter = ArrayAdapter<String>(this,
-            androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, gameNames)
-        gameListAdapter.setDropDownViewResource(
-            androidx.appcompat.R.layout.support_simple_spinner_dropdown_item)
-        binding.spinnerSelectGame.adapter = gameListAdapter
+    }
 
+    private fun dialogAddGame(context: Context){
+        context.let {
+            val builder = android.app.AlertDialog.Builder(it)
+            val dialogAddGameBinding: DialogAddGameBinding =
+                DialogAddGameBinding.inflate(LayoutInflater.from(it))
 
-        binding.spinnerSelectGame.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                gameSelectedId = position
-                Log.i("game_selected", parent.selectedItemPosition.toString())
-                Log.i("game_id", position.toString())
+            with(dialogAddGameBinding) {
+                textGameName.setText("Custom Game")
             }
 
-            override fun onNothingSelected(parent: AdapterView<*>) {
-                // Code to handle nothing selected
-            }
-        }
+            with(builder) {
+                setPositiveButton("Add", DialogInterface.OnClickListener { _, _ ->
+                    val dao: GameDAO = GameDAOSQLImpl(it)
+                    val newGame = Game()
 
-        binding.btnContinue.setOnClickListener{
-            val goToNextActivity = Intent(this, SelectClassActivity::class.java)
-            goToNextActivity.putExtra("data_game_name", gameSelected)
-            goToNextActivity.putExtra("data_game_id", gameSelectedId)
-            startActivity(goToNextActivity)
+                    val addGameName =
+                        dialogAddGameBinding.textGameName.text.toString()
+
+                    newGame.name = addGameName
+
+                    dao.addGame(newGame)
+                    gameAdapter.updateGame(dao.getGames())
+                    gameAdapter.notifyDataSetChanged()
+                })
+                setNegativeButton("Cancel", DialogInterface.OnClickListener { _, _ ->
+                    // Do something when user press the positive button
+                })
+                    .setView(dialogAddGameBinding.root)
+                    .create()
+                    .show()
+            }
         }
     }
+
+
 }

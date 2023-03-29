@@ -11,19 +11,20 @@
     android:orientation="vertical"
     android:weightSum="10">
 
-    <androidx.appcompat.widget.SearchView
-        android:layout_width="match_parent"
+    <Button
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:id="@+id/skill_search"
-        android:hint="Search skill (Ex. Knight)"
-        android:layout_weight="1"/>
+        android:id="@+id/btn_add_class"
+        android:text="Add Class"
+        android:layout_weight="1"
+        />
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:id="@+id/class_list"
-        android:layout_weight="9"
+        android:layout_weight="8"
         />
 
 </LinearLayout>

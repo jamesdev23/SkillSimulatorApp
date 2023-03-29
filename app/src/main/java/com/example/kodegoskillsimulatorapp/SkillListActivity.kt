@@ -17,8 +17,6 @@ class SkillListActivity : AppCompatActivity() {
     private lateinit var dao: SkillDAO
     private var skills: ArrayList<Skill> = ArrayList()
     private val maxSkillPoints = 49
-    private var jobclassData: Int = 0
-    private var jobclassName: String = "Knight"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,15 +24,15 @@ class SkillListActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val bundle = intent.extras
-        jobclassData =  bundle!!.getInt("item_position",0)
-        jobclassName =  bundle!!.getString("jobclass_name","Knight")
+        val jobClassId = bundle!!.getInt("data_jobclass_id",0)
+        val jobClassName = bundle!!.getString("data_jobclass_name")
 
-        supportActionBar?.title = jobclassName
+        supportActionBar?.title = jobClassName
 
 //        binding.skillpointsTotal.text = " / ${maxSkillPoints.toString()}"
 
         dao = SkillDAOSQLImpl(applicationContext)
-        skillSimulatorSetup(dao, jobclassData)
+        skillSimulatorSetup(dao, jobClassId)
 
     }
 
