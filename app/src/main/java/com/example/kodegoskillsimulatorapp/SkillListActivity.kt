@@ -11,14 +11,10 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kodegoskillsimulatorapp.adapter.SkillAdapter
-import com.example.kodegoskillsimulatorapp.dao.JobClassDAO
-import com.example.kodegoskillsimulatorapp.dao.JobClassDAOSQLImpl
 import com.example.kodegoskillsimulatorapp.dao.SkillDAO
 import com.example.kodegoskillsimulatorapp.dao.SkillDAOSQLImpl
 import com.example.kodegoskillsimulatorapp.databinding.ActivitySkillListBinding
-import com.example.kodegoskillsimulatorapp.databinding.DialogAddClassBinding
 import com.example.kodegoskillsimulatorapp.databinding.DialogAddSkillBinding
-import com.example.kodegoskillsimulatorapp.model.JobClass
 import com.example.kodegoskillsimulatorapp.model.Skill
 
 class SkillListActivity : AppCompatActivity() {
@@ -36,17 +32,23 @@ class SkillListActivity : AppCompatActivity() {
         binding = ActivitySkillListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val bundle = intent.extras
-        jobClassID = bundle!!.getInt("data_jobclass_id",0)
-        gameID = bundle!!.getInt("data_game_id", 0)
-        jobClassName = bundle!!.getString("data_jobclass_name").toString()
+        jobClassID = intent.extras!!.getInt("data_jobclass1",0)
+        gameID = intent.extras!!.getInt("data_game1", 0)
+        jobClassName = intent.extras!!.getString("data_jobclass2").toString()
+        Log.i("skilllist class id", jobClassID.toString())
+        Log.i("skilllist game id", gameID.toString())
+        Log.i("skilllist class name", jobClassName)
 
         supportActionBar?.title = jobClassName
 
 //        binding.skillpointsTotal.text = " / ${maxSkillPoints.toString()}"
 
         dao = SkillDAOSQLImpl(applicationContext)
-        skillSimulatorSetup(dao, gameID, jobClassID)
+        skills = dao.getSkillPerJob(gameID, jobClassID)
+        skillAdapter = SkillAdapter(skills, this)
+        binding.skillList.layoutManager = LinearLayoutManager(applicationContext)
+        binding.skillList.adapter = skillAdapter
+//        setSkillPointsLabelToDefault()
 
     }
 
@@ -63,15 +65,6 @@ class SkillListActivity : AppCompatActivity() {
             }
             else -> return super.onOptionsItemSelected(item)
         }
-    }
-
-    private fun skillSimulatorSetup(dao: SkillDAO, gameID: Int, jobClassID: Int) {
-        skills = dao.getSkillPerJob(gameID, jobClassID)
-        skillAdapter = SkillAdapter(skills, this)
-//        binding.skillList.layoutManager = GridLayoutManager(applicationContext,2)
-        binding.skillList.layoutManager = LinearLayoutManager(applicationContext)
-        binding.skillList.adapter = skillAdapter
-//        setSkillPointsLabelToDefault()
     }
     
     
@@ -136,13 +129,13 @@ class SkillListActivity : AppCompatActivity() {
                     newSkill.maxLevel = addSkillMaxLevel.toInt()
                     newSkill.minLevel = addSkillMinLevel.toInt()
                     newSkill.description = addSkillDescription
-                    Log.i("class name", newSkill.name)
-                    Log.i("class game id", gameID.toString())
 
                     dao.addSkill(newSkill)
                     Log.i("new class", newSkill.name)
+                    Log.i("class game id", gameID.toString())
+                    Log.i("class id", jobClassID.toString())
 
-                    var newSkills = dao.getSkillPerJob(newSkill.gameId, newSkill.jobClassId)
+                    var newSkills = dao.getSkillPerJob(gameID, jobClassID)
                     Log.i("skill list", newSkills.toString())
                     skillAdapter.updateSkill(newSkills)
                     skillAdapter.notifyDataSetChanged()

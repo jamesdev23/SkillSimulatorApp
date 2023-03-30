@@ -32,11 +32,9 @@ class JobClassDAOSQLImpl(var context: Context): JobClassDAO {
         val contentValues = ContentValues()
         contentValues.put(DatabaseHandler.jobclassName, jobClass.name)
         contentValues.put(DatabaseHandler.classGameId, jobClass.gameId)
-        contentValues.put(DatabaseHandler.jobclassType, jobClass.type)
+        contentValues.put(DatabaseHandler.jobclassType, "type")
         contentValues.put(DatabaseHandler.jobclassDescription, jobClass.description)
         contentValues.put(DatabaseHandler.jobclassImage, defaultClassImage)
-
-
 
         val success = db.insert(DatabaseHandler.tableJobclasses,null,contentValues)
         db.close()
@@ -64,7 +62,7 @@ class JobClassDAOSQLImpl(var context: Context): JobClassDAO {
                 null,
                 null,
                 null,
-                null
+                DatabaseHandler.jobclassId
             )
 
         } catch (e: SQLiteException) {

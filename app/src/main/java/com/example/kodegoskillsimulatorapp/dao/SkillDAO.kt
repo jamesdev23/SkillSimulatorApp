@@ -85,8 +85,6 @@ class SkillDAOSQLImpl(var context: Context): SkillDAO {
     }
 
     override fun getSkillPerJob(gameID: Int, jobclassID: Int): ArrayList<Skill> {
-        Log.i("from getskillperjob game id", gameID.toString())
-        Log.i("from getskillperjob jobclass id", jobclassID.toString())
         val skillList: ArrayList<Skill> = ArrayList()
         val newGameID = gameID.toString()
         val newJobclassID = jobclassID.toString()
@@ -100,7 +98,7 @@ class SkillDAOSQLImpl(var context: Context): SkillDAO {
             DatabaseHandler.skillIcon
         )
 
-        val values = arrayOf(newGameID,newJobclassID)
+        val values = arrayOf(newJobclassID, newGameID)
 
         var databaseHandler: DatabaseHandler = DatabaseHandler(context)
         val db = databaseHandler.readableDatabase
@@ -110,7 +108,7 @@ class SkillDAOSQLImpl(var context: Context): SkillDAO {
             cursor = db.query(
                 DatabaseHandler.tableSkills,
                 columns,
-                "${DatabaseHandler.skillGameID} = ? AND ${DatabaseHandler.skillJobclassID} = ?",
+                "${DatabaseHandler.skillJobclassID} = ? AND ${DatabaseHandler.skillGameID} = ?",
                 values,
                 null,
                 null,

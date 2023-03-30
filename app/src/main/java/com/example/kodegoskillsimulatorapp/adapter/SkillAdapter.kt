@@ -1,14 +1,11 @@
 package com.example.kodegoskillsimulatorapp.adapter
 
 import android.app.Activity
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.recyclerview.widget.RecyclerView
-import com.example.kodegoskillsimulatorapp.dao.JobClassDAO
-import com.example.kodegoskillsimulatorapp.dao.JobClassDAOSQLImpl
 import com.example.kodegoskillsimulatorapp.dao.SkillDAO
 import com.example.kodegoskillsimulatorapp.dao.SkillDAOSQLImpl
 import com.example.kodegoskillsimulatorapp.databinding.SkillItemBinding
@@ -20,8 +17,7 @@ class SkillAdapter(var skills: ArrayList<Skill>, var activity: Activity, )
     : RecyclerView.Adapter<SkillAdapter.SkillViewHolder>() {
 
     // Declare a list to hold the progress of each SeekBar
-    private val skillPointsList: MutableList<Int> = MutableList(itemCount) { 0 }
-
+    private val skillPointsList: MutableList<Int> = MutableList(itemCount+1){ 0 }
     fun addSkill(skill: Skill){
         skills.add(0,skill)
         notifyItemInserted(0)
@@ -91,23 +87,19 @@ class SkillAdapter(var skills: ArrayList<Skill>, var activity: Activity, )
                 removeSkill(adapterPosition)
             }
 
-//            skillPointsList[adapterPosition] = itemBinding.skillBar.progress
-
-            Log.i("skill 1 progress value", skillPointsList[0].toString())
-            Log.i("skill 2 progress value", skillPointsList[1].toString())
-            Log.i("sum of all progress right now", skillPointsList.sum().toString())
+            skillPointsList[adapterPosition] = itemBinding.skillBar.progress
 
             itemBinding.skillBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
 
-//                    if (fromUser) {
-//                        saveSkillBarProgress(itemBinding, adapterPosition, progress)
-//                    }
+                    if (fromUser) {
+                        saveSkillBarProgress(itemBinding, adapterPosition, progress)
+                    }
                 }
 
                 override fun onStartTrackingTouch(seekBar: SeekBar?) {}
                 override fun onStopTrackingTouch(seekBar: SeekBar?) {
-//                    setSeekbarWhenOutOfScreen(adapterPosition, seekBar!!.progress)
+                    setSeekbarWhenOutOfScreen(adapterPosition, seekBar!!.progress)
                 }
 
 
@@ -120,7 +112,6 @@ class SkillAdapter(var skills: ArrayList<Skill>, var activity: Activity, )
 
         private fun saveSkillBarProgress(itemBinding: SkillItemBinding, position: Int, progress: Int){
             itemBinding.skillValue.text = progress.toString()
-            Log.i("skill #${position} progress from onprogress", progress.toString())
             skillPointsList[position] = progress
 //            observer.getTotalProgress(skillPointsList)
 //            observer.checkSkillPoints(skillPointsList)
@@ -129,7 +120,6 @@ class SkillAdapter(var skills: ArrayList<Skill>, var activity: Activity, )
         private fun setSeekbarWhenOutOfScreen(position: Int, progress: Int){
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 skillPointsList[adapterPosition] = progress
-                Log.i("hidden view", skillPointsList[adapterPosition].toString())
             }
         }
     }
