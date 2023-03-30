@@ -82,7 +82,8 @@ class JobClassAdapter (var jobClasses: ArrayList<JobClass>, var activity: Activi
 
             itemBinding.jobclassName.text = "${jobClass.name}"
             itemBinding.jobclassPicture.setImageBitmap(jobClass.img)
-            itemBinding.btnDeleteRow.setOnClickListener {
+
+            itemBinding.btnOptionsRow.setOnClickListener {
                 Snackbar.make(
                     itemBinding.root,
                     "Delete by button",

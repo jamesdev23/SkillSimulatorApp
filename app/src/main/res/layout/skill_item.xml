@@ -76,13 +76,14 @@
 
         </LinearLayout>
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_delete_row"
+        <Button
+            android:id="@+id/btn_options_row"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/transparent"
-            android:text="x" />
+            android:background="@drawable/baseline_more_vert_24"
+            android:layout_gravity="center_vertical"
+            />
 
     </LinearLayout>
 

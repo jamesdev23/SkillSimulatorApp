@@ -74,7 +74,8 @@ class SkillAdapter(var skills: ArrayList<Skill>, var activity: Activity, )
             itemBinding.skillBar.max = skill.maxLevel
             itemBinding.skillIcon.setImageBitmap(skill.icon)
             itemBinding.skillValue.text = skill.currentLevel.toString()
-            itemBinding.btnDeleteRow.setOnClickListener {
+
+            itemBinding.btnOptionsRow.setOnClickListener {
                 Snackbar.make(
                     itemBinding.root,
                     "Delete by button",

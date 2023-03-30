@@ -83,7 +83,7 @@ class GameAdapter (var games: ArrayList<Game>, var activity: Activity)
             itemBinding.gameName.text = "${game.name}"
             itemBinding.gamePicture.setImageBitmap(game.icon)
 
-            itemBinding.btnDeleteRow.setOnClickListener {
+            itemBinding.btnOptionsRow.setOnClickListener {
                 Snackbar.make(
                     itemBinding.root,
                     "Delete by button",
