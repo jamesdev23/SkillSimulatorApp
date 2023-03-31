@@ -1,4 +1,4 @@
-package com.example.for_testing.dao
+package com.example.kodegoskillsimulatorapp.dao
 
 import android.content.ContentValues
 import android.content.Context
@@ -8,8 +8,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.provider.ContactsContract.Data
 import android.util.Log
-import com.example.for_testing.model.Game
-import com.example.for_testing.model.JobClass
+import com.example.kodegoskillsimulatorapp.model.Game
 import com.example.kodegoskillsimulatorapp.model.JobClass
 
 interface JobClassDAO {

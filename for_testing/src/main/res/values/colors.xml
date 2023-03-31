@@ -7,42 +7,4 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-
-    <color name="textColor">#333333</color>
-    <color name="navy_blue">#2375D7</color>
-    <color name="bright_navy_blue">#549CF1</color>
-    <color name="brighter_navy_blue">#6CAEFB</color>
-    <color name="turquoise_blue">#00BCD4</color>
-    <color name="caribbean_green">#00D482</color>
-    <color name="light_red">#EA6156</color>
-    <color name="icon_black">#010101</color>
-    <color name="icon_white">#FEFEFE</color>
-
-    <!--    custom color-->
-    <color name="indigo">#1D3F6E</color>
-    <color name="may_green">#4E9B47</color>
-    <color name="dark_charcoal">#333333</color>
-    <color name="fire_engine_red">#CF202A</color>
-
-    <color name="gold">#FFD700</color>
-    <color name="umber_brown">#5D4A44</color>
-    <color name="dark_sky_blue">#7AC5CD</color>
-    <color name="byzantium_violet">#6F295B</color>
-
-    <color name="vivid_orange">#FF9900</color>
-    <color name="sea_serpent_blue">#60BBD0</color>
-    <color name="calamansi_yellow">#FFF7A7</color>
-    <color name="maximum_green">#688335</color>
-
-    <color name="boston_uni_red">#CC0000</color>
-    <color name="misty_pink">#F9E6E6</color>
-    <color name="middle_blue_green">#8FD0CA</color>
-    <color name="dark_cerulean_blue">#0F4C81</color>
-
-    <color name="transparent">#00000000</color>
-
-    <color name="may_green_500">#A7CDA3</color>
-    <color name="sea_serpent_blue_500">#B0DDE8</color>
-
-
 </resources>
