@@ -22,6 +22,7 @@ import com.example.kodegoskillsimulatorapp.model.SavedBuild
 import com.example.kodegoskillsimulatorapp.model.Skill
 import com.example.kodegoskillsimulatorapp.observer.SkillBarObserver
 import com.example.kodegoskillsimulatorapp.observer.SkillDataObserver
+import com.google.gson.Gson
 
 class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserver {
     private lateinit var binding: ActivitySkillListBinding
@@ -182,7 +183,12 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
     override fun saveSkillData(skillData: ArrayList<Skill>) {
         val savedBuild = SavedBuild()
         daoSB = SavedBuildsDAOSQLImpl(this)
-        savedBuild.saveData = skillData.toString()
+
+        // using gson method
+        val gson = Gson()
+        val skillDataJson = gson.toJson(skillData)
+
+        savedBuild.saveData = skillDataJson
         daoSB.addSavedBuild(savedBuild)
     }
 

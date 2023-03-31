@@ -9,6 +9,9 @@ import android.graphics.BitmapFactory
 import android.util.Log
 import com.example.kodegoskillsimulatorapp.model.Game
 import com.example.kodegoskillsimulatorapp.model.SavedBuild
+import com.example.kodegoskillsimulatorapp.model.Skill
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 interface SavedBuildsDAO {
     fun addSavedBuild(savedBuild: SavedBuild)
@@ -32,6 +35,8 @@ class SavedBuildsDAOSQLImpl(var context: Context): SavedBuildsDAO {
 
     override fun getSavedBuilds(): ArrayList<SavedBuild> {
         val savedBuildList: ArrayList<SavedBuild> = ArrayList()
+        var skillDataJson = ""
+        val gson = Gson()
 
         val databaseHandler: DatabaseHandler = DatabaseHandler(context)
         val db = databaseHandler.readableDatabase
@@ -63,7 +68,10 @@ class SavedBuildsDAOSQLImpl(var context: Context): SavedBuildsDAO {
             do {
                 savedBuild = SavedBuild()
                 savedBuild.id = cursor.getInt(0)
-                savedBuild.saveData = cursor.getString(1)
+                skillDataJson = cursor.getString(1)
+
+                savedBuild.saveData = skillDataJson
+                savedBuild.skillData = gson.fromJson(skillDataJson, object : TypeToken<ArrayList<Skill>>() {}.type)
 
                 savedBuildList.add(savedBuild)
 
