@@ -27,8 +27,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var dao: GameDAO
     private lateinit var gameAdapter: GameAdapter
-    private var games: ArrayList<Game> = ArrayList()
-    private var gameNames: ArrayList<String> = ArrayList()
+    private lateinit var games: ArrayList<Game>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

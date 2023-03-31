@@ -60,9 +60,9 @@ class JobClassAdapter (var jobClasses: ArrayList<JobClass>, var activity: Activi
             val intent = Intent(activity.applicationContext, SkillListActivity::class.java)
 
             val bundle = Bundle()
-            bundle.putInt("data_game1", jobClasses[position].gameId)
-            bundle.putInt("data_jobclass1", position)
-            bundle.putString("data_jobclass2", jobClasses[position].name)
+            bundle.putString("data3", jobClasses[position].gameId.toString())
+            bundle.putString("data4", position.toString())
+            bundle.putString("data5", jobClasses[position].name)
             intent.putExtras(bundle)
             activity.startActivity(intent)
         }

@@ -15,36 +15,35 @@ import com.example.kodegoskillsimulatorapp.dao.SkillDAO
 import com.example.kodegoskillsimulatorapp.dao.SkillDAOSQLImpl
 import com.example.kodegoskillsimulatorapp.databinding.ActivitySkillListBinding
 import com.example.kodegoskillsimulatorapp.databinding.DialogAddSkillBinding
+import com.example.kodegoskillsimulatorapp.model.JobClass
 import com.example.kodegoskillsimulatorapp.model.Skill
 
 class SkillListActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySkillListBinding
     private lateinit var skillAdapter: SkillAdapter
     private lateinit var dao: SkillDAO
-    private var skills: ArrayList<Skill> = ArrayList()
+    private lateinit var skills: ArrayList<Skill>
     private val maxSkillPoints = 49
-    private var jobClassID = 0
-    private var gameID = 0
-    private var jobClassName = ""
+    private var jobClassSelected: JobClass = JobClass()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySkillListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        jobClassID = intent.extras!!.getInt("data_jobclass1",0)
-        gameID = intent.extras!!.getInt("data_game1", 0)
-        jobClassName = intent.extras!!.getString("data_jobclass2").toString()
-        Log.i("skilllist class id", jobClassID.toString())
-        Log.i("skilllist game id", gameID.toString())
-        Log.i("skilllist class name", jobClassName)
+        jobClassSelected.id = intent.extras?.getString("data3")?.toInt() ?: 0
+        jobClassSelected.gameId = intent.extras?.getString("data4")?.toInt() ?: 0
+        jobClassSelected.name = intent.extras?.getString("data5").toString()
+        Log.i("skilllist class id", jobClassSelected.id.toString())
+        Log.i("skilllist game id", jobClassSelected.gameId.toString())
+        Log.i("skilllist class name", jobClassSelected.name)
 
-        supportActionBar?.title = jobClassName
+        supportActionBar?.title =jobClassSelected.name
 
 //        binding.skillpointsTotal.text = " / ${maxSkillPoints.toString()}"
 
         dao = SkillDAOSQLImpl(applicationContext)
-        skills = dao.getSkillPerJob(gameID, jobClassID)
+        skills = dao.getSkillPerJob(jobClassSelected.gameId, jobClassSelected.id)
         skillAdapter = SkillAdapter(skills, this)
         binding.skillList.layoutManager = LinearLayoutManager(applicationContext)
         binding.skillList.adapter = skillAdapter
@@ -123,8 +122,8 @@ class SkillListActivity : AppCompatActivity() {
                     val addSkillMinLevel = dialogAddSkillBinding.editSkillMinLevel.text.toString()
                     val addSkillDescription = dialogAddSkillBinding.editSkillDescription.text.toString()
 
-                    newSkill.jobClassId = jobClassID
-                    newSkill.gameId = gameID
+                    newSkill.jobClassId = jobClassSelected.id
+                    newSkill.gameId = jobClassSelected.gameId
                     newSkill.name = addSkillName
                     newSkill.maxLevel = addSkillMaxLevel.toInt()
                     newSkill.minLevel = addSkillMinLevel.toInt()
@@ -132,10 +131,10 @@ class SkillListActivity : AppCompatActivity() {
 
                     dao.addSkill(newSkill)
                     Log.i("new class", newSkill.name)
-                    Log.i("class game id", gameID.toString())
-                    Log.i("class id", jobClassID.toString())
+                    Log.i("class game id", jobClassSelected.gameId.toString())
+                    Log.i("class id", jobClassSelected.id.toString())
 
-                    var newSkills = dao.getSkillPerJob(gameID, jobClassID)
+                    var newSkills = dao.getSkillPerJob(jobClassSelected.gameId, jobClassSelected.id)
                     Log.i("skill list", newSkills.toString())
                     skillAdapter.updateSkill(newSkills)
                     skillAdapter.notifyDataSetChanged()

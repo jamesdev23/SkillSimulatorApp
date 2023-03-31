@@ -60,8 +60,8 @@ class GameAdapter (var games: ArrayList<Game>, var activity: Activity)
             val intent = Intent(activity.applicationContext, SelectClassActivity::class.java)
 
             val bundle = Bundle()
-            bundle.putInt("data_game_id", position)
-            bundle.putString("data_game_name", games[position].name)
+            bundle.putString("data", position.toString())
+            bundle.putString("data2", games[position].name)
             intent.putExtras(bundle)
 
             activity.startActivity(intent)

@@ -14,4 +14,3 @@ dependencyResolutionManagement {
 }
 rootProject.name = "KodegoSkillSimulatorApp"
 include ':app'
-include ':for_testing'
