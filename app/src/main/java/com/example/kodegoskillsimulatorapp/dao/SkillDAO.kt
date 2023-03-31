@@ -12,7 +12,7 @@ import com.example.kodegoskillsimulatorapp.model.Skill
 interface SkillDAO {
     fun addSkill(skill: Skill)
     fun getSkills(): ArrayList<Skill>
-    fun getSkillPerJob(gameID: Int, jobclassID: Int): ArrayList<Skill>
+    fun getSkillPerJob(gameName: String, jobClassName: String): ArrayList<Skill>
     fun updateSkill(skillId: Int, skill: Skill)
     fun deleteSkill(skillId: Int)
 
@@ -28,9 +28,9 @@ class SkillDAOSQLImpl(var context: Context): SkillDAO {
         val db = databaseHandler.writableDatabase
 
         val contentValues = ContentValues()
-        contentValues.put(DatabaseHandler.skillJobclassID, skill.jobClassId)
-        contentValues.put(DatabaseHandler.skillGameID, skill.gameId)
         contentValues.put(DatabaseHandler.skillName, skill.name)
+        contentValues.put(DatabaseHandler.skillJobClassName, skill.jobClassName)
+        contentValues.put(DatabaseHandler.skillGameName, skill.gameName)
         contentValues.put(DatabaseHandler.skillMaxLevel, skill.maxLevel)
         contentValues.put(DatabaseHandler.skillDescription, skill.description)
         contentValues.put(DatabaseHandler.skillIcon, defaultSkillIcon)
@@ -45,7 +45,12 @@ class SkillDAOSQLImpl(var context: Context): SkillDAO {
         val columns = arrayOf(
             DatabaseHandler.skillId,
             DatabaseHandler.skillName,
-            DatabaseHandler.skillMaxLevel
+            DatabaseHandler.skillJobClassName,
+            DatabaseHandler.skillGameName,
+            DatabaseHandler.skillMaxLevel,
+            DatabaseHandler.skillMinLevel,
+            DatabaseHandler.skillDescription,
+            DatabaseHandler.skillIcon
         )
 
         val databaseHandler: DatabaseHandler = DatabaseHandler(context)
@@ -71,9 +76,15 @@ class SkillDAOSQLImpl(var context: Context): SkillDAO {
         if(cursor.moveToFirst()) {
             do {
                 skill = Skill()
-                skill.id = cursor.getInt(2)
-                skill.name = cursor.getString(0)
-                skill.maxLevel = cursor.getInt(1)
+                skill.id = cursor.getInt(0)
+                skill.name = cursor.getString(1)
+                skill.jobClassName = cursor.getString(2)
+                skill.gameName = cursor.getString(3)
+                skill.maxLevel = cursor.getInt(4)
+                skill.minLevel = cursor.getInt(5)
+                skill.description = cursor.getString(6)
+
+                getIcon(cursor, skill)
 
                 skillList.add(skill)
             }while(cursor.moveToNext())
@@ -84,58 +95,10 @@ class SkillDAOSQLImpl(var context: Context): SkillDAO {
         return skillList
     }
 
-    override fun getSkillPerJob(gameID: Int, jobclassID: Int): ArrayList<Skill> {
-        val skillList: ArrayList<Skill> = ArrayList()
-        val newGameID = gameID.toString()
-        val newJobclassID = jobclassID.toString()
-
-        val columns = arrayOf(
-            DatabaseHandler.skillId,
-            DatabaseHandler.skillName,
-            DatabaseHandler.skillMaxLevel,
-            DatabaseHandler.skillMinLevel,
-            DatabaseHandler.skillDescription,
-            DatabaseHandler.skillIcon
-        )
-
-        val values = arrayOf(newJobclassID, newGameID)
-
-        var databaseHandler: DatabaseHandler = DatabaseHandler(context)
-        val db = databaseHandler.readableDatabase
-        var cursor: Cursor? = null
-
-        try{
-            cursor = db.query(
-                DatabaseHandler.tableSkills,
-                columns,
-                "${DatabaseHandler.skillJobclassID} = ? AND ${DatabaseHandler.skillGameID} = ?",
-                values,
-                null,
-                null,
-                DatabaseHandler.skillId
-            )
-        } catch (e: SQLiteException) {
-            db.close()
-            return ArrayList()
-        }
-
-        var skill = Skill()
-        if(cursor.moveToFirst()) {
-            do {
-                skill = Skill()
-                skill.id = cursor.getInt(0)
-                skill.name = cursor.getString(1)
-                skill.maxLevel = cursor.getInt(2)
-                skill.minLevel = cursor.getInt(3)
-                skill.description = cursor.getString(4)
-                getIcon(cursor,skill)
-
-                skillList.add(skill)
-            }while(cursor.moveToNext())
-        }
-        cursor?.close()
-        db.close()
-        return skillList
+    override fun getSkillPerJob(gameName: String, jobClassName: String): ArrayList<Skill> {
+        val skills = getSkills()
+        val filteredSkills = skills.filter { it.gameName == gameName && it.jobClassName == jobClassName }
+        return filteredSkills as ArrayList<Skill>
     }
 
     override fun updateSkill(skillId: Int, skill: Skill) {
@@ -171,7 +134,7 @@ class SkillDAOSQLImpl(var context: Context): SkillDAO {
         var iconBitmap: Bitmap
 
         try {
-            val iconText:String = cursor.getString(5)
+            val iconText:String = cursor.getString(7)
             val iconByte:ByteArray = android.util.Base64.decode(iconText, android.util.Base64.DEFAULT)
 
             iconBitmap = iconByte.let { BitmapFactory.decodeByteArray(it, 0, it.size) }!!

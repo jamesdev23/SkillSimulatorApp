@@ -2,6 +2,7 @@ package com.example.kodegoskillsimulatorapp
 
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -30,15 +31,14 @@ class SelectClassActivity : AppCompatActivity() {
         binding = ActivitySelectClassBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        gameSelected.id = intent.extras?.getString("data")?.toInt()!!
-        gameSelected.name = intent.extras?.getString("data2")!!
+        gameSelected.name = intent.extras?.getString("data").toString()
 
         Log.i("selectclass game id", gameSelected.id.toString())
 
         supportActionBar?.title = "Select Class"
 
         dao = JobClassDAOSQLImpl(applicationContext)
-        jobClasses = dao.getJobclassPerGame(gameSelected.id)
+        jobClasses = dao.getJobclassPerGame(gameSelected.name)
         jobClassAdapter = JobClassAdapter(jobClasses, this)
         binding.classList.layoutManager = LinearLayoutManager(applicationContext)
         binding.classList.adapter = jobClassAdapter
@@ -53,6 +53,11 @@ class SelectClassActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.action_add_class -> {
                 dialogAddClass(this)
+                return true
+            }
+            R.id.action_saved_builds -> {
+                val goToSavedBuilds = Intent(this, SavedBuildsActivity::class.java)
+                startActivity(goToSavedBuilds)
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
@@ -72,14 +77,14 @@ class SelectClassActivity : AppCompatActivity() {
 
                     val addJobClassName = dialogAddClassBinding.editClassName.text.toString()
 
-                    jobClass.gameId = gameSelected.id
+                    jobClass.gameName = gameSelected.name
                     jobClass.name = addJobClassName
                     Log.i("add class name", jobClass.name)
-                    Log.i("add class game id", jobClass.gameId.toString())
+                    Log.i("add class game id", jobClass.gameName)
 
                     dao.addJobclass(jobClass)
 
-                    var newJobClass = dao.getJobclassPerGame(gameSelected.id)
+                    var newJobClass = dao.getJobclassPerGame(gameSelected.name)
                     Log.i("class list", newJobClass.toString())
                     jobClassAdapter.updateJobClass(newJobClass)
                     jobClassAdapter.notifyDataSetChanged()

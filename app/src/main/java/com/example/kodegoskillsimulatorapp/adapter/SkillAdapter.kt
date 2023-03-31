@@ -10,14 +10,16 @@ import com.example.kodegoskillsimulatorapp.dao.SkillDAO
 import com.example.kodegoskillsimulatorapp.dao.SkillDAOSQLImpl
 import com.example.kodegoskillsimulatorapp.databinding.SkillItemBinding
 import com.example.kodegoskillsimulatorapp.model.Skill
+import com.example.kodegoskillsimulatorapp.observer.SkillBarObserver
+import com.example.kodegoskillsimulatorapp.observer.SkillDataObserver
 import com.google.android.material.snackbar.Snackbar
 
-//var observer: SkillBarObserver
-class SkillAdapter(var skills: ArrayList<Skill>, var activity: Activity, )
+class SkillAdapter(var skills: ArrayList<Skill>, var activity: Activity, var skillDataObserver: SkillDataObserver, var skillBarObserver: SkillBarObserver)
     : RecyclerView.Adapter<SkillAdapter.SkillViewHolder>() {
 
     // Declare a list to hold the progress of each SeekBar
     private val skillPointsList: MutableList<Int> = MutableList(itemCount+1){ 0 }
+    private var skillSaveData: ArrayList<Skill> = arrayListOf()
     fun addSkill(skill: Skill){
         skills.add(0,skill)
         notifyItemInserted(0)
@@ -90,6 +92,9 @@ class SkillAdapter(var skills: ArrayList<Skill>, var activity: Activity, )
 
             skillPointsList[adapterPosition] = itemBinding.skillBar.progress
 
+            skillSaveData.add(skill)
+            skillDataObserver.saveSkillData(skillSaveData)
+
             itemBinding.skillBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
 
@@ -114,8 +119,8 @@ class SkillAdapter(var skills: ArrayList<Skill>, var activity: Activity, )
         private fun saveSkillBarProgress(itemBinding: SkillItemBinding, position: Int, progress: Int){
             itemBinding.skillValue.text = progress.toString()
             skillPointsList[position] = progress
-//            observer.getTotalProgress(skillPointsList)
-//            observer.checkSkillPoints(skillPointsList)
+//            skillBarObserver.getTotalProgress(skillPointsList)
+//            skillBarObserver.checkSkillPoints(skillPointsList)
         }
 
         private fun setSeekbarWhenOutOfScreen(position: Int, progress: Int){

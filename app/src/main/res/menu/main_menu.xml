@@ -7,4 +7,10 @@
         android:title="Add Game"
         app:showAsAction="always">
     </item>
+    <item
+        android:id="@+id/action_saved_builds"
+        android:icon="@drawable/baseline_more_vert_24"
+        android:title="Saved Builds"
+        app:showAsAction="always">
+    </item>
 </menu>

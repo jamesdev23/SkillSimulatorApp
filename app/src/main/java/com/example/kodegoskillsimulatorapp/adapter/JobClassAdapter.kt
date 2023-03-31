@@ -8,8 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kodegoskillsimulatorapp.SkillListActivity
-import com.example.kodegoskillsimulatorapp.dao.GameDAO
-import com.example.kodegoskillsimulatorapp.dao.GameDAOSQLImpl
 import com.example.kodegoskillsimulatorapp.dao.JobClassDAO
 import com.example.kodegoskillsimulatorapp.dao.JobClassDAOSQLImpl
 import com.example.kodegoskillsimulatorapp.databinding.JobClassItemBinding
@@ -60,9 +58,8 @@ class JobClassAdapter (var jobClasses: ArrayList<JobClass>, var activity: Activi
             val intent = Intent(activity.applicationContext, SkillListActivity::class.java)
 
             val bundle = Bundle()
-            bundle.putString("data3", jobClasses[position].gameId.toString())
-            bundle.putString("data4", position.toString())
-            bundle.putString("data5", jobClasses[position].name)
+            bundle.putString("data2", jobClasses[position].gameName)
+            bundle.putString("data3", jobClasses[position].name)
             intent.putExtras(bundle)
             activity.startActivity(intent)
         }

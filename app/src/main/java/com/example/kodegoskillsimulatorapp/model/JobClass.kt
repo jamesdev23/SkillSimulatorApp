@@ -4,7 +4,7 @@ import android.graphics.Bitmap
 
 class JobClass {
     var id: Int = 0
-    var gameId: Int = 0
+    var gameName: String = ""
     var name:String = ""
     var type:String = ""
     var description: String = ""

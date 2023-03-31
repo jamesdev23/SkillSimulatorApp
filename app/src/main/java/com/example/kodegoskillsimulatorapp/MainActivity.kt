@@ -2,6 +2,7 @@ package com.example.kodegoskillsimulatorapp
 
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -55,6 +56,11 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.action_add_game -> {
                 dialogAddGame(this)
+                return true
+            }
+            R.id.action_saved_builds -> {
+                val goToSavedBuilds = Intent(this, SavedBuildsActivity::class.java)
+                startActivity(goToSavedBuilds)
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
