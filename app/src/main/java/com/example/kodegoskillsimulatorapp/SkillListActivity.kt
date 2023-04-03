@@ -19,6 +19,7 @@ import com.example.kodegoskillsimulatorapp.model.Build
 import com.example.kodegoskillsimulatorapp.model.Skill
 import com.example.kodegoskillsimulatorapp.observer.SkillBarObserver
 import com.example.kodegoskillsimulatorapp.observer.SkillDataObserver
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 
 class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserver {
@@ -68,7 +69,8 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
             }
             R.id.action_save -> {
                 saveSkillData(skills)
-                showSkillData(skills)
+//                showSkillData(skills)
+                Snackbar.make(binding.root, "Skill build saved.", Snackbar.LENGTH_SHORT).show()
                 return true
             }
             R.id.action_saved_builds -> {
