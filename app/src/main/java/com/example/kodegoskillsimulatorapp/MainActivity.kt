@@ -11,6 +11,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kodegoskillsimulatorapp.adapter.GameAdapter
 import com.example.kodegoskillsimulatorapp.dao.GameDAO
@@ -42,7 +43,8 @@ class MainActivity : AppCompatActivity() {
         games = dao.getGames()
         gameAdapter = GameAdapter(games, this)
         Log.d("game list", games.toString())
-        binding.gameList.layoutManager = LinearLayoutManager(applicationContext)
+//        binding.gameList.layoutManager = LinearLayoutManager(applicationContext)
+        binding.gameList.layoutManager = GridLayoutManager(applicationContext, 3)
         binding.gameList.adapter = gameAdapter
 
     }

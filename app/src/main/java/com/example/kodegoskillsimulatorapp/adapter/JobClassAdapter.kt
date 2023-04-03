@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.kodegoskillsimulatorapp.SkillListActivity
 import com.example.kodegoskillsimulatorapp.dao.JobClassDAO
 import com.example.kodegoskillsimulatorapp.dao.JobClassDAOSQLImpl
-import com.example.kodegoskillsimulatorapp.databinding.JobClassItemBinding
+import com.example.kodegoskillsimulatorapp.databinding.JobClassItemGridBinding
 import com.example.kodegoskillsimulatorapp.model.JobClass
 import com.google.android.material.snackbar.Snackbar
 
@@ -43,7 +43,7 @@ class JobClassAdapter (var jobClasses: ArrayList<JobClass>, var activity: Activi
         viewType: Int
     ): JobClassViewHolder {
 
-        val itemBinding = JobClassItemBinding
+        val itemBinding = JobClassItemGridBinding
             .inflate(
                 LayoutInflater.from(parent.context),
                 parent, false)
@@ -65,7 +65,7 @@ class JobClassAdapter (var jobClasses: ArrayList<JobClass>, var activity: Activi
         }
     }
 
-    inner class JobClassViewHolder(private val itemBinding: JobClassItemBinding)
+    inner class JobClassViewHolder(private val itemBinding: JobClassItemGridBinding)
         : RecyclerView.ViewHolder(itemBinding.root), View.OnClickListener {
 
         var jobClass = JobClass()
@@ -80,18 +80,18 @@ class JobClassAdapter (var jobClasses: ArrayList<JobClass>, var activity: Activi
             itemBinding.jobclassName.text = "${jobClass.name}"
             itemBinding.jobclassPicture.setImageBitmap(jobClass.img)
 
-            itemBinding.btnOptionsRow.setOnClickListener {
-                Snackbar.make(
-                    itemBinding.root,
-                    "Delete by button",
-                    Snackbar.LENGTH_SHORT
-                ).show()
-
-                var dao: JobClassDAO = JobClassDAOSQLImpl(it.context)
-                bindJobClass(jobClass)
-                dao.deleteJobClass(jobClass.id)
-                removeJobClass(adapterPosition)
-            }
+//            itemBinding.btnOptionsRow.setOnClickListener {
+//                Snackbar.make(
+//                    itemBinding.root,
+//                    "Delete by button",
+//                    Snackbar.LENGTH_SHORT
+//                ).show()
+//
+//                var dao: JobClassDAO = JobClassDAOSQLImpl(it.context)
+//                bindJobClass(jobClass)
+//                dao.deleteJobClass(jobClass.id)
+//                removeJobClass(adapterPosition)
+//            }
         }
 
         override fun onClick(v: View?) {

@@ -11,14 +11,11 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kodegoskillsimulatorapp.adapter.SkillAdapter
-import com.example.kodegoskillsimulatorapp.dao.SavedBuildsDAO
-import com.example.kodegoskillsimulatorapp.dao.SavedBuildsDAOSQLImpl
-import com.example.kodegoskillsimulatorapp.dao.SkillDAO
-import com.example.kodegoskillsimulatorapp.dao.SkillDAOSQLImpl
+import com.example.kodegoskillsimulatorapp.dao.*
 import com.example.kodegoskillsimulatorapp.databinding.ActivitySkillListBinding
 import com.example.kodegoskillsimulatorapp.databinding.DialogAddSkillBinding
 import com.example.kodegoskillsimulatorapp.model.JobClass
-import com.example.kodegoskillsimulatorapp.model.SavedBuild
+import com.example.kodegoskillsimulatorapp.model.Build
 import com.example.kodegoskillsimulatorapp.model.Skill
 import com.example.kodegoskillsimulatorapp.observer.SkillBarObserver
 import com.example.kodegoskillsimulatorapp.observer.SkillDataObserver
@@ -29,8 +26,8 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
     private lateinit var skillAdapter: SkillAdapter
     private lateinit var dao: SkillDAO
     private lateinit var skills: ArrayList<Skill>
-    private lateinit var daoSB: SavedBuildsDAO
-    private lateinit var savedBuilds: ArrayList<SavedBuild>
+    private lateinit var daoBuild: BuildDAO
+    private lateinit var builds: ArrayList<Build>
 
     private val maxSkillPoints = 49
     private var jobClassSelected: JobClass = JobClass()
@@ -181,15 +178,19 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
     }
 
     override fun saveSkillData(skillData: ArrayList<Skill>) {
-        val savedBuild = SavedBuild()
-        daoSB = SavedBuildsDAOSQLImpl(this)
+        val build = Build()
+        daoBuild = BuildDAOSQLImpl(this)
+
+        build.name = "Custom Build"
+        build.jobClassName = jobClassSelected.name
+        build.gameName = jobClassSelected.gameName
+        build.description = "custom skill build"
 
         // using gson method
         val gson = Gson()
-        val skillDataJson = gson.toJson(skillData)
+        build.dataText = gson.toJson(skillData)
 
-        savedBuild.saveData = skillDataJson
-        daoSB.addSavedBuild(savedBuild)
+        daoBuild.addBuild(build)
     }
 
     override fun showSkillData(skillData: ArrayList<Skill>) {

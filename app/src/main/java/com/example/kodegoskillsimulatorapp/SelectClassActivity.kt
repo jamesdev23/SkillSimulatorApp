@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kodegoskillsimulatorapp.adapter.JobClassAdapter
 import com.example.kodegoskillsimulatorapp.dao.JobClassDAO
@@ -40,7 +41,8 @@ class SelectClassActivity : AppCompatActivity() {
         dao = JobClassDAOSQLImpl(applicationContext)
         jobClasses = dao.getJobclassPerGame(gameSelected.name)
         jobClassAdapter = JobClassAdapter(jobClasses, this)
-        binding.classList.layoutManager = LinearLayoutManager(applicationContext)
+//        binding.classList.layoutManager = LinearLayoutManager(applicationContext)
+        binding.classList.layoutManager = GridLayoutManager(applicationContext, 3)
         binding.classList.adapter = jobClassAdapter
     }
 

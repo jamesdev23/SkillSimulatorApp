@@ -8,15 +8,12 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="textColor">#333333</color>
-    <color name="navy_blue">#2375D7</color>
-    <color name="bright_navy_blue">#549CF1</color>
-    <color name="brighter_navy_blue">#6CAEFB</color>
-    <color name="turquoise_blue">#00BCD4</color>
-    <color name="caribbean_green">#00D482</color>
-    <color name="light_red">#EA6156</color>
-    <color name="icon_black">#010101</color>
-    <color name="icon_white">#FEFEFE</color>
+    <!-- theme color -->
+    <color name="winter_black">#20211A</color>  <!-- main color -->
+    <color name="iron_gray">#616569</color> <!-- for outline -->
+    <color name="white_tint">#F1F1EC</color> <!-- background color -->
+    <color name="white_marble">#E7E9EA</color>
+    <color name="maximum_green_yellow">#D9E650</color> <!-- for accents -->
 
     <!--    custom color-->
     <color name="indigo">#1D3F6E</color>

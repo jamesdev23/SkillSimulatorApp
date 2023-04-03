@@ -12,7 +12,7 @@ import com.example.kodegoskillsimulatorapp.SelectClassActivity
 import com.example.kodegoskillsimulatorapp.SkillListActivity
 import com.example.kodegoskillsimulatorapp.dao.GameDAO
 import com.example.kodegoskillsimulatorapp.dao.GameDAOSQLImpl
-import com.example.kodegoskillsimulatorapp.databinding.GameItemBinding
+import com.example.kodegoskillsimulatorapp.databinding.GameItemGridBinding
 import com.example.kodegoskillsimulatorapp.model.Game
 import com.google.android.material.snackbar.Snackbar
 
@@ -45,7 +45,7 @@ class GameAdapter (var games: ArrayList<Game>, var activity: Activity)
         viewType: Int
     ): GameViewHolder {
 
-        val itemBinding = GameItemBinding
+        val itemBinding = GameItemGridBinding
             .inflate(
                 LayoutInflater.from(parent.context),
                 parent, false)
@@ -67,7 +67,7 @@ class GameAdapter (var games: ArrayList<Game>, var activity: Activity)
         }
     }
 
-    inner class GameViewHolder(private val itemBinding: GameItemBinding)
+    inner class GameViewHolder(private val itemBinding: GameItemGridBinding)
         : RecyclerView.ViewHolder(itemBinding.root), View.OnClickListener {
 
         var game = Game()
@@ -82,18 +82,18 @@ class GameAdapter (var games: ArrayList<Game>, var activity: Activity)
             itemBinding.gameName.text = "${game.name}"
             itemBinding.gamePicture.setImageBitmap(game.icon)
 
-            itemBinding.btnOptionsRow.setOnClickListener {
-                Snackbar.make(
-                    itemBinding.root,
-                    "Delete by button",
-                    Snackbar.LENGTH_SHORT
-                ).show()
-
-                var dao: GameDAO = GameDAOSQLImpl(it.context)
-                bindGame(game)
-                dao.deleteGame(game.id)
-                removeGame(adapterPosition)
-            }
+//            itemBinding.btnOptionsRow.setOnClickListener {
+//                Snackbar.make(
+//                    itemBinding.root,
+//                    "Delete by button",
+//                    Snackbar.LENGTH_SHORT
+//                ).show()
+//
+//                var dao: GameDAO = GameDAOSQLImpl(it.context)
+//                bindGame(game)
+//                dao.deleteGame(game.id)
+//                removeGame(adapterPosition)
+//            }
         }
 
         override fun onClick(view: View?) {
