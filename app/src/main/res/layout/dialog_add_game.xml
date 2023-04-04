@@ -28,6 +28,22 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5sp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/text_game_description"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/game_description"
+            android:text="@string/custom_game"
+            android:maxLines="1" />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
 
 
 

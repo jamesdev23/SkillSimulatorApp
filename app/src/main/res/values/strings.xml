@@ -16,4 +16,6 @@
     <string name="ex_melee_ranged_etc">Ex. Melee, Ranged, etc.</string>
     <string name="class_description">Class Description</string>
     <string name="custom_class">custom class</string>
+    <string name="custom_game">custom game</string>
+    <string name="game_description">Game Description</string>
 </resources>
