@@ -19,8 +19,6 @@ interface BuildDAO {
     fun getBuildByName(buildName: String): Build
     fun getBuilds(): ArrayList<Build>
     fun deleteBuild(buildID: Int)
-
-    fun getBuildData(cursor: Cursor, build: Build)
     fun getImage(cursor: Cursor, build: Build)
 }
 
@@ -145,8 +143,8 @@ class BuildDAOSQLImpl(var context: Context): BuildDAO {
                 build.gameName = cursor.getString(2)
                 build.name = cursor.getString(3)
                 build.description = cursor.getString(4)
+                build.dataText = cursor.getString(5)
 
-                getBuildData(cursor, build)
                 getImage(cursor, build)
 
                 buildList.add(build)
@@ -168,17 +166,6 @@ class BuildDAOSQLImpl(var context: Context): BuildDAO {
             "${DatabaseHandler.buildId} = ?",
             values)
         db.close()
-    }
-
-    override fun getBuildData(cursor: Cursor, build: Build) {
-        // converts json back to ArrayList<Skill>
-        val gson = Gson()
-        val buildDataJson = cursor.getString(5)
-        build.dataText = buildDataJson
-
-        Log.i("skill data json", buildDataJson)
-
-        build.data = gson.fromJson(buildDataJson, object : TypeToken<ArrayList<Skill>>() {}.type)
     }
 
     override fun getImage(cursor: Cursor, build: Build) {

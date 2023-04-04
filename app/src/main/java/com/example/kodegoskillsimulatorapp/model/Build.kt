@@ -9,7 +9,6 @@ class Build {
     var name: String = ""
     var description: String = ""
     var dataText: String = ""
-    var data: ArrayList<Skill> = ArrayList()
     var img: Bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
 
 }
