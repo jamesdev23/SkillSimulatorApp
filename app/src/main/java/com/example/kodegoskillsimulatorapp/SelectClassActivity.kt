@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kodegoskillsimulatorapp.adapter.JobClassAdapter
@@ -25,8 +26,9 @@ class SelectClassActivity : AppCompatActivity() {
 
     private lateinit var jobClassAdapter: JobClassAdapter
     private lateinit var dao: JobClassDAO
-    private lateinit var jobClasses: ArrayList<JobClass>
+    private var jobClasses: ArrayList<JobClass> = ArrayList()
     private var gameSelected: Game = Game()
+    private var backPressedTime: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

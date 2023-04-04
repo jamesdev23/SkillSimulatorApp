@@ -63,10 +63,6 @@ class MainActivity : AppCompatActivity() {
         backPressedTime = System.currentTimeMillis()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
         return true

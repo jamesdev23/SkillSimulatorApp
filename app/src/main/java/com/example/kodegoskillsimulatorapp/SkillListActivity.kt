@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kodegoskillsimulatorapp.adapter.SkillAdapter
 import com.example.kodegoskillsimulatorapp.dao.*
@@ -35,6 +36,7 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
     private var jobClassSelected: JobClass = JobClass()
     private var skillBuild: ArrayList<Skill> = ArrayList()
     private var skillBuildText:String = ""
+    private var backPressedTime: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,10 +75,6 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
     override fun onBackPressed() {
         super.onBackPressed()
         finish()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
