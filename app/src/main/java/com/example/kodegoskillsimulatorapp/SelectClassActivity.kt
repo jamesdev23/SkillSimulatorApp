@@ -18,6 +18,7 @@ import com.example.kodegoskillsimulatorapp.databinding.ActivitySelectClassBindin
 import com.example.kodegoskillsimulatorapp.databinding.DialogAddClassBinding
 import com.example.kodegoskillsimulatorapp.model.Game
 import com.example.kodegoskillsimulatorapp.model.JobClass
+import com.google.android.material.snackbar.Snackbar
 
 class SelectClassActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySelectClassBinding
@@ -96,6 +97,8 @@ class SelectClassActivity : AppCompatActivity() {
                     Log.i("class list", newJobClass.toString())
                     jobClassAdapter.updateJobClass(newJobClass)
                     jobClassAdapter.notifyDataSetChanged()
+
+                    Snackbar.make(binding.root, "Added new class.", Snackbar.LENGTH_SHORT).show()
                 })
                 setNegativeButton("Cancel", DialogInterface.OnClickListener { _, _ ->
                     // Do something when user press the positive button

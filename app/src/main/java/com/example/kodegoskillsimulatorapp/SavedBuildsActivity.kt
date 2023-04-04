@@ -23,6 +23,7 @@ import com.example.kodegoskillsimulatorapp.databinding.DialogAddClassBinding
 import com.example.kodegoskillsimulatorapp.model.Build
 import com.example.kodegoskillsimulatorapp.model.JobClass
 import com.example.kodegoskillsimulatorapp.model.Skill
+import com.google.android.material.snackbar.Snackbar
 
 class SavedBuildsActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySavedBuildsBinding
@@ -112,6 +113,8 @@ class SavedBuildsActivity : AppCompatActivity() {
                     Log.i("build list", newBuilds.toString())
                     buildAdapter.updateBuild(newBuilds)
                     buildAdapter.notifyDataSetChanged()
+
+                    Snackbar.make(binding.root, "Added new build.", Snackbar.LENGTH_SHORT).show()
                 })
                 setNegativeButton("Cancel", DialogInterface.OnClickListener { _, _ ->
                     // Do something when user press the positive button

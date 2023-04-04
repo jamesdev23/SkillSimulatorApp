@@ -22,6 +22,7 @@ import com.example.kodegoskillsimulatorapp.databinding.ActivityMainBinding
 import com.example.kodegoskillsimulatorapp.databinding.DialogAddGameBinding
 import com.example.kodegoskillsimulatorapp.model.Game
 import com.example.kodegoskillsimulatorapp.model.JobClass
+import com.google.android.material.snackbar.Snackbar
 
 
 class MainActivity : AppCompatActivity() {
@@ -97,6 +98,7 @@ class MainActivity : AppCompatActivity() {
                     dao.addGame(newGame)
                     gameAdapter.updateGame(dao.getGames())
                     gameAdapter.notifyDataSetChanged()
+                    Snackbar.make(binding.root, "Added new game.", Snackbar.LENGTH_SHORT).show()
                 })
                 setNegativeButton("Cancel", DialogInterface.OnClickListener { _, _ ->
                     // Do something when user press the positive button
