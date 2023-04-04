@@ -62,6 +62,7 @@ class JobClassAdapter (var jobClasses: ArrayList<JobClass>, var activity: Activi
             bundle.putString("data3", jobClasses[position].name)
             intent.putExtras(bundle)
             activity.startActivity(intent)
+            activity.finish()
         }
     }
 

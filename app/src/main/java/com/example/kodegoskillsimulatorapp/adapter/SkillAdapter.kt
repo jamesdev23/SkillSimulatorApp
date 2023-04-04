@@ -19,7 +19,7 @@ class SkillAdapter(var skills: ArrayList<Skill>, var activity: Activity, var ski
 
     // Declare a list to hold the progress of each SeekBar
     private val skillPointsList: MutableList<Int> = MutableList(itemCount+1){ 0 }
-    private var skillSaveData: ArrayList<Skill> = arrayListOf()
+    private var skillData: ArrayList<Skill> = arrayListOf()
     fun addSkill(skill: Skill){
         skills.add(0,skill)
         notifyItemInserted(0)
@@ -92,14 +92,14 @@ class SkillAdapter(var skills: ArrayList<Skill>, var activity: Activity, var ski
 
             skillPointsList[adapterPosition] = itemBinding.skillBar.progress
 
-            skillSaveData.add(skill)
-            skillDataObserver.saveSkillData(skillSaveData)
+            skillData.add(skill)
 
             itemBinding.skillBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
 
                     if (fromUser) {
                         saveSkillBarProgress(itemBinding, adapterPosition, progress)
+                        skill.currentLevel = progress
                     }
                 }
 

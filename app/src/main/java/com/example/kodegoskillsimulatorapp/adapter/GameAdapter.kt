@@ -64,6 +64,7 @@ class GameAdapter (var games: ArrayList<Game>, var activity: Activity)
             intent.putExtras(bundle)
 
             activity.startActivity(intent)
+            activity.finish()
         }
     }
 

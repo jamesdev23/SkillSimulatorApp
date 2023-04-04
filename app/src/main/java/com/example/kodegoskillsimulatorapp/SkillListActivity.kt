@@ -21,6 +21,7 @@ import com.example.kodegoskillsimulatorapp.observer.SkillBarObserver
 import com.example.kodegoskillsimulatorapp.observer.SkillDataObserver
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserver {
     private lateinit var binding: ActivitySkillListBinding
@@ -32,6 +33,8 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
 
     private val maxSkillPoints = 49
     private var jobClassSelected: JobClass = JobClass()
+    private var skillBuild: ArrayList<Skill> = ArrayList()
+    private var skillBuildText:String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,19 +42,30 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
         setContentView(binding.root)
 
         jobClassSelected.gameName = intent.extras?.getString("data2").toString()
-        jobClassSelected.name = intent.extras?.getString("data3").toString()
+        jobClassSelected.name = intent.extras?.getString ("data3").toString()
+
+        if(intent.extras?.containsKey("data4") == true){
+            skillBuildText = intent.extras?.getString("data4").toString()
+        }
+
         Log.i("skilllist game id", jobClassSelected.gameName)
         Log.i("skilllist class name", jobClassSelected.name)
 
-        supportActionBar?.title =jobClassSelected.name
+        supportActionBar?.title = jobClassSelected.name
+
+        if (skillBuildText.isEmpty()) {
+            dao = SkillDAOSQLImpl(applicationContext)
+            skills = dao.getSkillPerJob(jobClassSelected.gameName, jobClassSelected.name)
+            skillAdapter = SkillAdapter(skills, this, this, this)
+            binding.skillList.layoutManager = LinearLayoutManager(applicationContext)
+            binding.skillList.adapter = skillAdapter
+        }else {
+            setSkillBuild(skillBuildText)
+        }
 
 //        binding.skillpointsTotal.text = " / ${maxSkillPoints.toString()}"
 
-        dao = SkillDAOSQLImpl(applicationContext)
-        skills = dao.getSkillPerJob(jobClassSelected.gameName, jobClassSelected.name)
-        skillAdapter = SkillAdapter(skills, this, this, this)
-        binding.skillList.layoutManager = LinearLayoutManager(applicationContext)
-        binding.skillList.adapter = skillAdapter
+
 //        setSkillPointsLabelToDefault()
 
     }
@@ -69,7 +83,7 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
             }
             R.id.action_save -> {
                 saveSkillData(skills)
-//                showSkillData(skills)
+                showSkillData(skills)
                 Snackbar.make(binding.root, "Skill build saved.", Snackbar.LENGTH_SHORT).show()
                 return true
             }
@@ -122,6 +136,59 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
 //        binding.skillpointsTotal.setTextColor(textColor)
 //    }
 
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val goToSelect = Intent(this,SelectClassActivity::class.java)
+        startActivity(goToSelect)
+        finish()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
+    override fun saveSkillData(skillData: ArrayList<Skill>) {
+        if(skillData.isNotEmpty()) {
+            var build = Build()
+            val dao2: BuildDAO
+            dao2 = BuildDAOSQLImpl(this)
+            build.name = "Custom Build"
+            build.jobClassName = jobClassSelected.name
+            build.gameName = jobClassSelected.gameName
+            build.description = "custom skill build"
+
+            // using gson method
+            val gson = Gson()
+            build.dataText = gson.toJson(skillData)
+
+            dao2.addBuild(build)
+        }
+    }
+
+    override fun showSkillData(skillData: ArrayList<Skill>) {
+        for(skill in skillData){
+            Log.i("skill data", skill.name)
+            Log.i("skill points", skill.currentLevel.toString())
+        }
+    }
+
+    private fun isBuildNameExists(context: Context, buildName: String): Boolean {
+        val daoBuild = BuildDAOSQLImpl(context)
+        val skillBuild = daoBuild.getBuildByName(buildName)
+        return skillBuild != null
+    }
+
+    private fun setSkillBuild(skillBuildText: String) {
+        val gson = Gson()
+
+        skillBuild = gson.fromJson(skillBuildText, object : TypeToken<ArrayList<Skill>>() {}.type)
+        skillAdapter = SkillAdapter(skillBuild, this, this, this)
+        binding.skillList.layoutManager = LinearLayoutManager(applicationContext)
+        binding.skillList.adapter = skillAdapter
+    }
+
     private fun dialogAddSkill(context: Context){
         context.let {
             val builder = android.app.AlertDialog.Builder(it)
@@ -163,41 +230,6 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
                     .create()
                     .show()
             }
-        }
-    }
-
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-        val goToSelect = Intent(this,SelectClassActivity::class.java)
-        startActivity(goToSelect)
-        finish()
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return true
-    }
-
-    override fun saveSkillData(skillData: ArrayList<Skill>) {
-        val build = Build()
-        daoBuild = BuildDAOSQLImpl(this)
-
-        build.name = "Custom Build"
-        build.jobClassName = jobClassSelected.name
-        build.gameName = jobClassSelected.gameName
-        build.description = "custom skill build"
-
-        // using gson method
-        val gson = Gson()
-        build.dataText = gson.toJson(skillData)
-
-        daoBuild.addBuild(build)
-    }
-
-    override fun showSkillData(skillData: ArrayList<Skill>) {
-        for(skill in skillData){
-            Log.i("skill data", skill.name)
         }
     }
 }
