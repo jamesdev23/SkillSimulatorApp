@@ -21,8 +21,8 @@
             android:id="@+id/edit_class_name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="Class Name"
-            android:text="Class Name"
+            android:hint="@string/class_name"
+            android:text="@string/class_name_1"
             android:maxLines="1" />
 
 
@@ -37,8 +37,8 @@
             android:id="@+id/edit_class_type"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="Class Type"
-            android:text="Type"
+            android:hint="@string/class_type"
+            android:text="@string/ex_melee_ranged_etc"
             android:maxLines="1" />
 
 
@@ -53,8 +53,8 @@
             android:id="@+id/edit_class_description"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="Class Description"
-            android:text="Description"
+            android:hint="@string/class_description"
+            android:text="@string/custom_class"
             android:maxLines="1" />
 
 

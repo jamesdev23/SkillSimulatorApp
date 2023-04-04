@@ -12,4 +12,8 @@
     <string name="custom_build">custom build</string>
     <string name="class_name">Class Name</string>
     <string name="class_name_1">Class Name 1</string>
+    <string name="class_type">Class Type</string>
+    <string name="ex_melee_ranged_etc">Ex. Melee, Ranged, etc.</string>
+    <string name="class_description">Class Description</string>
+    <string name="custom_class">custom class</string>
 </resources>
