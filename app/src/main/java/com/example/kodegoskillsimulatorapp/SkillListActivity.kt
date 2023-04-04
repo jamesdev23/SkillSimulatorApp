@@ -27,9 +27,9 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
     private lateinit var binding: ActivitySkillListBinding
     private lateinit var skillAdapter: SkillAdapter
     private lateinit var dao: SkillDAO
-    private lateinit var skills: ArrayList<Skill>
     private lateinit var daoBuild: BuildDAO
-    private lateinit var builds: ArrayList<Build>
+    private var skills: ArrayList<Skill> = ArrayList()
+    private var builds: ArrayList<Build> = ArrayList()
 
     private val maxSkillPoints = 49
     private var jobClassSelected: JobClass = JobClass()
@@ -68,6 +68,15 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
 
 //        setSkillPointsLabelToDefault()
 
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -135,19 +144,6 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
 //        binding.skillpointsCurrent.setTextColor(textColor)
 //        binding.skillpointsTotal.setTextColor(textColor)
 //    }
-
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-        val goToSelect = Intent(this,SelectClassActivity::class.java)
-        startActivity(goToSelect)
-        finish()
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return true
-    }
 
     override fun saveSkillData(skillData: ArrayList<Skill>) {
         if(skillData.isNotEmpty()) {
@@ -231,5 +227,9 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
                     .show()
             }
         }
+    }
+
+    private fun addSkillToSkillList() {
+
     }
 }

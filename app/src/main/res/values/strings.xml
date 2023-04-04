@@ -4,4 +4,12 @@
     <string name="options">OPTIONS</string>
     <string name="job_class_name_1">Job Class Name 1</string>
     <string name="build_name_1">Build Name 1</string>
+    <string name="custom_game_1">Custom Game 1</string>
+    <string name="add_game">Add Game</string>
+    <string name="game_name">Game Name</string>
+    <string name="build_name">Build Name</string>
+    <string name="description">Description</string>
+    <string name="custom_build">custom build</string>
+    <string name="class_name">Class Name</string>
+    <string name="class_name_1">Class Name 1</string>
 </resources>

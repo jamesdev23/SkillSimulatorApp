@@ -1,8 +1,12 @@
 package com.example.kodegoskillsimulatorapp
 
+import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import androidx.recyclerview.widget.GridLayoutManager
@@ -11,8 +15,13 @@ import com.example.kodegoskillsimulatorapp.adapter.BuildAdapter
 import com.example.kodegoskillsimulatorapp.adapter.JobClassAdapter
 import com.example.kodegoskillsimulatorapp.dao.BuildDAO
 import com.example.kodegoskillsimulatorapp.dao.BuildDAOSQLImpl
+import com.example.kodegoskillsimulatorapp.dao.JobClassDAO
+import com.example.kodegoskillsimulatorapp.dao.JobClassDAOSQLImpl
 import com.example.kodegoskillsimulatorapp.databinding.ActivitySavedBuildsBinding
+import com.example.kodegoskillsimulatorapp.databinding.DialogAddBuildBinding
+import com.example.kodegoskillsimulatorapp.databinding.DialogAddClassBinding
 import com.example.kodegoskillsimulatorapp.model.Build
+import com.example.kodegoskillsimulatorapp.model.JobClass
 import com.example.kodegoskillsimulatorapp.model.Skill
 
 class SavedBuildsActivity : AppCompatActivity() {
@@ -36,6 +45,15 @@ class SavedBuildsActivity : AppCompatActivity() {
 
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.saved_builds_menu, menu)
         return true
@@ -43,6 +61,10 @@ class SavedBuildsActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.action_add_build -> {
+                dialogAddBuild(this)
+                return true
+            }
             R.id.action_select_game -> {
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
@@ -56,15 +78,48 @@ class SavedBuildsActivity : AppCompatActivity() {
                 finish()
                 return true
             }
-            R.id.action_add_build -> {
-                val intent = Intent(this, SkillListActivity::class.java)
-                intent.putExtra("data2", "Ragnarok Online (iRO)")
-                intent.putExtra("data3", "Knight")
-                startActivity(intent)
-                finish()
-                return true
-            }
             else -> return super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun dialogAddBuild(context: Context){
+        context.let {
+            val builder = android.app.AlertDialog.Builder(it)
+            val dialogAddBuildBinding: DialogAddBuildBinding =
+                DialogAddBuildBinding.inflate(LayoutInflater.from(it))
+
+            with(builder) {
+                setPositiveButton("Add", DialogInterface.OnClickListener { _, _ ->
+                    val dao: BuildDAO = BuildDAOSQLImpl(it)
+                    val build = Build()
+
+                    val addBuildName = dialogAddBuildBinding.editBuildName.text.toString()
+                    val addBuildDescription = dialogAddBuildBinding.editBuildDescription.text.toString()
+                    val addBuildGameName = dialogAddBuildBinding.editGameName.text.toString()
+                    val addBuildJobClassName = dialogAddBuildBinding.editClassName.text.toString()
+
+                    build.name = addBuildName
+                    build.description = addBuildDescription
+                    build.gameName = addBuildGameName
+                    build.jobClassName = addBuildJobClassName
+
+                    Log.i("add build name", build.name)
+
+
+                    dao.addBuild(build)
+
+                    var newBuilds = dao.getBuilds()
+                    Log.i("build list", newBuilds.toString())
+                    buildAdapter.updateBuild(newBuilds)
+                    buildAdapter.notifyDataSetChanged()
+                })
+                setNegativeButton("Cancel", DialogInterface.OnClickListener { _, _ ->
+                    // Do something when user press the positive button
+                })
+                    .setView(dialogAddBuildBinding.root)
+                    .create()
+                    .show()
+            }
         }
     }
 

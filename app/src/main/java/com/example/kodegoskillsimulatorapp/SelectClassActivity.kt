@@ -46,6 +46,11 @@ class SelectClassActivity : AppCompatActivity() {
         binding.classList.adapter = jobClassAdapter
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.jobclass_menu, menu)
         return true
@@ -60,6 +65,7 @@ class SelectClassActivity : AppCompatActivity() {
             R.id.action_saved_builds -> {
                 val goToSavedBuilds = Intent(this, SavedBuildsActivity::class.java)
                 startActivity(goToSavedBuilds)
+                finish()
                 return true
             }
             else -> return super.onOptionsItemSelected(item)

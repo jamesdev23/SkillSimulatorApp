@@ -63,7 +63,7 @@ class BuildDAOSQLImpl(var context: Context): BuildDAO {
                 DatabaseHandler.tableBuilds,
                 columns,
                 "${DatabaseHandler.buildName} = ?",
-                arrayOf(DatabaseHandler.buildName),
+                arrayOf(buildName),
                 null,
                 null,
                 null

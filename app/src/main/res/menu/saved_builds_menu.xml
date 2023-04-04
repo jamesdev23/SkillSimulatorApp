@@ -2,19 +2,20 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/action_add_build"
+        android:icon="@drawable/baseline_add_24"
+        android:title="Add Build"
+        app:showAsAction="always">
+    </item>
+    <item
         android:id="@+id/action_select_game"
         android:icon="@drawable/baseline_more_vert_24"
-        android:title="Select Game"
+        android:title="Return to Home"
         app:showAsAction="never">
     </item>
     <item
         android:id="@+id/action_select_class"
         android:title="Select Class"
-        app:showAsAction="never">
-    </item>
-    <item
-        android:id="@+id/action_add_build"
-        android:title="Add Build"
         app:showAsAction="never">
     </item>
 </menu>
