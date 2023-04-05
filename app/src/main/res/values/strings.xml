@@ -20,4 +20,6 @@
     <string name="game_description">Game Description</string>
     <string name="game_info">Game Info</string>
     <string name="x">X</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 </resources>

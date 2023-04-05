@@ -11,7 +11,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context,
 ){
 
     companion object {
-        private val DATABASEVERSION = 19
+        private val DATABASEVERSION = 20
         private val DATABASENAME = "skillsimulatordatabase"
         
         val tableGames = "game_table"

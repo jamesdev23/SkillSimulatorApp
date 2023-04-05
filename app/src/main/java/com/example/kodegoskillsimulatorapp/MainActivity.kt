@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
 
         dao = GameDAOSQLImpl(applicationContext)
         games = dao.getGames()
-        gameAdapter = GameAdapter(games, this)
+        gameAdapter = GameAdapter(games, this, this)
         Log.d("game list", games.toString())
 //        binding.gameList.layoutManager = LinearLayoutManager(applicationContext)
         binding.gameList.layoutManager = GridLayoutManager(applicationContext, 3)

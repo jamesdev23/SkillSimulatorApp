@@ -8,8 +8,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.PopupMenu
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat.startActivity
+import androidx.core.widget.PopupMenuCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.kodegoskillsimulatorapp.R
 import com.example.kodegoskillsimulatorapp.SelectClassActivity
 import com.example.kodegoskillsimulatorapp.SkillListActivity
 import com.example.kodegoskillsimulatorapp.dao.GameDAO
@@ -19,8 +23,9 @@ import com.example.kodegoskillsimulatorapp.databinding.DialogUpdateGameBinding
 import com.example.kodegoskillsimulatorapp.databinding.GameItemGridBinding
 import com.example.kodegoskillsimulatorapp.model.Game
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.NonDisposableHandle.parent
 
-class GameAdapter (var games: ArrayList<Game>, var activity: Activity)
+class GameAdapter (var games: ArrayList<Game>, var activity: Activity, var context: Context)
     : RecyclerView.Adapter<GameAdapter.GameViewHolder>() {
 
     fun addGame(game: Game){
@@ -70,6 +75,8 @@ class GameAdapter (var games: ArrayList<Game>, var activity: Activity)
             activity.startActivity(intent)
             activity.finish()
         }
+
+
     }
 
     inner class GameViewHolder(private val itemBinding: GameItemGridBinding)
@@ -87,23 +94,38 @@ class GameAdapter (var games: ArrayList<Game>, var activity: Activity)
             itemBinding.gameName.text = "${game.name}"
             itemBinding.gamePicture.setImageBitmap(game.icon)
 
-            itemBinding.btnDeleteRow.setOnClickListener {
-                Snackbar.make(
-                    itemBinding.root,
-                    "Delete by button",
-                    Snackbar.LENGTH_SHORT
-                ).show()
+            val popupMenu = PopupMenu(context, itemBinding.btnOptionsRow)
 
-                var dao: GameDAO = GameDAOSQLImpl(it.context)
-                bindGame(game)
-                dao.deleteGame(game.id)
-                removeGame(adapterPosition)
+            popupMenu.menuInflater.inflate(R.menu.game_option_menu, popupMenu.menu)
+
+            popupMenu.setOnMenuItemClickListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.option_edit -> {
+                        Snackbar.make(itemBinding.root, "Game name: ${game.name}", Snackbar.LENGTH_SHORT).show()
+                        dialogShowUpdateGameInfo(context)
+                        true
+                    }
+                    R.id.option_delete -> {
+                        Snackbar.make(itemBinding.root, "Delete ${game.name}", Snackbar.LENGTH_SHORT).show()
+
+                        var dao: GameDAO = GameDAOSQLImpl(itemView.context)
+                        bindGame(game)
+                        dao.deleteGame(game.id)
+                        removeGame(adapterPosition)
+                        true
+                    }
+                    else -> false
+                }
+            }
+
+
+            itemBinding.btnOptionsRow.setOnClickListener {
+                popupMenu.show()
             }
         }
 
         override fun onClick(view: View?) {
-            Snackbar.make(itemBinding.root, "Game name: ${game.name}", Snackbar.LENGTH_SHORT).show()
-            dialogShowUpdateGameInfo(view!!.context)
+            // do nothing
         }
 
         private fun dialogShowUpdateGameInfo(context: Context){
@@ -131,6 +153,7 @@ class GameAdapter (var games: ArrayList<Game>, var activity: Activity)
                         dao.updateGame(game.id, game)
                         updateGame(dao.getGames())
                         notifyItemChanged(adapterPosition)
+                        Snackbar.make(itemBinding.root, "Updated ${game.name}", Snackbar.LENGTH_SHORT).show()
                     })
                     setNegativeButton("Cancel", DialogInterface.OnClickListener { _, _ ->
                         // Do something
