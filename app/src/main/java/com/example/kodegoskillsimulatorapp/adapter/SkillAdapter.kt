@@ -19,7 +19,7 @@ class SkillAdapter(var skills: ArrayList<Skill>, var activity: Activity, var ski
 
     // Declare a list to hold the progress of each SeekBar
     private val skillPointsList: MutableList<Int> = MutableList(itemCount+1){ 0 }
-    private var skillData: ArrayList<Skill> = arrayListOf()
+    private var skillData: ArrayList<Skill> = ArrayList(itemCount+1)
     fun addSkill(skill: Skill){
         skills.add(0,skill)
         notifyItemInserted(0)

@@ -18,4 +18,6 @@
     <string name="custom_class">custom class</string>
     <string name="custom_game">custom game</string>
     <string name="game_description">Game Description</string>
+    <string name="game_info">Game Info</string>
+    <string name="x">X</string>
 </resources>

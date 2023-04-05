@@ -1,6 +1,8 @@
 package com.example.kodegoskillsimulatorapp.adapter
 
 import android.app.Activity
+import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,6 +14,8 @@ import com.example.kodegoskillsimulatorapp.SelectClassActivity
 import com.example.kodegoskillsimulatorapp.SkillListActivity
 import com.example.kodegoskillsimulatorapp.dao.GameDAO
 import com.example.kodegoskillsimulatorapp.dao.GameDAOSQLImpl
+import com.example.kodegoskillsimulatorapp.databinding.DialogAddGameBinding
+import com.example.kodegoskillsimulatorapp.databinding.DialogUpdateGameBinding
 import com.example.kodegoskillsimulatorapp.databinding.GameItemGridBinding
 import com.example.kodegoskillsimulatorapp.model.Game
 import com.google.android.material.snackbar.Snackbar
@@ -83,22 +87,61 @@ class GameAdapter (var games: ArrayList<Game>, var activity: Activity)
             itemBinding.gameName.text = "${game.name}"
             itemBinding.gamePicture.setImageBitmap(game.icon)
 
-//            itemBinding.btnOptionsRow.setOnClickListener {
-//                Snackbar.make(
-//                    itemBinding.root,
-//                    "Delete by button",
-//                    Snackbar.LENGTH_SHORT
-//                ).show()
-//
-//                var dao: GameDAO = GameDAOSQLImpl(it.context)
-//                bindGame(game)
-//                dao.deleteGame(game.id)
-//                removeGame(adapterPosition)
-//            }
+            itemBinding.btnDeleteRow.setOnClickListener {
+                Snackbar.make(
+                    itemBinding.root,
+                    "Delete by button",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+
+                var dao: GameDAO = GameDAOSQLImpl(it.context)
+                bindGame(game)
+                dao.deleteGame(game.id)
+                removeGame(adapterPosition)
+            }
         }
 
         override fun onClick(view: View?) {
-            // do nothing
+            Snackbar.make(itemBinding.root, "Game name: ${game.name}", Snackbar.LENGTH_SHORT).show()
+            dialogShowUpdateGameInfo(view!!.context)
+        }
+
+        private fun dialogShowUpdateGameInfo(context: Context){
+            context.let {
+                val builder = android.app.AlertDialog.Builder(it)
+                val dialogUpdateGameBinding: DialogUpdateGameBinding =
+                    DialogUpdateGameBinding.inflate(LayoutInflater.from(it))
+
+                with(dialogUpdateGameBinding) {
+                    textGameName.setText(game.name)
+                    textGameDescription.setText(game.description)
+                }
+
+                with(builder) {
+                    setPositiveButton("Update", DialogInterface.OnClickListener { _, _ ->
+                        val dao: GameDAO = GameDAOSQLImpl(it)
+                        val updateGameName =
+                            dialogUpdateGameBinding.textGameName.text.toString()
+                        val updateGameDescription =
+                            dialogUpdateGameBinding.textGameDescription.text.toString()
+
+                        game.name = updateGameName
+                        game.description = updateGameDescription
+
+                        dao.updateGame(game.id, game)
+                        updateGame(dao.getGames())
+                        notifyItemChanged(adapterPosition)
+                    })
+                    setNegativeButton("Cancel", DialogInterface.OnClickListener { _, _ ->
+                        // Do something
+                    })
+                        .setView(dialogUpdateGameBinding.root)
+                        .create()
+                        .show()
+                }
+            }
         }
     }
+
+
 }

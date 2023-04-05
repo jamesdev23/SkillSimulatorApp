@@ -11,7 +11,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context,
 ){
 
     companion object {
-        private val DATABASEVERSION = 17
+        private val DATABASEVERSION = 19
         private val DATABASENAME = "skillsimulatordatabase"
         
         val tableGames = "game_table"
@@ -208,6 +208,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context,
 
         db?.execSQL("Insert into $tableGames ($gameName, $gameIconText) values ('Ragnarok Online (iRO)', '$roGameIcon')")
         db?.execSQL("Insert into $tableGames ($gameName, $gameIconText) values ('Custom Game 1', '$defaultGameIcon')")
+        db?.execSQL("Insert into $tableGames ($gameName, $gameIconText) values ('Custom Game 2', '$defaultGameIcon')")
 
         val CREATEJOBCLASSESTABLE = "CREATE TABLE $tableJobclasses " +
                 "($jobclassId INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -355,6 +356,8 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context,
                 "$buildDataText TEXT, " +
                 "$buildImage TEXT)"
         db?.execSQL(CREATEBUILDSTABLE)
+
+
 
 
     }
