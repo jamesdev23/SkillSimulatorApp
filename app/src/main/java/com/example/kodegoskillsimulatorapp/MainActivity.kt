@@ -39,8 +39,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        supportActionBar?.title = "Skill Simulator - Select a Game"
-        supportActionBar?.displayOptions
+        supportActionBar?.apply{
+            title = "Select a Game"
+            displayOptions
+        }
+
 
         dao = GameDAOSQLImpl(applicationContext)
         games = dao.getGames()
@@ -50,6 +53,22 @@ class MainActivity : AppCompatActivity() {
         binding.gameList.layoutManager = GridLayoutManager(applicationContext, 3)
         binding.gameList.adapter = gameAdapter
 
+
+        binding.bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.skill_simulator_tab -> {
+                    val main = Intent(this, MainActivity::class.java)
+                    startActivity(main)
+                    true
+                }
+                R.id.saved_builds_tab -> {
+                    val savedBuilds = Intent(this, SavedBuildsActivity::class.java)
+                    startActivity(savedBuilds)
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     override fun onBackPressed() {
@@ -62,6 +81,7 @@ class MainActivity : AppCompatActivity() {
         }
         backPressedTime = System.currentTimeMillis()
     }
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)

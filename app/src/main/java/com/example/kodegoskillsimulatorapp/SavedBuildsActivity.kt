@@ -38,7 +38,11 @@ class SavedBuildsActivity : AppCompatActivity() {
         binding = ActivitySavedBuildsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        supportActionBar?.title = "Saved Builds"
+        supportActionBar?.apply{
+            title = "Saved Builds"
+            setDisplayHomeAsUpEnabled(true)
+            displayOptions
+        }
 
         dao = BuildDAOSQLImpl(this)
         builds = dao.getBuilds()
@@ -46,10 +50,33 @@ class SavedBuildsActivity : AppCompatActivity() {
         binding.savedBuildsList.layoutManager = LinearLayoutManager(applicationContext)
         binding.savedBuildsList.adapter = buildAdapter
 
+        binding.bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.skill_simulator_tab -> {
+                    val main = Intent(this, MainActivity::class.java)
+                    startActivity(main)
+                    true
+                }
+                R.id.saved_builds_tab -> {
+                    val savedBuilds = Intent(this, SavedBuildsActivity::class.java)
+                    startActivity(savedBuilds)
+                    true
+                }
+                else -> false
+            }
+        }
+
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
         finish()
     }
 

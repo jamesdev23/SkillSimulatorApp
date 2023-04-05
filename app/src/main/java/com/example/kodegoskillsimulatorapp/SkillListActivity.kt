@@ -53,7 +53,11 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
         Log.i("skilllist game id", jobClassSelected.gameName)
         Log.i("skilllist class name", jobClassSelected.name)
 
-        supportActionBar?.title = jobClassSelected.name
+        supportActionBar?.apply{
+            title = jobClassSelected.name
+            setDisplayHomeAsUpEnabled(true)
+            displayOptions
+        }
 
         if (skillBuildText.isEmpty()) {
             dao = SkillDAOSQLImpl(applicationContext)
@@ -72,8 +76,15 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
 
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
+    }
+
     override fun onBackPressed() {
         super.onBackPressed()
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
         finish()
     }
 

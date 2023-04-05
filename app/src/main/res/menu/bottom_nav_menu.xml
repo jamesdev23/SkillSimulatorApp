@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/skill_simulator_tab"
+        android:title="Skill Simulator"
+        android:icon="@drawable/baseline_account_tree_24" />
+
+    <item
+        android:id="@+id/saved_builds_tab"
+        android:title="Saved Builds"
+        android:icon="@drawable/baseline_save_alt_24" />
+
+</menu>

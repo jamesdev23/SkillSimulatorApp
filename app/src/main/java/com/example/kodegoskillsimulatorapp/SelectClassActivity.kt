@@ -39,7 +39,12 @@ class SelectClassActivity : AppCompatActivity() {
 
         Log.i("selectclass game id", gameSelected.id.toString())
 
-        supportActionBar?.title = "Select Class"
+        supportActionBar?.apply{
+            title = "Select Class"
+            setDisplayHomeAsUpEnabled(true)
+            displayOptions
+        }
+
 
         dao = JobClassDAOSQLImpl(applicationContext)
         jobClasses = dao.getJobclassPerGame(gameSelected.name)
@@ -49,8 +54,15 @@ class SelectClassActivity : AppCompatActivity() {
         binding.classList.adapter = jobClassAdapter
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
+    }
+
     override fun onBackPressed() {
         super.onBackPressed()
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
         finish()
     }
 

@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".SelectClassActivity"
     android:gravity="center_horizontal"
-    android:padding="20dp"
     android:orientation="vertical"
     android:weightSum="10">
 
@@ -25,5 +24,13 @@
         android:id="@+id/class_list"
         android:layout_weight="9"
         />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginBottom="0dp"
+        app:menu="@menu/bottom_nav_menu"/>
 
 </LinearLayout>
