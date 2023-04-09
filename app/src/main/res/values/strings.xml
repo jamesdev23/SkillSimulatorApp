@@ -22,4 +22,5 @@
     <string name="x">X</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="custom_class_1">Custom Class 1</string>
 </resources>

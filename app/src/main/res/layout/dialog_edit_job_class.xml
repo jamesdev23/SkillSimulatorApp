@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:padding="5sp"
-        android:text="@string/game_info"
+        android:text="Class Info"
         android:textSize="20sp" />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -18,12 +18,12 @@
         android:padding="5sp">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/text_game_name"
+            android:id="@+id/edit_job_class_name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="@string/game_name"
+            android:hint="@string/class_name"
             android:maxLines="1"
-            android:text="@string/custom_game_1"/>
+            android:text="@string/custom_class_1"/>
 
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -34,11 +34,11 @@
         android:padding="5sp">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/text_game_description"
+            android:id="@+id/edit_job_class_description"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="@string/game_description"
-            android:text="@string/custom_game"
+            android:hint="@string/class_description"
+            android:text="@string/custom_class"
             android:maxLines="1" />
 
 

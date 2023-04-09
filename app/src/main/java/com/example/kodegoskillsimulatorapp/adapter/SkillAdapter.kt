@@ -8,7 +8,7 @@ import android.widget.SeekBar
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kodegoskillsimulatorapp.dao.SkillDAO
 import com.example.kodegoskillsimulatorapp.dao.SkillDAOSQLImpl
-import com.example.kodegoskillsimulatorapp.databinding.SkillItemBinding
+import com.example.kodegoskillsimulatorapp.databinding.ItemSkillBinding
 import com.example.kodegoskillsimulatorapp.model.Skill
 import com.example.kodegoskillsimulatorapp.observer.SkillBarObserver
 import com.example.kodegoskillsimulatorapp.observer.SkillDataObserver
@@ -16,6 +16,8 @@ import com.google.android.material.snackbar.Snackbar
 
 class SkillAdapter(var skills: ArrayList<Skill>, var activity: Activity, var skillDataObserver: SkillDataObserver, var skillBarObserver: SkillBarObserver)
     : RecyclerView.Adapter<SkillAdapter.SkillViewHolder>() {
+
+    // TODO: popup menu, dialog and onClick changes
 
     // Declare a list to hold the progress of each SeekBar
     private val skillPointsList: MutableList<Int> = MutableList(itemCount+1){ 0 }
@@ -47,7 +49,7 @@ class SkillAdapter(var skills: ArrayList<Skill>, var activity: Activity, var ski
         viewType: Int
     ): SkillViewHolder {
 
-        val itemBinding = SkillItemBinding
+        val itemBinding = ItemSkillBinding
             .inflate(
                 LayoutInflater.from(parent.context),
                 parent, false)
@@ -59,7 +61,7 @@ class SkillAdapter(var skills: ArrayList<Skill>, var activity: Activity, var ski
         holder.bindSkill(skills[position])
     }
 
-    inner class SkillViewHolder(private val itemBinding: SkillItemBinding)
+    inner class SkillViewHolder(private val itemBinding: ItemSkillBinding)
         : RecyclerView.ViewHolder(itemBinding.root), View.OnClickListener {
 
         private var skill = Skill()
@@ -116,7 +118,7 @@ class SkillAdapter(var skills: ArrayList<Skill>, var activity: Activity, var ski
         }
         override fun onClick(v: View?) {}
 
-        private fun saveSkillBarProgress(itemBinding: SkillItemBinding, position: Int, progress: Int){
+        private fun saveSkillBarProgress(itemBinding: ItemSkillBinding, position: Int, progress: Int){
             itemBinding.skillValue.text = progress.toString()
             skillPointsList[position] = progress
 //            skillBarObserver.getTotalProgress(skillPointsList)

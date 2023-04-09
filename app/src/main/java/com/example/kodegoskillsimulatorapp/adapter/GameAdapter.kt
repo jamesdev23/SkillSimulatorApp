@@ -14,8 +14,8 @@ import com.example.kodegoskillsimulatorapp.R
 import com.example.kodegoskillsimulatorapp.SelectClassActivity
 import com.example.kodegoskillsimulatorapp.dao.GameDAO
 import com.example.kodegoskillsimulatorapp.dao.GameDAOSQLImpl
-import com.example.kodegoskillsimulatorapp.databinding.DialogUpdateGameBinding
-import com.example.kodegoskillsimulatorapp.databinding.GameItemGridBinding
+import com.example.kodegoskillsimulatorapp.databinding.DialogEditGameBinding
+import com.example.kodegoskillsimulatorapp.databinding.ItemGameGridBinding
 import com.example.kodegoskillsimulatorapp.model.Game
 import com.google.android.material.snackbar.Snackbar
 
@@ -48,7 +48,7 @@ class GameAdapter (var games: ArrayList<Game>, var activity: Activity, var conte
         viewType: Int
     ): GameViewHolder {
 
-        val itemBinding = GameItemGridBinding
+        val itemBinding = ItemGameGridBinding
             .inflate(
                 LayoutInflater.from(parent.context),
                 parent, false)
@@ -58,22 +58,9 @@ class GameAdapter (var games: ArrayList<Game>, var activity: Activity, var conte
     override fun onBindViewHolder(holder: GameViewHolder,
                                   position: Int) {
         holder.bindGame(games[position])
-
-        holder.itemView.setOnClickListener {
-            val intent = Intent(activity.applicationContext, SelectClassActivity::class.java)
-
-            val bundle = Bundle()
-            bundle.putString("data", games[position].name)
-            intent.putExtras(bundle)
-
-            activity.startActivity(intent)
-            activity.finish()
-        }
-
-
     }
 
-    inner class GameViewHolder(private val itemBinding: GameItemGridBinding)
+    inner class GameViewHolder(private val itemBinding: ItemGameGridBinding)
         : RecyclerView.ViewHolder(itemBinding.root), View.OnClickListener {
 
         var game = Game()
@@ -85,9 +72,26 @@ class GameAdapter (var games: ArrayList<Game>, var activity: Activity, var conte
         fun bindGame(game: Game) {
             this.game = game
 
-            itemBinding.gameName.text = "${game.name}"
-            itemBinding.gamePicture.setImageBitmap(game.icon)
+            itemBinding.gameName.text = game.name
 
+            itemBinding.gamePicture.setImageBitmap(game.icon)
+            
+            itemBinding.btnOptionsRow.setOnClickListener {
+                popupMenu()
+            }
+        }
+
+        override fun onClick(view: View?) {
+            val intent = Intent(view?.context, SelectClassActivity::class.java)
+
+            val bundle = Bundle()
+            bundle.putString("data", games[position].name)
+            intent.putExtras(bundle)
+
+            view?.context?.startActivity(intent)
+        }
+
+        private fun popupMenu() {
             val popupMenu = PopupMenu(context, itemBinding.btnOptionsRow)
 
             popupMenu.menuInflater.inflate(R.menu.item_popup_menu, popupMenu.menu)
@@ -96,7 +100,7 @@ class GameAdapter (var games: ArrayList<Game>, var activity: Activity, var conte
                 when (menuItem.itemId) {
                     R.id.option_edit -> {
                         Snackbar.make(itemBinding.root, "Game name: ${game.name}", Snackbar.LENGTH_SHORT).show()
-                        dialogShowUpdateGameInfo(context)
+                        dialogEditGameInfo(context)
                         true
                     }
                     R.id.option_delete -> {
@@ -112,37 +116,30 @@ class GameAdapter (var games: ArrayList<Game>, var activity: Activity, var conte
                 }
             }
 
-
-            itemBinding.btnOptionsRow.setOnClickListener {
-                popupMenu.show()
-            }
+            popupMenu.show()
         }
 
-        override fun onClick(view: View?) {
-            // do nothing
-        }
-
-        private fun dialogShowUpdateGameInfo(context: Context){
+        private fun dialogEditGameInfo(context: Context){
             context.let {
                 val builder = android.app.AlertDialog.Builder(it)
-                val dialogUpdateGameBinding: DialogUpdateGameBinding =
-                    DialogUpdateGameBinding.inflate(LayoutInflater.from(it))
+                val dialogEditGameBinding: DialogEditGameBinding =
+                    DialogEditGameBinding.inflate(LayoutInflater.from(it))
 
-                with(dialogUpdateGameBinding) {
-                    textGameName.setText(game.name)
-                    textGameDescription.setText(game.description)
+                with(dialogEditGameBinding) {
+                    editGameName.setText(game.name)
+                    editGameDescription.setText(game.description)
                 }
 
                 with(builder) {
                     setPositiveButton("Update", DialogInterface.OnClickListener { _, _ ->
                         val dao: GameDAO = GameDAOSQLImpl(it)
-                        val updateGameName =
-                            dialogUpdateGameBinding.textGameName.text.toString()
-                        val updateGameDescription =
-                            dialogUpdateGameBinding.textGameDescription.text.toString()
+                        val editGameName =
+                            dialogEditGameBinding.editGameName.text.toString()
+                        val editGameDescription =
+                            dialogEditGameBinding.editGameDescription.text.toString()
 
-                        game.name = updateGameName
-                        game.description = updateGameDescription
+                        game.name = editGameName
+                        game.description = editGameDescription
 
                         dao.updateGame(game.id, game)
                         updateGame(dao.getGames())
@@ -152,7 +149,7 @@ class GameAdapter (var games: ArrayList<Game>, var activity: Activity, var conte
                     setNegativeButton("Cancel", DialogInterface.OnClickListener { _, _ ->
                         // Do something
                     })
-                        .setView(dialogUpdateGameBinding.root)
+                        .setView(dialogEditGameBinding.root)
                         .create()
                         .show()
                 }
