@@ -9,21 +9,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.content.ContextCompat.startActivity
-import androidx.core.widget.PopupMenuCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kodegoskillsimulatorapp.R
 import com.example.kodegoskillsimulatorapp.SelectClassActivity
-import com.example.kodegoskillsimulatorapp.SkillListActivity
 import com.example.kodegoskillsimulatorapp.dao.GameDAO
 import com.example.kodegoskillsimulatorapp.dao.GameDAOSQLImpl
-import com.example.kodegoskillsimulatorapp.databinding.DialogAddGameBinding
 import com.example.kodegoskillsimulatorapp.databinding.DialogUpdateGameBinding
 import com.example.kodegoskillsimulatorapp.databinding.GameItemGridBinding
 import com.example.kodegoskillsimulatorapp.model.Game
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.NonDisposableHandle.parent
 
 class GameAdapter (var games: ArrayList<Game>, var activity: Activity, var context: Context)
     : RecyclerView.Adapter<GameAdapter.GameViewHolder>() {
@@ -96,7 +90,7 @@ class GameAdapter (var games: ArrayList<Game>, var activity: Activity, var conte
 
             val popupMenu = PopupMenu(context, itemBinding.btnOptionsRow)
 
-            popupMenu.menuInflater.inflate(R.menu.game_option_menu, popupMenu.menu)
+            popupMenu.menuInflater.inflate(R.menu.item_popup_menu, popupMenu.menu)
 
             popupMenu.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
