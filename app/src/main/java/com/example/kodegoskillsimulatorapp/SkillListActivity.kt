@@ -53,20 +53,10 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
         Log.i("skilllist game id", jobClassSelected.gameName)
         Log.i("skilllist class name", jobClassSelected.name)
 
-        supportActionBar?.apply{
+        supportActionBar?.apply {
             title = jobClassSelected.name
             setDisplayHomeAsUpEnabled(true)
             displayOptions
-        }
-
-        if (skillBuildText.isEmpty()) {
-            dao = SkillDAOSQLImpl(applicationContext)
-            skills = dao.getSkillPerJob(jobClassSelected.gameName, jobClassSelected.name)
-            skillAdapter = SkillAdapter(skills, this, this, this)
-            binding.skillList.layoutManager = LinearLayoutManager(applicationContext)
-            binding.skillList.adapter = skillAdapter
-        }else {
-            setSkillBuild(skillBuildText)
         }
 
         binding.bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
@@ -85,8 +75,17 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
             }
         }
 
-//        binding.skillpointsTotal.text = " / ${maxSkillPoints.toString()}"
+        if (skillBuildText.isEmpty()) {
+            dao = SkillDAOSQLImpl(applicationContext)
+            skills = dao.getSkillPerJob(jobClassSelected.gameName, jobClassSelected.name)
+            skillAdapter = SkillAdapter(skills, this, this, this)
+            binding.skillList.layoutManager = LinearLayoutManager(applicationContext)
+            binding.skillList.adapter = skillAdapter
+        } else {
+            setSkillBuild(skillBuildText)
+        }
 
+//        binding.skillpointsTotal.text = " / ${maxSkillPoints.toString()}"
 
 //        setSkillPointsLabelToDefault()
 
