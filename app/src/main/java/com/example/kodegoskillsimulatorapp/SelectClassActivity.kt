@@ -52,6 +52,22 @@ class SelectClassActivity : AppCompatActivity() {
 //        binding.classList.layoutManager = LinearLayoutManager(applicationContext)
         binding.classList.layoutManager = GridLayoutManager(applicationContext, 3)
         binding.classList.adapter = jobClassAdapter
+
+        binding.bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.skill_simulator_tab -> {
+                    val main = Intent(this, MainActivity::class.java)
+                    startActivity(main)
+                    true
+                }
+                R.id.saved_builds_tab -> {
+                    val savedBuilds = Intent(this, SavedBuildsActivity::class.java)
+                    startActivity(savedBuilds)
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

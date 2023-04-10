@@ -23,4 +23,10 @@
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="custom_class_1">Custom Class 1</string>
+    <string name="class_info">Class Info</string>
+    <string name="skill_info">Skill Info</string>
+    <string name="skill_name">Skill Name</string>
+    <string name="skill_name_1">Skill Name 1</string>
+    <string name="skill_description">Skill Description</string>
+    <string name="custom_skill">custom skill</string>
 </resources>

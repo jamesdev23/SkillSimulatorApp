@@ -69,6 +69,22 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
             setSkillBuild(skillBuildText)
         }
 
+        binding.bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.skill_simulator_tab -> {
+                    val main = Intent(this, MainActivity::class.java)
+                    startActivity(main)
+                    true
+                }
+                R.id.saved_builds_tab -> {
+                    val savedBuilds = Intent(this, SavedBuildsActivity::class.java)
+                    startActivity(savedBuilds)
+                    true
+                }
+                else -> false
+            }
+        }
+
 //        binding.skillpointsTotal.text = " / ${maxSkillPoints.toString()}"
 
 

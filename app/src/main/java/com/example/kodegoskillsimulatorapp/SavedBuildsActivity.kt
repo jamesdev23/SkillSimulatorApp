@@ -58,8 +58,6 @@ class SavedBuildsActivity : AppCompatActivity() {
                     true
                 }
                 R.id.saved_builds_tab -> {
-                    val savedBuilds = Intent(this, SavedBuildsActivity::class.java)
-                    startActivity(savedBuilds)
                     true
                 }
                 else -> false

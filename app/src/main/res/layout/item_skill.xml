@@ -2,90 +2,88 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="100dp"
     app:cardCornerRadius="16dp"
     app:cardElevation="4dp"
     app:cardUseCompatPadding="true">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="10"
         android:padding="8dp">
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/skill_icon"
             android:layout_width="30dp"
-            android:layout_weight="0.2"
             android:layout_height="30dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
             android:scaleType="fitXY"
             android:src="@drawable/icon_default"
             />
 
-        <LinearLayout
-            android:layout_width="0dp"
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/skill_name"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_weight="8.8">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="10"
-                android:padding="3dp">
-
-                <TextView
-                    android:id="@+id/skill_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Skill name #1"
-                    android:textSize="12sp"
-                    android:layout_gravity="center_vertical"
-                    android:gravity="center_vertical"
-                    android:paddingStart="5dp"
-                    android:layout_weight="2"
-                    />
-
-                <TextView
-                    android:id="@+id/skill_value"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:gravity="center"
-                    android:text="1"
-                    android:textSize="15sp"
-                    android:padding="12dp"
-                    android:layout_weight="8"
-                    />
-
-
-            </LinearLayout>
-
-
-            <androidx.appcompat.widget.AppCompatSeekBar
-                android:id="@+id/skill_bar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="30dp"
-                android:progressDrawable="@drawable/custom_seekbar"
-                android:thumb="@drawable/thumb"
-                />
-
-
-        </LinearLayout>
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@id/skill_icon"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="8dp"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:text="@string/skill_name_1"
+            android:textSize="12sp" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/btn_options_row"
-            android:layout_width="0dp"
+            android:id="@+id/skill_value"
+            android:layout_width="30dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/x"
-            android:textAlignment="center"
+            android:layout_alignParentTop="true"
+            android:layout_alignEnd="@id/btn_options_row"
+            android:layout_marginEnd="30dp"
+            android:layout_marginTop="8dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:text="10"
+            android:textSize="15sp"
             />
 
-    </LinearLayout>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_options_row"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="-5dp"
+            android:background="@drawable/baseline_more_vert_24"
+            android:contentDescription="@string/options"
+            android:gravity="center_horizontal"
+            android:text="@string/x"
+            android:textAlignment="center"
+            tools:ignore="TouchTargetSizeCheck" />
+
+
+
+        <androidx.appcompat.widget.AppCompatSeekBar
+            android:id="@+id/skill_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="23dp"
+            android:minHeight="30dp"
+            android:min="0"
+            android:max="10"
+            android:progress="10"
+            android:progressDrawable="@drawable/custom_seekbar"
+            android:thumb="@drawable/thumb"
+            app:tickMarkTint="@color/maximum_green"
+            style="@style/Widget.AppCompat.SeekBar.Discrete"
+            tools:targetApi="o" />
+
+    </RelativeLayout>
 
 </androidx.cardview.widget.CardView>
