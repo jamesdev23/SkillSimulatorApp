@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
         gameAdapter = GameAdapter(games, this, this)
         Log.d("game list", games.toString())
 //        binding.gameList.layoutManager = LinearLayoutManager(applicationContext)
-        binding.gameList.layoutManager = GridLayoutManager(applicationContext, 3)
+        binding.gameList.layoutManager = GridLayoutManager(applicationContext, 2)
         binding.gameList.adapter = gameAdapter
 
 

@@ -29,4 +29,6 @@
     <string name="skill_name_1">Skill Name 1</string>
     <string name="skill_description">Skill Description</string>
     <string name="custom_skill">custom skill</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -50,7 +50,7 @@ class SelectClassActivity : AppCompatActivity() {
         jobClasses = dao.getJobclassPerGame(gameSelected.name)
         jobClassAdapter = JobClassAdapter(jobClasses, this)
 //        binding.classList.layoutManager = LinearLayoutManager(applicationContext)
-        binding.classList.layoutManager = GridLayoutManager(applicationContext, 3)
+        binding.classList.layoutManager = GridLayoutManager(applicationContext, 2)
         binding.classList.adapter = jobClassAdapter
 
         binding.bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
