@@ -7,7 +7,8 @@
     android:layout_height="100dp"
     app:cardCornerRadius="16dp"
     app:cardElevation="4dp"
-    app:cardUseCompatPadding="true">
+    app:cardUseCompatPadding="true"
+    android:layout_margin="5dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -35,7 +36,9 @@
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
             android:text="@string/skill_name_1"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:textStyle="bold"
+            />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/skill_value"
@@ -47,20 +50,21 @@
             android:layout_marginTop="8dp"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
-            android:text="10"
+            android:text="@string/_10"
             android:textSize="15sp"
+            android:textStyle="bold"
             />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_options_row"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="3dp"
             android:layout_marginEnd="-5dp"
             android:background="@drawable/baseline_more_vert_24"
             android:contentDescription="@string/options"
-            android:gravity="center_horizontal"
             android:text="@string/x"
             android:textAlignment="center"
             tools:ignore="TouchTargetSizeCheck" />
@@ -69,7 +73,7 @@
 
         <androidx.appcompat.widget.AppCompatSeekBar
             android:id="@+id/skill_bar"
-            android:layout_width="match_parent"
+            android:layout_width="320dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginStart="30dp"
@@ -80,9 +84,10 @@
             android:progress="10"
             android:progressDrawable="@drawable/custom_seekbar"
             android:thumb="@drawable/thumb"
-            app:tickMarkTint="@color/maximum_green"
+            app:tickMarkTint="@color/royal_azure_blue"
             style="@style/Widget.AppCompat.SeekBar.Discrete"
-            tools:targetApi="o" />
+            tools:targetApi="o"
+            />
 
     </RelativeLayout>
 

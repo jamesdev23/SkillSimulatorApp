@@ -9,7 +9,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
+import androidx.core.view.isEmpty
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kodegoskillsimulatorapp.adapter.BuildAdapter
@@ -49,6 +51,10 @@ class SavedBuildsActivity : AppCompatActivity() {
         buildAdapter = BuildAdapter(builds, this)
         binding.savedBuildsList.layoutManager = LinearLayoutManager(applicationContext)
         binding.savedBuildsList.adapter = buildAdapter
+
+        if(builds.isEmpty()){
+            binding.layoutListEmpty.visibility = View.VISIBLE
+        }
 
         binding.bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {

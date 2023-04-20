@@ -31,11 +31,9 @@ import com.google.android.material.snackbar.Snackbar
 class SkillAdapter(var skills: ArrayList<Skill>, var context: Context, var skillDataObserver: SkillDataObserver, var skillBarObserver: SkillBarObserver)
     : RecyclerView.Adapter<SkillAdapter.SkillViewHolder>() {
 
-    // TODO: popup menu, dialog and onClick changes
-
     // Declare a list to hold the progress of each SeekBar
-    private val skillPointsList: MutableList<Int> = MutableList(itemCount+1){ 0 }
-    private var skillData: ArrayList<Skill> = ArrayList(itemCount+1)
+    private val skillPointsList: MutableList<Int> = MutableList(100){ 0 }
+    private var skillData: ArrayList<Skill> = ArrayList(100)
     fun addSkill(skill: Skill){
         skills.add(0,skill)
         notifyItemInserted(0)
@@ -89,6 +87,13 @@ class SkillAdapter(var skills: ArrayList<Skill>, var context: Context, var skill
         fun bindSkill(skill: Skill) {
             this.skill = skill
 
+            // misc changes when skill is a quest skill
+            if(skill.skillType.equals("Quest")) {
+                itemBinding.skillValue.text = "1"
+                itemBinding.skillBar.progress = 1
+                itemBinding.skillBar.isEnabled = false
+            }
+
             itemBinding.skillName.text = skill.name
             itemBinding.skillBar.progress = skill.currentLevel
             itemBinding.skillBar.min = skill.minLevel
@@ -101,22 +106,17 @@ class SkillAdapter(var skills: ArrayList<Skill>, var context: Context, var skill
             }
 
             // setting seekbar width dynamically
-//            var maxValue = skill.maxLevel
-//            val params = itemBinding.skillBar.layoutParams as RelativeLayout.LayoutParams
-//
-//            // if(maxValue == 1) maxValue = 2
-//
-//            params.width = (maxValue * context.resources.getDimension(R.dimen.seekbar_width_multiplier)).toInt()
-//
-//            itemBinding.skillBar.layoutParams = params
+            var maxValue = skill.maxLevel
+            val params = itemBinding.skillBar.layoutParams as RelativeLayout.LayoutParams
+
+            if(maxValue == 1) maxValue = 2
+
+            params.width = (maxValue * context.resources.getDimension(R.dimen.seekbar_width_multiplier)).toInt()
+
+            itemBinding.skillBar.layoutParams = params
 
 
-            // misc changes when skill is a quest skill
-            if(skill.skillType.equals("Quest")) {
-                itemBinding.skillValue.text = "1"
-                itemBinding.skillBar.progress = 1
-                itemBinding.skillBar.isEnabled = false
-            }
+
 
             // add skill points to observers
             skillPointsList[adapterPosition] = itemBinding.skillBar.progress

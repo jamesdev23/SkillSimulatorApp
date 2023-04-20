@@ -8,6 +8,6 @@ class JobClass {
     var name:String = ""
     var type:String = ""
     var description: String = ""
-    var img:Bitmap = Bitmap.createBitmap(0, 0, Bitmap.Config.ARGB_8888)
+    var img:Bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
 
 }

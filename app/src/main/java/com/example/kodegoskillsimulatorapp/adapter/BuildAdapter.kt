@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.kodegoskillsimulatorapp.SkillListActivity
 import com.example.kodegoskillsimulatorapp.dao.BuildDAO
 import com.example.kodegoskillsimulatorapp.dao.BuildDAOSQLImpl
-import com.example.kodegoskillsimulatorapp.databinding.BuildItemBinding
+import com.example.kodegoskillsimulatorapp.databinding.ItemBuildBinding
 import com.example.kodegoskillsimulatorapp.model.Build
 import com.google.android.material.snackbar.Snackbar
 
@@ -43,7 +43,7 @@ class BuildAdapter (var builds: ArrayList<Build>, var activity: Activity)
         viewType: Int
     ): BuildViewHolder {
 
-        val itemBinding = BuildItemBinding
+        val itemBinding = ItemBuildBinding
             .inflate(
                 LayoutInflater.from(parent.context),
                 parent, false)
@@ -66,7 +66,7 @@ class BuildAdapter (var builds: ArrayList<Build>, var activity: Activity)
         }
     }
 
-    inner class BuildViewHolder(private val itemBinding: BuildItemBinding)
+    inner class BuildViewHolder(private val itemBinding: ItemBuildBinding)
         : RecyclerView.ViewHolder(itemBinding.root), View.OnClickListener {
 
         var build = Build()

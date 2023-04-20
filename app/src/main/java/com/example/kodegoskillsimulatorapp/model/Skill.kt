@@ -7,7 +7,7 @@ class Skill {
     var jobClassName: String = ""
     var gameName: String = ""
     var name: String = ""
-    var icon: Bitmap = Bitmap.createBitmap(0, 0, Bitmap.Config.ARGB_8888)
+    var icon: Bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
     var description: String = ""
     var maxLevel: Int = 10
     var minLevel: Int = 0

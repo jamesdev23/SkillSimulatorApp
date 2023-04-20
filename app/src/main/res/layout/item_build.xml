@@ -8,7 +8,8 @@
     android:layout_marginTop="5dp"
     app:cardCornerRadius="16dp"
     app:cardElevation="4dp"
-    app:cardUseCompatPadding="true">
+    app:cardUseCompatPadding="true"
+    android:layout_margin="5dp">
 
 
     <LinearLayout
@@ -32,7 +33,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="4dp"
-            android:layout_weight="6">
+            android:layout_weight="7">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/build_name"
@@ -40,6 +41,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/build_name_1"
                 android:textSize="18sp"
+                android:textColor="@android:color/holo_blue_light"
+                android:textStyle="bold"
                 />
 
             <com.google.android.material.textview.MaterialTextView
@@ -48,6 +51,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/game_name_1"
                 android:textSize="18sp"
+                android:textStyle="bold"
                 />
 
             <com.google.android.material.textview.MaterialTextView
@@ -56,6 +60,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/job_class_name_1"
                 android:textSize="18sp"
+                android:textStyle="bold"
                 />
 
         </LinearLayout>
@@ -63,11 +68,10 @@
 
         <Button
             android:id="@+id/btn_options_row"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:background="@drawable/baseline_more_vert_24"
-            android:layout_gravity="center_vertical"
+            android:layout_gravity="center_vertical|top"
             />
 
 
