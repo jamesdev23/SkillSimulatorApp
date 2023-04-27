@@ -1,6 +1,7 @@
 package com.example.kodegoskillsimulatorapp.adapter
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -22,6 +23,7 @@ import com.example.kodegoskillsimulatorapp.dao.JobClassDAOSQLImpl
 import com.example.kodegoskillsimulatorapp.dao.SkillDAO
 import com.example.kodegoskillsimulatorapp.dao.SkillDAOSQLImpl
 import com.example.kodegoskillsimulatorapp.databinding.DialogEditSkillBinding
+import com.example.kodegoskillsimulatorapp.databinding.DialogSkillDetailsBinding
 import com.example.kodegoskillsimulatorapp.databinding.ItemSkillBinding
 import com.example.kodegoskillsimulatorapp.model.Skill
 import com.example.kodegoskillsimulatorapp.observer.SkillBarObserver
@@ -69,15 +71,17 @@ class SkillAdapter(var skills: ArrayList<Skill>, var context: Context, var skill
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    override fun onBindViewHolder(holder: SkillViewHolder,
-                                  position: Int) {
+    override fun onBindViewHolder(
+        holder: SkillViewHolder,
+        position: Int
+    ) {
         holder.bindSkill(skills[position])
     }
 
-    inner class SkillViewHolder(private val itemBinding: ItemSkillBinding)
-        : RecyclerView.ViewHolder(itemBinding.root), View.OnClickListener {
+    inner class SkillViewHolder(private val itemBinding: ItemSkillBinding) :
+        RecyclerView.ViewHolder(itemBinding.root), View.OnClickListener {
 
-        private var skill = Skill()
+        var skill = Skill()
 
         init{
             itemView.setOnClickListener(this)
@@ -88,8 +92,7 @@ class SkillAdapter(var skills: ArrayList<Skill>, var context: Context, var skill
             this.skill = skill
 
             // misc changes when skill is a quest skill
-            if(skill.skillType.equals("Quest")) {
-                itemBinding.skillValue.text = "1"
+            if(skill.skillType == "Quest") {
                 itemBinding.skillBar.progress = 1
                 itemBinding.skillBar.isEnabled = false
             }
@@ -116,8 +119,6 @@ class SkillAdapter(var skills: ArrayList<Skill>, var context: Context, var skill
             itemBinding.skillBar.layoutParams = params
 
 
-
-
             // add skill points to observers
             skillPointsList[adapterPosition] = itemBinding.skillBar.progress
             skillData.add(skill)
@@ -140,11 +141,24 @@ class SkillAdapter(var skills: ArrayList<Skill>, var context: Context, var skill
 
             })
 
-
         }
 
-        override fun onClick(view: View?) {
-            // do nothing
+        override fun onClick(v: View?) {
+            dialogSkillDetails(v!!.context)
+        }
+
+
+        private fun saveSkillBarProgress(itemBinding: ItemSkillBinding, position: Int, progress: Int){
+            itemBinding.skillValue.text = progress.toString()
+            skillPointsList[position] = progress
+//            skillBarObserver.getTotalProgress(skillPointsList)
+//            skillBarObserver.checkSkillPoints(skillPointsList)
+        }
+
+        private fun setSeekbarWhenOutOfScreen(position: Int, progress: Int){
+            if (adapterPosition != RecyclerView.NO_POSITION) {
+                skillPointsList[adapterPosition] = progress
+            }
         }
 
         @RequiresApi(Build.VERSION_CODES.O)
@@ -158,7 +172,7 @@ class SkillAdapter(var skills: ArrayList<Skill>, var context: Context, var skill
                     R.id.option_edit -> {
                         Snackbar.make(
                             itemBinding.root,
-                            "Job Class name: ${skill.name}",
+                            "Skill Name: ${skill.name}",
                             Snackbar.LENGTH_SHORT
                         ).show()
                         dialogEditSkillInfo(context)
@@ -184,14 +198,40 @@ class SkillAdapter(var skills: ArrayList<Skill>, var context: Context, var skill
             popupMenu.show()
         }
 
+        private fun dialogSkillDetails(context: Context){
+            context.let {
+                val builder = AlertDialog.Builder(it)
+                val dialogSkillDetailsBinding: DialogSkillDetailsBinding =
+                    DialogSkillDetailsBinding.inflate(LayoutInflater.from(it))
+
+                with(dialogSkillDetailsBinding) {
+                    skillName.text = skill.name
+                    skillMaxLevel.text = skill.maxLevel.toString()
+                    skillType.text = skill.skillType
+                    skillDescription.text = skill.description
+                }
+
+                with(builder) {
+                    setPositiveButton("OK", DialogInterface.OnClickListener { _, _ ->
+                        // does nothing
+                    })
+                        .setView(dialogSkillDetailsBinding.root)
+                        .create()
+                        .show()
+                }
+            }
+        }
+
         private fun dialogEditSkillInfo(context: Context){
             context.let {
-                val builder = android.app.AlertDialog.Builder(it)
+                val builder = AlertDialog.Builder(it)
                 val dialogEditSkillBinding: DialogEditSkillBinding =
                     DialogEditSkillBinding.inflate(LayoutInflater.from(it))
 
                 with(dialogEditSkillBinding) {
                     editSkillName.setText(skill.name)
+                    editSkillMaxLevel.setText(skill.maxLevel.toString())
+                    editSkillType.setText(skill.skillType)
                     editSkillDescription.setText(skill.description)
                 }
 
@@ -199,10 +239,16 @@ class SkillAdapter(var skills: ArrayList<Skill>, var context: Context, var skill
                     setPositiveButton("Update", DialogInterface.OnClickListener { _, _ ->
                         val editSkillName =
                             dialogEditSkillBinding.editSkillName.text.toString()
+                        val editSkillMaxLevel =
+                            dialogEditSkillBinding.editSkillMaxLevel.text.toString()
+                        val editSkillType =
+                            dialogEditSkillBinding.editSkillType.text.toString()
                         val editSkillDescription =
                             dialogEditSkillBinding.editSkillDescription.text.toString()
 
                         skill.name = editSkillName
+                        skill.maxLevel = editSkillMaxLevel.toInt()
+                        skill.skillType = editSkillType
                         skill.description = editSkillDescription
 
                         val dao: SkillDAO = SkillDAOSQLImpl(it)
@@ -212,7 +258,7 @@ class SkillAdapter(var skills: ArrayList<Skill>, var context: Context, var skill
                         Snackbar.make(itemBinding.root, "Updated ${skill.name}", Snackbar.LENGTH_SHORT).show()
                     })
                     setNegativeButton("Cancel", DialogInterface.OnClickListener { _, _ ->
-                        // Do something
+                        // does nothing
                     })
                         .setView(dialogEditSkillBinding.root)
                         .create()
@@ -220,21 +266,10 @@ class SkillAdapter(var skills: ArrayList<Skill>, var context: Context, var skill
                 }
             }
         }
-        
+
 
    
-        private fun saveSkillBarProgress(itemBinding: ItemSkillBinding, position: Int, progress: Int){
-            itemBinding.skillValue.text = progress.toString()
-            skillPointsList[position] = progress
-//            skillBarObserver.getTotalProgress(skillPointsList)
-//            skillBarObserver.checkSkillPoints(skillPointsList)
-        }
 
-        private fun setSeekbarWhenOutOfScreen(position: Int, progress: Int){
-            if (adapterPosition != RecyclerView.NO_POSITION) {
-                skillPointsList[adapterPosition] = progress
-            }
-        }
     }
 
 

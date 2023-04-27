@@ -52,10 +52,6 @@ class SavedBuildsActivity : AppCompatActivity() {
         binding.savedBuildsList.layoutManager = LinearLayoutManager(applicationContext)
         binding.savedBuildsList.adapter = buildAdapter
 
-        if(builds.isEmpty()){
-            binding.layoutListEmpty.visibility = View.VISIBLE
-        }
-
         binding.bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.skill_simulator_tab -> {

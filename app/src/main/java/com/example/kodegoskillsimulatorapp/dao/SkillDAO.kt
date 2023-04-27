@@ -49,6 +49,7 @@ class SkillDAOSQLImpl(var context: Context): SkillDAO {
             DatabaseHandler.skillGameName,
             DatabaseHandler.skillMaxLevel,
             DatabaseHandler.skillMinLevel,
+            DatabaseHandler.skillType,
             DatabaseHandler.skillDescription,
             DatabaseHandler.skillIcon
         )
@@ -82,7 +83,13 @@ class SkillDAOSQLImpl(var context: Context): SkillDAO {
                 skill.gameName = cursor.getString(3)
                 skill.maxLevel = cursor.getInt(4)
                 skill.minLevel = cursor.getInt(5)
-                skill.description = cursor.getString(6)
+                skill.skillType = cursor.getString(6)
+
+                if(skill.skillType.isEmpty()){
+                   skill.skillType = "Not Set"
+                }
+
+                skill.description = cursor.getString(7)
 
                 getIcon(cursor, skill)
 
@@ -108,6 +115,8 @@ class SkillDAOSQLImpl(var context: Context): SkillDAO {
         val contentValues = ContentValues()
         contentValues.put(DatabaseHandler.skillName, skill.name)
         contentValues.put(DatabaseHandler.skillMaxLevel, skill.maxLevel)
+        contentValues.put(DatabaseHandler.skillType, skill.skillType)
+        contentValues.put(DatabaseHandler.skillDescription, skill.description)
 
         val values = arrayOf("$skillId")
         val success = db.update(
@@ -134,7 +143,7 @@ class SkillDAOSQLImpl(var context: Context): SkillDAO {
         var iconBitmap: Bitmap
 
         try {
-            val iconText:String = cursor.getString(7)
+            val iconText:String = cursor.getString(8)
             val iconByte:ByteArray = android.util.Base64.decode(iconText, android.util.Base64.DEFAULT)
 
             iconBitmap = iconByte.let { BitmapFactory.decodeByteArray(it, 0, it.size) }!!

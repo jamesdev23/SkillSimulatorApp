@@ -35,4 +35,18 @@
     <string name="skill_simulator">Skill Simulator</string>
     <string name="saved_builds">Saved Builds</string>
     <string name="_10">10</string>
+    <string name="splash_logo">SPLASH LOGO</string>
+    <string name="skill_details">Skill Details</string>
+    <string name="skill_logo">SKILL LOGO</string>
+    <string name="skill_name_label1">Skill Name:</string>
+    <string name="description_label1">Description:</string>
+    <string name="level_label1">Level:</string>
+    <string name="lorem_ipsum">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</string>
+    <string name="add_skill">Add Skill</string>
+    <string name="save_this_build">Save this build</string>
+    <string name="add_build">Add Build</string>
+    <string name="add_class">Add Class</string>
+    <string name="skill_type">Skill Type</string>
+    <string name="active">Active</string>
+    <string name="max_level">Max Level</string>
 </resources>

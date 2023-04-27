@@ -2,27 +2,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="8dp">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:padding="5sp"
-        android:text="Add Skill"
+        android:text="@string/add_skill"
         android:textSize="20sp" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5sp">
+        android:layout_marginBottom="10dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_skill_name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="Skill Name"
-            android:text="Skill Name"
+            android:hint="@string/skill_name"
+            android:text="@string/skill_name_1"
             android:maxLines="1" />
 
 
@@ -31,14 +36,14 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5sp">
+        android:layout_marginBottom="10dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_skill_max_level"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="number"
-            android:hint="Max. Level"
+            android:hint="Max Level"
             android:text="10"
             android:maxLines="1" />
 
@@ -48,14 +53,14 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5sp">
+        android:layout_marginBottom="10dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_skill_min_level"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="number"
-            android:hint="Min. Level"
+            android:hint="Min Level"
             android:text="1"
             android:maxLines="1" />
 
@@ -65,7 +70,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5sp">
+        android:layout_marginBottom="10dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_skill_description"
