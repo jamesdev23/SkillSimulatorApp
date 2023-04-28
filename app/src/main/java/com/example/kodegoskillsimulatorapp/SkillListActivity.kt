@@ -194,13 +194,14 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
         }
     }
 
-    private fun isBuildNameExists(context: Context, buildName: String): Boolean {
-        val daoBuild = BuildDAOSQLImpl(context)
-        val skillBuild = daoBuild.getBuildByName(buildName)
-        return skillBuild != null
-    }
+//    private fun isBuildNameExists(context: Context, buildName: String): Boolean {
+//        val daoBuild = BuildDAOSQLImpl(context)
+//        val skillBuild = daoBuild.getBuildByName(buildName)
+//        return true
+//    }
 
     private fun setSkillBuild(skillBuildText: String) {
+        Log.d("SKILL BUILD TEXT FROM SKILLLIST", skillBuildText)
         val gson = Gson()
 
         skillBuild = gson.fromJson(skillBuildText, object : TypeToken<ArrayList<Skill>>() {}.type)

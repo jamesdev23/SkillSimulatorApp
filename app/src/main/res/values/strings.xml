@@ -49,4 +49,8 @@
     <string name="skill_type">Skill Type</string>
     <string name="active">Active</string>
     <string name="max_level">Max Level</string>
+    <string name="min_level">Min Level</string>
+    <string name="_1">1</string>
+    <string name="type">Type</string>
+    <string name="not_set">Not Set</string>
 </resources>

@@ -128,6 +128,7 @@ class SavedBuildsActivity : AppCompatActivity() {
                     build.description = addBuildDescription
                     build.gameName = addBuildGameName
                     build.jobClassName = addBuildJobClassName
+                    build.dataText = ""
 
                     Log.i("add build name", build.name)
 

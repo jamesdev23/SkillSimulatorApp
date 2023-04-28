@@ -15,7 +15,6 @@ interface SkillDAO {
     fun getSkillPerJob(gameName: String, jobClassName: String): ArrayList<Skill>
     fun updateSkill(skillId: Int, skill: Skill)
     fun deleteSkill(skillId: Int)
-
     fun getIcon(cursor: Cursor, skill: Skill)
 }
 
@@ -32,6 +31,7 @@ class SkillDAOSQLImpl(var context: Context): SkillDAO {
         contentValues.put(DatabaseHandler.skillJobClassName, skill.jobClassName)
         contentValues.put(DatabaseHandler.skillGameName, skill.gameName)
         contentValues.put(DatabaseHandler.skillMaxLevel, skill.maxLevel)
+        contentValues.put(DatabaseHandler.skillType, skill.skillType)
         contentValues.put(DatabaseHandler.skillDescription, skill.description)
         contentValues.put(DatabaseHandler.skillIcon, defaultSkillIcon)
 
@@ -85,10 +85,6 @@ class SkillDAOSQLImpl(var context: Context): SkillDAO {
                 skill.minLevel = cursor.getInt(5)
                 skill.skillType = cursor.getString(6)
 
-                if(skill.skillType.isEmpty()){
-                   skill.skillType = "Not Set"
-                }
-
                 skill.description = cursor.getString(7)
 
                 getIcon(cursor, skill)
@@ -140,12 +136,11 @@ class SkillDAOSQLImpl(var context: Context): SkillDAO {
     }
 
     override fun getIcon(cursor: Cursor, skill: Skill) {
-        var iconBitmap: Bitmap
+        val iconBitmap: Bitmap
 
         try {
             val iconText:String = cursor.getString(8)
             val iconByte:ByteArray = android.util.Base64.decode(iconText, android.util.Base64.DEFAULT)
-
             iconBitmap = iconByte.let { BitmapFactory.decodeByteArray(it, 0, it.size) }!!
             skill.icon = iconBitmap
         }catch (e:Exception){

@@ -15,11 +15,12 @@ import com.google.gson.reflect.TypeToken
 
 interface BuildDAO {
     fun addBuild(build: Build)
-
     fun getBuildByName(buildName: String): Build
     fun getBuilds(): ArrayList<Build>
     fun deleteBuild(buildID: Int)
-    fun getImage(cursor: Cursor, build: Build)
+    fun getIcon(cursor: Cursor, columnIndex: Int, build: Build)
+    fun getIcon(iconText: String): Bitmap
+    fun getBuildData(cursor: Cursor, columnIndex: Int, build: Build)
 }
 
 class BuildDAOSQLImpl(var context: Context): BuildDAO {
@@ -84,9 +85,10 @@ class BuildDAOSQLImpl(var context: Context): BuildDAO {
                 build.gameName = cursor.getString(2)
                 build.jobClassName = cursor.getString(3)
                 build.description = cursor.getString(4)
-                build.dataText = cursor.getString(5)
+//                build.dataText = cursor.getString(5)
+                getBuildData(cursor,5, build)
 
-                getImage(cursor, build)
+                getIcon(cursor,6, build)
 
             }while(cursor.moveToNext())
         }
@@ -101,8 +103,6 @@ class BuildDAOSQLImpl(var context: Context): BuildDAO {
 
     override fun getBuilds(): ArrayList<Build> {
         val buildList: ArrayList<Build> = ArrayList()
-        var skillDataJson = ""
-        val gson = Gson()
 
         val databaseHandler: DatabaseHandler = DatabaseHandler(context)
         val db = databaseHandler.readableDatabase
@@ -143,9 +143,10 @@ class BuildDAOSQLImpl(var context: Context): BuildDAO {
                 build.gameName = cursor.getString(2)
                 build.name = cursor.getString(3)
                 build.description = cursor.getString(4)
-                build.dataText = cursor.getString(5)
+//                build.dataText = cursor.getString(5)
+                getBuildData(cursor,5,build)
 
-                getImage(cursor, build)
+                getIcon(cursor,6,build)
 
                 buildList.add(build)
 
@@ -168,17 +169,35 @@ class BuildDAOSQLImpl(var context: Context): BuildDAO {
         db.close()
     }
 
-    override fun getImage(cursor: Cursor, build: Build) {
-        var imageBitmap: Bitmap
+    override fun getIcon(cursor: Cursor, columnIndex: Int, build: Build) {
+        val iconBitmap: Bitmap
+        var iconText: String = ""
 
         try {
-            var imageText:String = cursor.getString(6)
-            var imageByte:ByteArray = android.util.Base64.decode(imageText, android.util.Base64.DEFAULT)
+            iconText = cursor.getString(columnIndex)
+            val iconByte:ByteArray = android.util.Base64.decode(iconText, android.util.Base64.DEFAULT)
 
-            imageBitmap = imageByte.let { BitmapFactory.decodeByteArray(it, 0, it.size) }!!
-            build.img = imageBitmap
+            iconBitmap = iconByte.let { BitmapFactory.decodeByteArray(it, 0, it.size) }!!
+            build.img = iconBitmap
         }catch (e:Exception){
             Log.e("Error", "image text is bad/empty or image bytearray is null",e)
         }
     }
+
+    override fun getIcon(iconText: String): Bitmap {
+        Log.d("ICONTEXT FROM GETICON", iconText)
+        val iconBitmap: Bitmap
+        val iconByte:ByteArray = android.util.Base64.decode(iconText, android.util.Base64.DEFAULT)
+        iconBitmap = iconByte.let { BitmapFactory.decodeByteArray(it, 0, it.size) }!!
+        return iconBitmap
+    }
+
+    override fun getBuildData(cursor: Cursor, columnIndex: Int, build: Build) {
+        try {
+            build.dataText = cursor.getString(columnIndex)
+        }catch (e:Exception){
+            Log.e("Error", "image text is bad/empty or image bytearray is null",e)
+        }
+    }
+
 }
