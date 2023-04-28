@@ -36,7 +36,7 @@
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
             android:text="@string/skill_name_1"
-            android:textSize="12sp"
+            android:textSize="14sp"
             android:textStyle="bold"
             />
 
@@ -51,7 +51,7 @@
             android:layout_gravity="center_horizontal"
             android:gravity="center"
             android:text="@string/_10"
-            android:textSize="15sp"
+            android:textSize="14sp"
             android:textStyle="bold"
             />
 

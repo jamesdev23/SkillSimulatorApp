@@ -10,20 +10,21 @@
     android:orientation="vertical"
     android:weightSum="10">
 
-<!--    <androidx.appcompat.widget.SearchView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:id="@+id/search_skill"-->
-<!--        android:layout_weight="1"-->
-<!--        />-->
-
-
-    <androidx.recyclerview.widget.RecyclerView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:id="@+id/class_list"
-        android:layout_weight="10"
-        />
+        android:background="@drawable/inner_shadow_background"
+        android:orientation="vertical"
+        android:layout_weight="10">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/class_list"
+            />
+
+    </LinearLayout>
+
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation_view"
