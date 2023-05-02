@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/text_skill_points"
             android:padding="5dp"
-            android:text="Skill Points: 0"
+            android:text=""
             android:textAlignment="center"
             />
 

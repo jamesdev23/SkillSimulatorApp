@@ -54,4 +54,5 @@
     <string name="type">Type</string>
     <string name="not_set">Not Set</string>
     <string name="reset_all_skills">Reset All Skills</string>
+    <string name="id_1">ID: 1</string>
 </resources>

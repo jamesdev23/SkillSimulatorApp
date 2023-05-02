@@ -160,11 +160,11 @@ class BuildDAOSQLImpl(var context: Context): BuildDAO {
         val databaseHandler: DatabaseHandler = DatabaseHandler(context)
         val db = databaseHandler.writableDatabase
 
-        val values = arrayOf(buildID.toString())
         val success = db.delete(
             DatabaseHandler.tableBuilds,
             "${DatabaseHandler.buildId} = ?",
-            values)
+            arrayOf(buildID.toString())
+        )
         db.close()
     }
 

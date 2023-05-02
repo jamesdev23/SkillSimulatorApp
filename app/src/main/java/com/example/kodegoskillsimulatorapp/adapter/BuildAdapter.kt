@@ -77,8 +77,10 @@ class BuildAdapter (var builds: ArrayList<Build>, var activity: Activity)
 
         fun bindBuild(build: Build) {
             this.build = build
+            val buildId = "ID: ${build.id}"
 
             itemBinding.buildName.text = build.name
+            itemBinding.buildId.text = buildId
             itemBinding.gameName.text = build.gameName
             itemBinding.jobclassName.text = build.jobClassName
             itemBinding.buildImage.setImageBitmap(build.img)

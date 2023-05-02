@@ -104,6 +104,15 @@ class SkillAdapter(var skills: ArrayList<Skill>, var context: Context, var skill
 
             setSeekBarWidth()
 
+            // misc changes when skill is a quest skill
+            if(skill.skillType == "Quest") {
+                itemBinding.skillBar.progress = 1
+                itemBinding.skillValue.text = "1"
+                itemBinding.skillBar.isEnabled = false
+                skill.currentLevel = itemBinding.skillBar.progress
+                setSkillPointsToObserver()
+            }
+
             itemBinding.skillBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
 
@@ -121,14 +130,6 @@ class SkillAdapter(var skills: ArrayList<Skill>, var context: Context, var skill
                 }
 
             })
-
-            // misc changes when skill is a quest skill
-            if(skill.skillType == "Quest") {
-                itemBinding.skillBar.progress = 1
-                itemBinding.skillValue.text = "1"
-                itemBinding.skillBar.isEnabled = false
-                skill.currentLevel = itemBinding.skillBar.progress
-            }
 
             setSkillPointsToObserver()
 

@@ -22,7 +22,6 @@ import com.example.kodegoskillsimulatorapp.model.Build
 import com.example.kodegoskillsimulatorapp.model.Skill
 import com.example.kodegoskillsimulatorapp.observer.SkillBarObserver
 import com.example.kodegoskillsimulatorapp.observer.SkillDataObserver
-import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
@@ -37,6 +36,7 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
     private val maxSkillPoints = 49
     private var totalSP = 0
     private var remainingSP = 0
+
 
 
 
@@ -77,10 +77,11 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
             }
         }
 
-        if (skillBuildText.isEmpty()) {
-            setSkillListDefault(jobClassSelected)
-        } else {
-            setSkillBuild(skillBuildText)
+        when {
+            skillBuildText.isEmpty() ->
+                setSkillListDefault(jobClassSelected)
+            else ->
+                setSkillBuild(skillBuildText)
         }
 
         setSkillPointsLabelToDefault()
@@ -94,16 +95,18 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
         binding.skillList.adapter = skillAdapter
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+    }
+
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return super.onSupportNavigateUp()
     }
 
     override fun onBackPressed() {
+        saveSkillData(skillBuild)
         super.onBackPressed()
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-        finish()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -152,7 +155,7 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
         binding.textSkillPoints.text = defaultText
         setSkillListDefault(jobClass)
         setSkillPointsLabelToDefault()
-        toast("Skill List Reset.")
+        toast("Skill List reset.")
     }
 
     private fun setSkillPointsLabelToDefault() {
@@ -165,21 +168,20 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
     }
 
     override fun saveSkillData(skillData: ArrayList<Skill>) {
-        if(skillData.isNotEmpty()) {
-            var build = Build()
-            val dao2: BuildDAO
-            dao2 = BuildDAOSQLImpl(this)
-            build.name = "Custom Build"
-            build.jobClassName = jobClassSelected.name
-            build.gameName = jobClassSelected.gameName
-            build.description = "custom skill build"
+        val build = Build()
+        val daoBuild: BuildDAO = BuildDAOSQLImpl(this)
+        build.name = "${jobClassSelected.name} | ${jobClassSelected.gameName}"
+        build.jobClassName = jobClassSelected.name
+        build.gameName = jobClassSelected.gameName
+        build.description = "custom build from save button."
 
-            // using gson method
-            val gson = Gson()
-            build.dataText = gson.toJson(skillData)
 
-            dao2.addBuild(build)
-        }
+
+        // using gson method
+        val gson = Gson()
+        build.dataText = gson.toJson(skillData)
+
+        daoBuild.addBuild(build)
     }
 
     override fun showSkillData(skillData: ArrayList<Skill>) {

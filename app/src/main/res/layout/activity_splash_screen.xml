@@ -16,14 +16,4 @@
         android:layout_centerInParent="true"
         android:contentDescription="@string/splash_logo" />
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/splash_logo_background"
-        android:src="@drawable/skillsimulator_icon"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:contentDescription="@string/splash_logo"
-        />
-
 </RelativeLayout>
