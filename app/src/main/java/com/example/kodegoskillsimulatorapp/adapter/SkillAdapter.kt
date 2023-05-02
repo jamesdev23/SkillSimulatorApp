@@ -141,7 +141,12 @@ class SkillAdapter(var skills: ArrayList<Skill>, var context: Context, var skill
         private fun setSeekBarWidth(){
             var maxValue = skill.maxLevel
             val params = itemBinding.skillBar.layoutParams as RelativeLayout.LayoutParams
-            params.width = (maxValue * context.resources.getDimension(R.dimen.seekbar_width_multiplier)).toInt()
+
+            if(maxValue == 1 || maxValue == 5){
+                params.width = (maxValue * context.resources.getDimension(R.dimen.seekbar_width_multiplier_below_ten)).toInt()
+            }else {
+                params.width = (maxValue * context.resources.getDimension(R.dimen.seekbar_width_multiplier)).toInt()
+            }
 
             itemBinding.skillBar.layoutParams = params
         }

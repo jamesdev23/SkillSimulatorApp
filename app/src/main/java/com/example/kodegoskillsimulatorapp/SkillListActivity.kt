@@ -30,14 +30,10 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
     private lateinit var binding: ActivitySkillListBinding
     private lateinit var skillAdapter: SkillAdapter
     private lateinit var dao: SkillDAO
-    private lateinit var daoBuild: BuildDAO
     private var skills: ArrayList<Skill> = ArrayList()
-    private var builds: ArrayList<Build> = ArrayList()
-
     private var jobClassSelected: JobClass = JobClass()
     private var skillBuild: ArrayList<Skill> = ArrayList()
     private var skillBuildText:String = ""
-    private var backPressedTime: Long = 0
     private val maxSkillPoints = 49
     private var totalSP = 0
     private var remainingSP = 0
@@ -82,17 +78,20 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
         }
 
         if (skillBuildText.isEmpty()) {
-            dao = SkillDAOSQLImpl(applicationContext)
-            skills = dao.getSkillPerJob(jobClassSelected.gameName, jobClassSelected.name)
-            skillAdapter = SkillAdapter(skills, this, this)
-            binding.skillList.layoutManager = LinearLayoutManager(applicationContext)
-            binding.skillList.adapter = skillAdapter
+            setSkillListDefault(jobClassSelected)
         } else {
             setSkillBuild(skillBuildText)
         }
 
         setSkillPointsLabelToDefault()
 
+    }
+    private fun setSkillListDefault(jobClass: JobClass){
+        dao = SkillDAOSQLImpl(applicationContext)
+        skills = dao.getSkillPerJob(jobClass.gameName, jobClass.name)
+        skillAdapter = SkillAdapter(skills, this, this)
+        binding.skillList.layoutManager = LinearLayoutManager(applicationContext)
+        binding.skillList.adapter = skillAdapter
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -118,15 +117,14 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
                 dialogAddSkill(this)
                 return true
             }
+            R.id.action_reset_all_skills -> {
+                resetSkillPoints(jobClassSelected)
+                return true
+            }
             R.id.action_save -> {
                 saveSkillData(skills)
                 showSkillData(skills)
-                Snackbar.make(binding.root, "Skill build saved.", Snackbar.LENGTH_SHORT).show()
-                return true
-            }
-            R.id.action_saved_builds -> {
-                val goToSavedBuilds = Intent(this, SavedBuildsActivity::class.java)
-                startActivity(goToSavedBuilds)
+                toast("Skill Build Saved.")
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
@@ -135,7 +133,8 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
 
     override fun getTotalProgress(list:MutableList<Int>) {
         totalSP = list.sum()
-        binding.textSkillPoints.text = "Skill Points: $totalSP/$maxSkillPoints"
+        val setTotalSP = "Skill Points: $totalSP/$maxSkillPoints"
+        binding.textSkillPoints.text = setTotalSP
     }
 
     override fun checkSkillPoints(list: MutableList<Int>) {
@@ -147,15 +146,14 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
         }
     }
 
-//    private fun resetSkillPoints(jobclassData: Int) {
-//        skillAdapter.updateSkill(skills)
-//        binding.skillpointsCurrent.text = "0"
-//        skillSimulatorSetup(dao, jobclassData)
-//        Toast.makeText(
-//            applicationContext,"Resetting skill points...",
-//            Toast.LENGTH_SHORT
-//        ).show()
-//    }
+    private fun resetSkillPoints(jobClass: JobClass) {
+        skillAdapter.updateSkill(skills)
+        val defaultText = "Skill Points: 0/$maxSkillPoints"
+        binding.textSkillPoints.text = defaultText
+        setSkillListDefault(jobClass)
+        setSkillPointsLabelToDefault()
+        toast("Skill List Reset.")
+    }
 
     private fun setSkillPointsLabelToDefault() {
         // this code is optimized
@@ -233,7 +231,8 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
                     var newSkills = dao.getSkillPerJob(jobClassSelected.gameName, jobClassSelected.name)
                     Log.i("skill list", newSkills.toString())
                     skillAdapter.updateSkill(newSkills)
-                    skillAdapter.notifyDataSetChanged()
+                    skillAdapter.notifyItemInserted(newSkill.id)
+                    toast("Added ${newSkill.name} skill.")
                 })
                 setNegativeButton("Cancel", DialogInterface.OnClickListener { _, _ ->
                     // Do something when user press the positive button
@@ -245,7 +244,7 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
         }
     }
 
-    private fun addSkillToSkillList() {
-
+    private fun toast(message: String){
+        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
     }
 }

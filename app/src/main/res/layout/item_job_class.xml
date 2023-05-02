@@ -14,7 +14,7 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/jobclass_picture"
-            android:src="@drawable/icon_default"
+            android:src="@drawable/skillsimulator_icon"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
