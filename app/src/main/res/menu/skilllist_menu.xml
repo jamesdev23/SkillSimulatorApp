@@ -7,6 +7,7 @@
         android:title="@string/add_skill"
         app:showAsAction="always">
     </item>
+
     <item
         android:id="@+id/action_save"
         android:icon="@drawable/baseline_save_24"

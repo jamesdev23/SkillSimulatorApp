@@ -85,9 +85,8 @@ class BuildDAOSQLImpl(var context: Context): BuildDAO {
                 build.gameName = cursor.getString(2)
                 build.jobClassName = cursor.getString(3)
                 build.description = cursor.getString(4)
-//                build.dataText = cursor.getString(5)
-                getBuildData(cursor,5, build)
 
+                getBuildData(cursor,5, build)
                 getIcon(cursor,6, build)
 
             }while(cursor.moveToNext())

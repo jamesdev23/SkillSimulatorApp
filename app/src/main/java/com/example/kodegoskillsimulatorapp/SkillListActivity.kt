@@ -1,5 +1,6 @@
 package com.example.kodegoskillsimulatorapp
 
+import android.app.UiModeManager
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -10,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kodegoskillsimulatorapp.adapter.SkillAdapter
 import com.example.kodegoskillsimulatorapp.dao.*
@@ -32,11 +34,15 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
     private var skills: ArrayList<Skill> = ArrayList()
     private var builds: ArrayList<Build> = ArrayList()
 
-    private val maxSkillPoints = 49
     private var jobClassSelected: JobClass = JobClass()
     private var skillBuild: ArrayList<Skill> = ArrayList()
     private var skillBuildText:String = ""
     private var backPressedTime: Long = 0
+    private val maxSkillPoints = 49
+    private var totalSP = 0
+    private var remainingSP = 0
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,16 +84,14 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
         if (skillBuildText.isEmpty()) {
             dao = SkillDAOSQLImpl(applicationContext)
             skills = dao.getSkillPerJob(jobClassSelected.gameName, jobClassSelected.name)
-            skillAdapter = SkillAdapter(skills, this, this, this)
+            skillAdapter = SkillAdapter(skills, this, this)
             binding.skillList.layoutManager = LinearLayoutManager(applicationContext)
             binding.skillList.adapter = skillAdapter
         } else {
             setSkillBuild(skillBuildText)
         }
 
-//        binding.skillpointsTotal.text = " / ${maxSkillPoints.toString()}"
-
-//        setSkillPointsLabelToDefault()
+        setSkillPointsLabelToDefault()
 
     }
 
@@ -128,24 +132,19 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
             else -> return super.onOptionsItemSelected(item)
         }
     }
-    
-    
 
     override fun getTotalProgress(list:MutableList<Int>) {
-//        val totalSP = list.sum().toString()
-//        val skillPointsTextView = findViewById<TextView>(R.id.skillpoints_current)
-//        skillPointsTextView.text = totalSP
+        totalSP = list.sum()
+        binding.textSkillPoints.text = "Skill Points: $totalSP/$maxSkillPoints"
     }
 
     override fun checkSkillPoints(list: MutableList<Int>) {
-//        var newProgressTotal = list.sum()
-//        if(newProgressTotal <= maxSkillPoints) {
-//            setSkillPointsLabelToDefault()
-//        } else {
-//            binding.skillpointsLabel.setTextColor(getColor(R.color.fire_engine_red))
-//            binding.skillpointsCurrent.setTextColor(getColor(R.color.fire_engine_red))
-//            binding.skillpointsTotal.setTextColor(getColor(R.color.fire_engine_red))
-//        }
+        val newProgressTotal = list.sum()
+        if(newProgressTotal <= maxSkillPoints) {
+            setSkillPointsLabelToDefault()
+        } else {
+            binding.textSkillPoints.setTextColor(getColor(R.color.fire_engine_red))
+        }
     }
 
 //    private fun resetSkillPoints(jobclassData: Int) {
@@ -158,16 +157,14 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
 //        ).show()
 //    }
 
-//    private fun setSkillPointsLabelToDefault() {
-//        // this code is optimized
-//        val uiModeManager = getSystemService(Context.UI_MODE_SERVICE) as UiModeManager
-//        val isNightModeEnabled = uiModeManager.nightMode == UiModeManager.MODE_NIGHT_YES
-//        val textColor = ContextCompat.getColor(this, if (isNightModeEnabled) R.color.white else R.color.black)
-//
-//        binding.skillpointsLabel.setTextColor(textColor)
-//        binding.skillpointsCurrent.setTextColor(textColor)
-//        binding.skillpointsTotal.setTextColor(textColor)
-//    }
+    private fun setSkillPointsLabelToDefault() {
+        // this code is optimized
+        val uiModeManager = getSystemService(Context.UI_MODE_SERVICE) as UiModeManager
+        val isNightModeEnabled = uiModeManager.nightMode == UiModeManager.MODE_NIGHT_YES
+        val textColor = ContextCompat.getColor(this, if (isNightModeEnabled) R.color.white else R.color.black)
+
+        binding.textSkillPoints.setTextColor(textColor)
+    }
 
     override fun saveSkillData(skillData: ArrayList<Skill>) {
         if(skillData.isNotEmpty()) {
@@ -194,18 +191,12 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
         }
     }
 
-//    private fun isBuildNameExists(context: Context, buildName: String): Boolean {
-//        val daoBuild = BuildDAOSQLImpl(context)
-//        val skillBuild = daoBuild.getBuildByName(buildName)
-//        return true
-//    }
-
     private fun setSkillBuild(skillBuildText: String) {
         Log.d("SKILL BUILD TEXT FROM SKILLLIST", skillBuildText)
         val gson = Gson()
 
         skillBuild = gson.fromJson(skillBuildText, object : TypeToken<ArrayList<Skill>>() {}.type)
-        skillAdapter = SkillAdapter(skillBuild, this, this, this)
+        skillAdapter = SkillAdapter(skillBuild, this, this)
         binding.skillList.layoutManager = LinearLayoutManager(applicationContext)
         binding.skillList.adapter = skillAdapter
     }

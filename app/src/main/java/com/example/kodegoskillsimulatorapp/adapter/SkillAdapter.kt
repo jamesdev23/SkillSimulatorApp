@@ -30,7 +30,7 @@ import com.example.kodegoskillsimulatorapp.observer.SkillBarObserver
 import com.example.kodegoskillsimulatorapp.observer.SkillDataObserver
 import com.google.android.material.snackbar.Snackbar
 
-class SkillAdapter(var skills: ArrayList<Skill>, var context: Context, var skillDataObserver: SkillDataObserver, var skillBarObserver: SkillBarObserver)
+class SkillAdapter(var skills: ArrayList<Skill>, var context: Context, var skillBarObserver: SkillBarObserver)
     : RecyclerView.Adapter<SkillAdapter.SkillViewHolder>() {
 
     // Declare a list to hold the progress of each SeekBar
@@ -91,12 +91,6 @@ class SkillAdapter(var skills: ArrayList<Skill>, var context: Context, var skill
         fun bindSkill(skill: Skill) {
             this.skill = skill
 
-            // misc changes when skill is a quest skill
-            if(skill.skillType == "Quest") {
-                itemBinding.skillBar.progress = 1
-                itemBinding.skillBar.isEnabled = false
-            }
-
             itemBinding.skillName.text = skill.name
             itemBinding.skillBar.progress = skill.currentLevel
             itemBinding.skillBar.min = skill.minLevel
@@ -108,20 +102,7 @@ class SkillAdapter(var skills: ArrayList<Skill>, var context: Context, var skill
                 popupMenu()
             }
 
-            // setting seekbar width dynamically
-            var maxValue = skill.maxLevel
-            val params = itemBinding.skillBar.layoutParams as RelativeLayout.LayoutParams
-
-            if(maxValue == 1) maxValue = 2
-
-            params.width = (maxValue * context.resources.getDimension(R.dimen.seekbar_width_multiplier)).toInt()
-
-            itemBinding.skillBar.layoutParams = params
-
-
-            // add skill points to observers
-            skillPointsList[adapterPosition] = itemBinding.skillBar.progress
-            skillData.add(skill)
+            setSeekBarWidth()
 
             itemBinding.skillBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
@@ -141,18 +122,41 @@ class SkillAdapter(var skills: ArrayList<Skill>, var context: Context, var skill
 
             })
 
+            // misc changes when skill is a quest skill
+            if(skill.skillType == "Quest") {
+                itemBinding.skillBar.progress = 1
+                itemBinding.skillValue.text = "1"
+                itemBinding.skillBar.isEnabled = false
+                skill.currentLevel = itemBinding.skillBar.progress
+            }
+
+            setSkillPointsToObserver()
+
         }
 
         override fun onClick(v: View?) {
             dialogSkillDetails(v!!.context)
         }
 
+        private fun setSeekBarWidth(){
+            var maxValue = skill.maxLevel
+            val params = itemBinding.skillBar.layoutParams as RelativeLayout.LayoutParams
+            params.width = (maxValue * context.resources.getDimension(R.dimen.seekbar_width_multiplier)).toInt()
+
+            itemBinding.skillBar.layoutParams = params
+        }
+
+        private fun setSkillPointsToObserver(){
+            skillPointsList[adapterPosition] = itemBinding.skillBar.progress
+            skillData.add(skill)
+        }
+
 
         private fun saveSkillBarProgress(itemBinding: ItemSkillBinding, position: Int, progress: Int){
             itemBinding.skillValue.text = progress.toString()
             skillPointsList[position] = progress
-//            skillBarObserver.getTotalProgress(skillPointsList)
-//            skillBarObserver.checkSkillPoints(skillPointsList)
+            skillBarObserver.getTotalProgress(skillPointsList)
+            skillBarObserver.checkSkillPoints(skillPointsList)
         }
 
         private fun setSeekbarWhenOutOfScreen(position: Int, progress: Int){
