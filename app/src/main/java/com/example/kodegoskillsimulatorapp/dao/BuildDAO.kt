@@ -37,7 +37,7 @@ class BuildDAOSQLImpl(var context: Context): BuildDAO {
         contentValues.put(DatabaseHandler.buildGameName, build.gameName)
         contentValues.put(DatabaseHandler.buildName, build.name)
         contentValues.put(DatabaseHandler.buildDescription, build.description)
-        contentValues.put(DatabaseHandler.buildDataText, build.dataText)
+        contentValues.put(DatabaseHandler.buildDataText, build.skillBuildText)
         contentValues.put(DatabaseHandler.buildImage, defaultBuildIcon)
 
         val success = db.insert(DatabaseHandler.tableBuilds,null,contentValues)
@@ -193,7 +193,7 @@ class BuildDAOSQLImpl(var context: Context): BuildDAO {
 
     override fun getBuildData(cursor: Cursor, columnIndex: Int, build: Build) {
         try {
-            build.dataText = cursor.getString(columnIndex)
+            build.skillBuildText = cursor.getString(columnIndex)
         }catch (e:Exception){
             Log.e("Error", "image text is bad/empty or image bytearray is null",e)
         }

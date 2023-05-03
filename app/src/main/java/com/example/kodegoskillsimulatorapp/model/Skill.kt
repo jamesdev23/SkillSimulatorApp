@@ -1,19 +1,19 @@
 package com.example.kodegoskillsimulatorapp.model
 
 import android.graphics.Bitmap
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
-class Skill {
-    var id: Int = 0
-    var jobClassName: String = ""
-    var gameName: String = ""
-    var name: String = ""
-    var icon: Bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
-    var description: String = ""
-    var maxLevel: Int = 10
-    var minLevel: Int = 0
-    var currentLevel: Int = 0
-    var skillType: String = ""
-    var requiredSkill: Boolean = false
-    var requiredSkillName: String = ""
-    var requiredSkillLevel: Int = 1
-}
+@Parcelize
+data class Skill(
+    var id: Int,
+    var name: String,
+    var jobClassName: String,
+    var gameName: String,
+    var icon: Bitmap,
+    var description: String,
+    var maxLevel: Int,
+    var minLevel: Int,
+    var currentLevel: Int,
+    var skillType: String
+): Parcelable

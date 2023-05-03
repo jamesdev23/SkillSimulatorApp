@@ -83,9 +83,8 @@ class JobClassAdapter (var jobClasses: ArrayList<JobClass>, var context: Context
             val intent = Intent(view?.context, SkillListActivity::class.java)
 
             val bundle = Bundle()
-            bundle.putString("data2", jobClasses[position].gameName)
-            bundle.putString("data3", jobClasses[position].name)
-            intent.putExtras(bundle)
+            bundle.putString("DATA_GAME_NAME", jobClasses[position].gameName)
+            bundle.putString("DATA_JOB_CLASS_NAME", jobClasses[position].name)
             intent.putExtras(bundle)
 
             view?.context?.startActivity(intent)

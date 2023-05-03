@@ -9,9 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kodegoskillsimulatorapp.adapter.JobClassAdapter
 import com.example.kodegoskillsimulatorapp.dao.JobClassDAO
 import com.example.kodegoskillsimulatorapp.dao.JobClassDAOSQLImpl
@@ -27,7 +25,7 @@ class SelectClassActivity : AppCompatActivity() {
     private lateinit var jobClassAdapter: JobClassAdapter
     private lateinit var dao: JobClassDAO
     private var jobClasses: ArrayList<JobClass> = ArrayList()
-    private var gameSelected: Game = Game()
+    private var selectedGame: Game = Game()
     private var backPressedTime: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,19 +33,22 @@ class SelectClassActivity : AppCompatActivity() {
         binding = ActivitySelectClassBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        gameSelected.name = intent.extras?.getString("data").toString()
+        // retrieving game name
+        val bundle = intent.extras
+        selectedGame.name = bundle?.getString("DATA_GAME_NAME").toString()
+        Log.i("DATA GAME NAME", selectedGame.name)
 
-        Log.i("selectclass game id", gameSelected.id.toString())
-
+        // setting up action bar
         supportActionBar?.apply{
             title = "Select Class"
             setDisplayHomeAsUpEnabled(true)
             displayOptions
         }
 
+        // setting up class list
 
         dao = JobClassDAOSQLImpl(applicationContext)
-        jobClasses = dao.getJobclassPerGame(gameSelected.name)
+        jobClasses = dao.getJobclassPerGame(selectedGame.name)
         jobClassAdapter = JobClassAdapter(jobClasses, this)
 //        binding.classList.layoutManager = LinearLayoutManager(applicationContext)
         binding.classList.layoutManager = GridLayoutManager(applicationContext, 2)
@@ -116,14 +117,14 @@ class SelectClassActivity : AppCompatActivity() {
 
                     val addJobClassName = dialogAddClassBinding.editClassName.text.toString()
 
-                    jobClass.gameName = gameSelected.name
+                    jobClass.gameName = selectedGame.name
                     jobClass.name = addJobClassName
                     Log.i("add class name", jobClass.name)
                     Log.i("add class game id", jobClass.gameName)
 
                     dao.addJobclass(jobClass)
 
-                    var newJobClass = dao.getJobclassPerGame(gameSelected.name)
+                    var newJobClass = dao.getJobclassPerGame(selectedGame.name)
                     Log.i("class list", newJobClass.toString())
                     jobClassAdapter.updateJobClass(newJobClass)
                     jobClassAdapter.notifyDataSetChanged()

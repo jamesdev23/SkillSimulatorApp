@@ -1,13 +1,10 @@
 package com.example.kodegoskillsimulatorapp.adapter
 
-import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
-import android.content.Intent
-import android.graphics.drawable.LayerDrawable
+import android.graphics.Bitmap
 import android.os.Build
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,9 +14,6 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kodegoskillsimulatorapp.R
-import com.example.kodegoskillsimulatorapp.SkillListActivity
-import com.example.kodegoskillsimulatorapp.dao.JobClassDAO
-import com.example.kodegoskillsimulatorapp.dao.JobClassDAOSQLImpl
 import com.example.kodegoskillsimulatorapp.dao.SkillDAO
 import com.example.kodegoskillsimulatorapp.dao.SkillDAOSQLImpl
 import com.example.kodegoskillsimulatorapp.databinding.DialogEditSkillBinding
@@ -27,7 +21,6 @@ import com.example.kodegoskillsimulatorapp.databinding.DialogSkillDetailsBinding
 import com.example.kodegoskillsimulatorapp.databinding.ItemSkillBinding
 import com.example.kodegoskillsimulatorapp.model.Skill
 import com.example.kodegoskillsimulatorapp.observer.SkillBarObserver
-import com.example.kodegoskillsimulatorapp.observer.SkillDataObserver
 import com.google.android.material.snackbar.Snackbar
 
 class SkillAdapter(var skills: ArrayList<Skill>, var context: Context, var skillBarObserver: SkillBarObserver)
@@ -81,7 +74,9 @@ class SkillAdapter(var skills: ArrayList<Skill>, var context: Context, var skill
     inner class SkillViewHolder(private val itemBinding: ItemSkillBinding) :
         RecyclerView.ViewHolder(itemBinding.root), View.OnClickListener {
 
-        var skill = Skill()
+        var skill = Skill(0,"","","",
+            Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888),
+            "",10, 0,0,"")
 
         init{
             itemView.setOnClickListener(this)

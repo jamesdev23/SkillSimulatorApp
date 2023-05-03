@@ -4,6 +4,7 @@ import android.app.UiModeManager
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -23,16 +24,15 @@ import com.example.kodegoskillsimulatorapp.model.Skill
 import com.example.kodegoskillsimulatorapp.observer.SkillBarObserver
 import com.example.kodegoskillsimulatorapp.observer.SkillDataObserver
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 
 class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserver {
     private lateinit var binding: ActivitySkillListBinding
     private lateinit var skillAdapter: SkillAdapter
     private lateinit var dao: SkillDAO
+    private var selectedJobClass: JobClass = JobClass()
     private var skills: ArrayList<Skill> = ArrayList()
-    private var jobClassSelected: JobClass = JobClass()
     private var skillBuild: ArrayList<Skill> = ArrayList()
-    private var skillBuildText:String = ""
+    private var skillBuildText: String = ""
     private val maxSkillPoints = 49
     private var totalSP = 0
     private var remainingSP = 0
@@ -45,18 +45,20 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
         binding = ActivitySkillListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        jobClassSelected.gameName = intent.extras?.getString("data2").toString()
-        jobClassSelected.name = intent.extras?.getString ("data3").toString()
+        val bundle = intent.extras
+        selectedJobClass.gameName = bundle?.getString("DATA_GAME_NAME").toString()
+        selectedJobClass.name = bundle?.getString ("DATA_JOB_CLASS_NAME").toString()
 
-        if(intent.extras?.containsKey("data4") == true){
-            skillBuildText = intent.extras?.getString("data4").toString()
+        if(bundle?.containsKey("DATA_SKILL_BUILD") == true){
+            skillBuild = bundle.getParcelableArrayList<Skill>("DATA_SKILL_BUILD") as ArrayList<Skill>
         }
 
-        Log.i("skilllist game id", jobClassSelected.gameName)
-        Log.i("skilllist class name", jobClassSelected.name)
+        Log.d("DATA GAME NAME", selectedJobClass.gameName)
+        Log.d("DATA JOB CLASS NAME", selectedJobClass.name)
+        Log.d("DATA SKILL BUILD", skillBuild.toString())
 
         supportActionBar?.apply {
-            title = jobClassSelected.name
+            title = selectedJobClass.name
             setDisplayHomeAsUpEnabled(true)
             displayOptions
         }
@@ -78,10 +80,10 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
         }
 
         when {
-            skillBuildText.isEmpty() ->
-                setSkillListDefault(jobClassSelected)
+            skillBuild.isEmpty() ->
+                setSkillListDefault(selectedJobClass)
             else ->
-                setSkillBuild(skillBuildText)
+                setSkillBuild(skillBuild)
         }
 
         setSkillPointsLabelToDefault()
@@ -93,10 +95,6 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
         skillAdapter = SkillAdapter(skills, this, this)
         binding.skillList.layoutManager = LinearLayoutManager(applicationContext)
         binding.skillList.adapter = skillAdapter
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -121,7 +119,7 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
                 return true
             }
             R.id.action_reset_all_skills -> {
-                resetSkillPoints(jobClassSelected)
+                resetSkillPoints(selectedJobClass)
                 return true
             }
             R.id.action_save -> {
@@ -170,18 +168,18 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
     override fun saveSkillData(skillData: ArrayList<Skill>) {
         val build = Build()
         val daoBuild: BuildDAO = BuildDAOSQLImpl(this)
-        build.name = "${jobClassSelected.name} | ${jobClassSelected.gameName}"
-        build.jobClassName = jobClassSelected.name
-        build.gameName = jobClassSelected.gameName
-        build.description = "custom build from save button."
+        build.name = "${selectedJobClass.name} | ${selectedJobClass.gameName}"
+        build.jobClassName = selectedJobClass.name
+        build.gameName = selectedJobClass.gameName
+        build.description = "custom build from save function"
 
-
-
-        // using gson method
         val gson = Gson()
-        build.dataText = gson.toJson(skillData)
+        skillBuildText = gson.toJson(skillData)
+        build.skillBuildText = skillBuildText
 
         daoBuild.addBuild(build)
+
+        Log.d("SKILL LIST FROM SAVE", build.skillBuild.toString())
     }
 
     override fun showSkillData(skillData: ArrayList<Skill>) {
@@ -191,11 +189,7 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
         }
     }
 
-    private fun setSkillBuild(skillBuildText: String) {
-        Log.d("SKILL BUILD TEXT FROM SKILLLIST", skillBuildText)
-        val gson = Gson()
-
-        skillBuild = gson.fromJson(skillBuildText, object : TypeToken<ArrayList<Skill>>() {}.type)
+    private fun setSkillBuild(skillBuild: ArrayList<Skill>) {
         skillAdapter = SkillAdapter(skillBuild, this, this)
         binding.skillList.layoutManager = LinearLayoutManager(applicationContext)
         binding.skillList.adapter = skillAdapter
@@ -210,7 +204,9 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
             with(builder) {
                 setPositiveButton("Add", DialogInterface.OnClickListener { _, _ ->
                     val dao: SkillDAO = SkillDAOSQLImpl(it)
-                    val newSkill = Skill()
+                    val newSkill = Skill(0,"","","",
+                        Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888),
+                        "",10,0,0,"")
 
                     val addSkillName = dialogAddSkillBinding.editSkillName.text.toString()
                     val addSkillMaxLevel = dialogAddSkillBinding.editSkillMaxLevel.text.toString()
@@ -218,19 +214,19 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
                     val addSkillDescription = dialogAddSkillBinding.editSkillDescription.text.toString()
 
                     newSkill.name = addSkillName
-                    newSkill.jobClassName = jobClassSelected.name
-                    newSkill.gameName = jobClassSelected.gameName
+                    newSkill.jobClassName = selectedJobClass.name
+                    newSkill.gameName = selectedJobClass.gameName
                     newSkill.maxLevel = addSkillMaxLevel.toInt()
                     newSkill.minLevel = addSkillMinLevel.toInt()
                     newSkill.description = addSkillDescription
 
                     dao.addSkill(newSkill)
                     Log.i("new class", newSkill.name)
-                    Log.i("class game id", jobClassSelected.gameName)
-                    Log.i("class id", jobClassSelected.id.toString())
+                    Log.i("class game id", selectedJobClass.gameName)
+                    Log.i("class id", selectedJobClass.id.toString())
                     Log.i("new skill id", newSkill.id.toString())
 
-                    var newSkills = dao.getSkillPerJob(jobClassSelected.gameName, jobClassSelected.name)
+                    var newSkills = dao.getSkillPerJob(selectedJobClass.gameName, selectedJobClass.name)
                     Log.i("skill list", newSkills.toString())
                     skillAdapter.updateSkill(newSkills)
                     skillAdapter.notifyItemInserted(newSkill.id)

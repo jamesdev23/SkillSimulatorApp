@@ -3,6 +3,7 @@ package com.example.kodegoskillsimulatorapp.adapter
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +13,10 @@ import com.example.kodegoskillsimulatorapp.dao.BuildDAO
 import com.example.kodegoskillsimulatorapp.dao.BuildDAOSQLImpl
 import com.example.kodegoskillsimulatorapp.databinding.ItemBuildBinding
 import com.example.kodegoskillsimulatorapp.model.Build
+import com.example.kodegoskillsimulatorapp.model.Skill
 import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 class BuildAdapter (var builds: ArrayList<Build>, var activity: Activity)
     : RecyclerView.Adapter<BuildAdapter.BuildViewHolder>() {
@@ -56,11 +60,10 @@ class BuildAdapter (var builds: ArrayList<Build>, var activity: Activity)
 
         holder.itemView.setOnClickListener {
             val intent = Intent(activity.applicationContext, SkillListActivity::class.java)
-
             val bundle = Bundle()
-            bundle.putString("data2", builds[position].gameName)
-            bundle.putString("data3", builds[position].name)
-            bundle.putString("data4", builds[position].dataText)
+            bundle.putString("DATA_GAME_NAME", builds[position].gameName)
+            bundle.putString("DATA_JOB_CLASS_NAME", builds[position].name)
+            bundle.putParcelableArrayList("DATA_SKILL_BUILD", builds[position].skillBuild)
             intent.putExtras(bundle)
             activity.startActivity(intent)
         }
@@ -97,10 +100,20 @@ class BuildAdapter (var builds: ArrayList<Build>, var activity: Activity)
                 dao.deleteBuild(build.id)
                 removeBuild(adapterPosition)
             }
+
+            convertSkillTextToSkillBuild()
         }
 
         override fun onClick(v: View?) {
             // onClick code goes here...
+        }
+
+        private fun convertSkillTextToSkillBuild(){
+            val gson = Gson()
+            val type = object : TypeToken<ArrayList<Skill>>() {}.type
+            build.skillBuild = gson.fromJson(build.skillBuildText, type)
+
+            Log.d("SKILL BUILD FROM JSON", build.skillBuildText)
         }
     }
 }

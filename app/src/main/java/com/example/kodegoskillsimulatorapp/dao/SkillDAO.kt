@@ -73,10 +73,15 @@ class SkillDAOSQLImpl(var context: Context): SkillDAO {
             return ArrayList()
         }
 
-        var skill = Skill()
+        var skill = Skill(0,"","","",
+            Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888),
+            "",10, 0,0,"")
+
         if(cursor.moveToFirst()) {
             do {
-                skill = Skill()
+                skill = Skill(0,"","","",
+                    Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888),
+                    "",10, 0,0,"")
                 skill.id = cursor.getInt(0)
                 skill.name = cursor.getString(1)
                 skill.jobClassName = cursor.getString(2)
