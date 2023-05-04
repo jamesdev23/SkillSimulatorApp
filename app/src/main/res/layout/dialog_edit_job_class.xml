@@ -28,7 +28,7 @@
             android:layout_height="match_parent"
             android:hint="@string/class_name"
             android:maxLines="1"
-            android:text="@string/custom_class_1"/>
+            android:text=""/>
 
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -43,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="@string/class_description"
-            android:text="@string/custom_class"
+            android:text="@string/custom_class2"
             android:maxLines="1" />
 
 

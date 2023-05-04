@@ -56,4 +56,6 @@
     <string name="reset_all_skills">Reset All Skills</string>
     <string name="id_1">ID: 1</string>
     <string name="max_level_1_100">Max Level (1-100)</string>
+    <string name="custom_game2">Custom Game</string>
+    <string name="custom_class2">Custom Class</string>
 </resources>
