@@ -27,8 +27,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="@string/skill_name"
+            android:text=""
+            android:inputType="text"
             android:maxLines="1"
-            android:text="@string/skill_name_1"/>
+            />
 
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -43,8 +45,43 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="@string/max_level"
-            android:text="@string/_10"
-            android:maxLines="3" />
+            android:text=""
+            android:inputType="number"
+            android:maxLines="1" />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_skill_min_level"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/min_level"
+            android:text=""
+            android:inputType="number"
+            android:maxLines="1" />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_skill_current_level"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/current_level"
+            android:text=""
+            android:inputType="number"
+            android:maxLines="1" />
 
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -60,8 +97,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="@string/skill_type"
-            android:text="@string/active"
-            android:maxLines="3" />
+            android:text=""
+            android:inputType="text"
+            android:maxLines="1"
+            />
+
 
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -76,9 +116,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="@string/skill_description"
-            android:text="@string/custom_skill"
-            android:maxLines="3" />
-
+            android:text=""
+            android:inputType="textMultiLine"
+            android:maxLines="2" />
 
     </com.google.android.material.textfield.TextInputLayout>
 

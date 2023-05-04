@@ -58,4 +58,5 @@
     <string name="max_level_1_100">Max Level (1-100)</string>
     <string name="custom_game2">Custom Game</string>
     <string name="custom_class2">Custom Class</string>
+    <string name="current_level">Current Level</string>
 </resources>
