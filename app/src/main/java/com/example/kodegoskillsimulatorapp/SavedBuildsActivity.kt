@@ -120,18 +120,14 @@ class SavedBuildsActivity : AppCompatActivity() {
                     val build = Build()
 
                     val addBuildName = dialogAddBuildBinding.editBuildName.text.toString()
-                    val addBuildDescription = dialogAddBuildBinding.editBuildDescription.text.toString()
-                    val addBuildGameName = dialogAddBuildBinding.editGameName.text.toString()
-                    val addBuildJobClassName = dialogAddBuildBinding.editClassName.text.toString()
 
                     build.name = addBuildName
-                    build.description = addBuildDescription
-                    build.gameName = addBuildGameName
-                    build.jobClassName = addBuildJobClassName
+                    build.description = "Custom Build"
+                    build.gameName = "Custom Game"
+                    build.jobClassName = "Custom Class"
                     build.skillBuild = arrayListOf()
 
                     Log.i("add build name", build.name)
-
 
                     dao.addBuild(build)
 

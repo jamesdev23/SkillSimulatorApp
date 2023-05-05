@@ -210,15 +210,14 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
 
                     val addSkillName = dialogAddSkillBinding.editSkillName.text.toString()
                     val addSkillMaxLevel = dialogAddSkillBinding.editSkillMaxLevel.text.toString()
-                    val addSkillMinLevel = dialogAddSkillBinding.editSkillMinLevel.text.toString()
-                    val addSkillDescription = dialogAddSkillBinding.editSkillDescription.text.toString()
 
                     newSkill.name = addSkillName
                     newSkill.jobClassName = selectedJobClass.name
                     newSkill.gameName = selectedJobClass.gameName
                     newSkill.maxLevel = addSkillMaxLevel.toInt()
-                    newSkill.minLevel = addSkillMinLevel.toInt()
-                    newSkill.description = addSkillDescription
+                    newSkill.minLevel = 0
+                    newSkill.currentLevel = 0
+                    newSkill.description = "Custom Skill"
 
                     dao.addSkill(newSkill)
                     Log.i("new class", newSkill.name)

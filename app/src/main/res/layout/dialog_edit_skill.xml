@@ -44,7 +44,7 @@
             android:id="@+id/edit_skill_max_level"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="@string/max_level"
+            android:hint="@string/max_level_1_100"
             android:text=""
             android:inputType="number"
             android:maxLines="1" />
@@ -68,24 +68,6 @@
 
 
     </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edit_skill_current_level"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="@string/current_level"
-            android:text=""
-            android:inputType="number"
-            android:maxLines="1" />
-
-
-    </com.google.android.material.textfield.TextInputLayout>
-
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"

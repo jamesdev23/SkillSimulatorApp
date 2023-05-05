@@ -236,6 +236,7 @@ class SkillAdapter(var skills: ArrayList<Skill>, var context: Context, var skill
                 with(dialogEditSkillBinding) {
                     editSkillName.setText(skill.name)
                     editSkillMaxLevel.setText(skill.maxLevel.toString())
+                    editSkillMinLevel.setText(skill.minLevel.toString())
                     editSkillType.setText(skill.skillType)
                     editSkillDescription.setText(skill.description)
                 }
