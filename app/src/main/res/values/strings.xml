@@ -59,4 +59,5 @@
     <string name="custom_game2">Custom Game</string>
     <string name="custom_class2">Custom Class</string>
     <string name="current_level">Current Level</string>
+    <string name="skill_icon">SKILL ICON</string>
 </resources>
