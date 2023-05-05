@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kodegoskillsimulatorapp.adapter.SkillAdapter
 import com.example.kodegoskillsimulatorapp.dao.*
 import com.example.kodegoskillsimulatorapp.databinding.ActivitySkillListBinding
+import com.example.kodegoskillsimulatorapp.databinding.DialogAddBuildBinding
 import com.example.kodegoskillsimulatorapp.databinding.DialogAddSkillBinding
 import com.example.kodegoskillsimulatorapp.model.JobClass
 import com.example.kodegoskillsimulatorapp.model.Build
@@ -125,7 +126,6 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
             R.id.action_save -> {
                 saveSkillData(skills)
                 showSkillData(skills)
-                toast("Skill Build Saved.")
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
@@ -166,20 +166,7 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
     }
 
     override fun saveSkillData(skillData: ArrayList<Skill>) {
-        val build = Build()
-        val daoBuild: BuildDAO = BuildDAOSQLImpl(this)
-        build.name = "Custom Build"
-        build.jobClassName = selectedJobClass.name
-        build.gameName = selectedJobClass.gameName
-        build.description = "custom build from save function"
-
-        val gson = Gson()
-        skillBuildText = gson.toJson(skillData)
-        build.setBuildText(skillBuildText)
-
-        daoBuild.addBuild(build)
-
-        Log.d("SKILL LIST FROM SAVE", build.skillBuild.toString())
+        dialogAddBuild(this, skillData)
     }
 
     override fun showSkillData(skillData: ArrayList<Skill>) {
@@ -205,38 +192,95 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
                     val addSkillName = dialogAddSkillBinding.editSkillName.text.toString().trim()
                     val addSkillMaxLevel = dialogAddSkillBinding.editSkillMaxLevel.text.toString()
 
-                    if(addSkillName.isNotEmpty() && addSkillMaxLevel.toInt() > 0) {
-                        newSkill.name = addSkillName
-                        newSkill.maxLevel = addSkillMaxLevel.toInt()
-                        newSkill.jobClassName = selectedJobClass.name
-                        newSkill.gameName = selectedJobClass.gameName
-                        newSkill.minLevel = 0
-                        newSkill.currentLevel = 0
-                        newSkill.description = "Custom Skill"
+                    val skillSearch = dao.getSkillByName(addSkillName)
 
-                        dao.addSkill(newSkill)
-                        Log.i("new class", newSkill.name)
-                        Log.i("class game id", selectedJobClass.gameName)
-                        Log.i("class id", selectedJobClass.id.toString())
-                        Log.i("new skill id", newSkill.id.toString())
+                    when {
+                        skillSearch.name.isNotEmpty() -> toast("Error: Duplicate name.")
+                        addSkillName.isEmpty() -> toast("Error: Skill name is empty.")
+                        addSkillMaxLevel.isEmpty() -> toast("Error: Skill Max Level is empty.")
+                        addSkillName.length > 200 -> toast("Error: Name exceeds 200 characters")
+                        addSkillMaxLevel.toInt() < 1 || addSkillMaxLevel.toInt() > 999 -> toast("Error: Skill Max Level must within 1-999 range.")
+                        else -> {
+                            newSkill.name = addSkillName
+                            newSkill.maxLevel = addSkillMaxLevel.toInt()
+                            newSkill.jobClassName = selectedJobClass.name
+                            newSkill.gameName = selectedJobClass.gameName
+                            newSkill.minLevel = 0
+                            newSkill.currentLevel = 0
+                            newSkill.description = "Custom Skill"
 
-                        val newSkills = dao.getSkillPerJob(selectedJobClass.gameName, selectedJobClass.name)
+                            dao.addSkill(newSkill)
+                            Log.i("new class", newSkill.name)
+                            Log.i("class game id", selectedJobClass.gameName)
+                            Log.i("class id", selectedJobClass.id.toString())
+                            Log.i("new skill id", newSkill.id.toString())
 
-                        Log.i("skill list", newSkills.toString())
+                            val newSkills = dao.getSkillPerJob(selectedJobClass.gameName, selectedJobClass.name)
 
-                        skillAdapter.updateSkill(newSkills)
-                        skillAdapter.notifyItemInserted(newSkill.id)
-                        toast("Added ${newSkill.name}.")
-                    }else {
-                        toast("Error: Class Name is empty or Max Level is below 1.")
+                            Log.i("skill list", newSkills.toString())
+
+                            skillAdapter.updateSkill(newSkills)
+                            skillAdapter.notifyItemInserted(newSkill.id)
+                            toast("Added ${newSkill.name}.")
+                        }
                     }
-
-
                 })
                 setNegativeButton("Cancel", DialogInterface.OnClickListener { _, _ ->
                     // Do something when user press the positive button
                 })
                     .setView(dialogAddSkillBinding.root)
+                    .create()
+                    .show()
+            }
+        }
+    }
+
+    private fun dialogAddBuild(context: Context, skillData: ArrayList<Skill>){
+        context.let {
+            val builder = android.app.AlertDialog.Builder(it)
+            val dialogAddBuildBinding: DialogAddBuildBinding =
+                DialogAddBuildBinding.inflate(LayoutInflater.from(it))
+
+            val customBuildName = "${selectedJobClass.name} Build"
+            dialogAddBuildBinding.editBuildName.setText(customBuildName)
+
+            with(builder) {
+                setPositiveButton("Add", DialogInterface.OnClickListener { _, _ ->
+                    val dao: BuildDAO = BuildDAOSQLImpl(it)
+                    val newBuild = Build()
+
+                    val addBuildName = dialogAddBuildBinding.editBuildName.text.toString().trim()
+
+                    val buildSearch = dao.getBuildByName(addBuildName)
+
+                    when {
+                        buildSearch.name.isNotEmpty() -> toast("Error: Duplicate name.")
+                        addBuildName.isEmpty() -> toast("Error: Build name is empty.")
+                        addBuildName.length > 200 -> toast("Error: Name exceeds 200 characters")
+                        else -> {
+                            newBuild.name = addBuildName
+                            newBuild.jobClassName = selectedJobClass.name
+                            newBuild.gameName = selectedJobClass.gameName
+                            newBuild.description = "custom build from save function"
+                            val gson = Gson()
+                            skillBuildText = gson.toJson(skillData)
+                            newBuild.skillBuildText = skillBuildText
+
+                            Log.d("SKILL LIST FROM SAVE", newBuild.skillBuild.toString())
+                            Log.i("BUILD NAME", newBuild.name)
+
+                            dao.addBuild(newBuild)
+
+                            var newBuilds = dao.getBuilds()
+
+                            toast("Added ${newBuild.name}")
+                        }
+                    }
+                })
+                setNegativeButton("Cancel", DialogInterface.OnClickListener { _, _ ->
+                    // Do something when user press the positive button
+                })
+                    .setView(dialogAddBuildBinding.root)
                     .create()
                     .show()
             }

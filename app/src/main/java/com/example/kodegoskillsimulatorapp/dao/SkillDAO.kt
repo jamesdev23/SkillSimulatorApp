@@ -12,6 +12,7 @@ import com.example.kodegoskillsimulatorapp.model.Skill
 interface SkillDAO {
     fun addSkill(skill: Skill)
     fun getSkills(): ArrayList<Skill>
+    fun getSkillByName(skillName: String): Skill
     fun getSkillPerJob(gameName: String, jobClassName: String): ArrayList<Skill>
     fun updateSkill(skillId: Int, skill: Skill)
     fun deleteSkill(skillId: Int)
@@ -101,6 +102,76 @@ class SkillDAOSQLImpl(var context: Context): SkillDAO {
         db.close()
         return skillList
     }
+
+    override fun getSkillByName(skillName: String): Skill {
+        val databaseHandler: DatabaseHandler = DatabaseHandler(context)
+        val db = databaseHandler.readableDatabase
+        var cursor: Cursor? = null
+        var emptySkill = Skill(0,"","","",
+            Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888),
+            "",10, 0,0,"")
+        var skillResult = Skill(0,"","","",
+            Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888),
+            "",10, 0,0,"")
+
+        val columns = arrayOf(
+            DatabaseHandler.skillId,
+            DatabaseHandler.skillName,
+            DatabaseHandler.skillJobClassName,
+            DatabaseHandler.skillGameName,
+            DatabaseHandler.skillMaxLevel,
+            DatabaseHandler.skillMinLevel,
+            DatabaseHandler.skillType,
+            DatabaseHandler.skillDescription,
+            DatabaseHandler.skillIcon
+        )
+
+        try {
+            cursor = db.query(
+                DatabaseHandler.tableSkills,
+                columns,
+                "${DatabaseHandler.skillName} = ?",
+                arrayOf(skillName),
+                null,
+                null,
+                DatabaseHandler.skillId
+            )
+        } catch (e: SQLiteException) {
+            db.close()
+            return emptySkill
+        }
+
+        var skill = Skill(0,"","","",
+            Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888),
+            "",10, 0,0,"")
+
+        if(cursor.moveToFirst()) {
+            do {
+                skill = Skill(0,"","","",
+                    Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888),
+                    "",10, 0,0,"")
+                skill.id = cursor.getInt(0)
+                skill.name = cursor.getString(1)
+                skill.jobClassName = cursor.getString(2)
+                skill.gameName = cursor.getString(3)
+                skill.maxLevel = cursor.getInt(4)
+                skill.minLevel = cursor.getInt(5)
+                skill.skillType = cursor.getString(6)
+
+                skill.description = cursor.getString(7)
+
+                getIcon(cursor, 8, skill)
+
+                skillResult = skill
+            }while(cursor.moveToNext())
+        }
+
+        cursor?.close()
+        db.close()
+        return skillResult
+    }
+
+
 
     override fun getSkillPerJob(gameName: String, jobClassName: String): ArrayList<Skill> {
         val skills = getSkills()

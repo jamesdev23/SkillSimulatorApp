@@ -114,13 +114,13 @@ class BuildAdapter (var builds: ArrayList<Build>, var activity: Activity)
         private fun convertSkillTextToSkillBuild(){
             val gson = Gson()
             val type = object : TypeToken<ArrayList<Skill>>() {}.type
-            val skillBuildText = build.getBuildText()
+            val skillBuildText = build.skillBuildText
 
             if(skillBuildText.isNotEmpty()){
                 build.skillBuild = gson.fromJson(skillBuildText, type)
             }
 
-            Log.d("SKILL BUILD FROM JSON", build.getBuildText())
+            Log.d("SKILL BUILD FROM JSON", build.skillBuildText)
         }
     }
 }
