@@ -12,11 +12,12 @@ import com.example.kodegoskillsimulatorapp.model.JobClass
 interface JobClassDAO {
     fun addJobclass(jobClass: JobClass)
 
-    fun getJobclasses(): ArrayList<JobClass>
-    fun getJobclassPerGame(gameName: String): ArrayList<JobClass>
+    fun getJobClasses(): ArrayList<JobClass>
+    fun getJobClassByName(jobClassName: String): JobClass
+    fun getJobClassPerGame(gameName: String): ArrayList<JobClass>
     fun updateJobClass(jobClassId: Int, jobClass: JobClass)
     fun deleteJobClass(jobClassId: Int)
-    fun getImage(cursor: Cursor, jobClass: JobClass)
+    fun getImage(cursor: Cursor, jobClass: JobClass, columnIndex: Int)
 }
 
 class JobClassDAOSQLImpl(var context: Context): JobClassDAO {
@@ -30,7 +31,8 @@ class JobClassDAOSQLImpl(var context: Context): JobClassDAO {
         val contentValues = ContentValues()
         contentValues.put(DatabaseHandler.jobclassName, jobClass.name)
         contentValues.put(DatabaseHandler.jobClassGameName, jobClass.gameName)
-        contentValues.put(DatabaseHandler.jobclassType, "type")
+        contentValues.put(DatabaseHandler.jobclassType, jobClass.jobClassType)
+        contentValues.put(DatabaseHandler.jobclassMaxSkillPoints, jobClass.maxSkillPoints)
         contentValues.put(DatabaseHandler.jobclassDescription, jobClass.description)
         contentValues.put(DatabaseHandler.jobclassImage, defaultClassImage)
 
@@ -38,7 +40,7 @@ class JobClassDAOSQLImpl(var context: Context): JobClassDAO {
         db.close()
     }
 
-    override fun getJobclasses(): ArrayList<JobClass> {
+    override fun getJobClasses(): ArrayList<JobClass> {
         val jobclassList: ArrayList<JobClass> = ArrayList()
 
         val databaseHandler: DatabaseHandler = DatabaseHandler(context)
@@ -47,8 +49,11 @@ class JobClassDAOSQLImpl(var context: Context): JobClassDAO {
 
         val columns = arrayOf(
             DatabaseHandler.jobclassId,
-            DatabaseHandler.jobClassGameName,
             DatabaseHandler.jobclassName,
+            DatabaseHandler.jobClassGameName,
+            DatabaseHandler.jobclassType,
+            DatabaseHandler.jobclassMaxSkillPoints,
+            DatabaseHandler.jobclassDescription,
             DatabaseHandler.jobclassImage
         )
 
@@ -71,12 +76,13 @@ class JobClassDAOSQLImpl(var context: Context): JobClassDAO {
         var jobClass = JobClass()
         if(cursor.moveToFirst()) {
             do {
-                jobClass = JobClass()
                 jobClass.id = cursor.getInt(0)
                 jobClass.name = cursor.getString(1)
                 jobClass.gameName = cursor.getString(2)
-
-                getImage(cursor,jobClass)
+                jobClass.jobClassType = cursor.getString(3)
+                jobClass.maxSkillPoints = cursor.getInt(4)
+                jobClass.description = cursor.getString(5)
+                getImage(cursor!!,jobClass, 6)
 
                 jobclassList.add(jobClass)
 
@@ -87,7 +93,61 @@ class JobClassDAOSQLImpl(var context: Context): JobClassDAO {
         return jobclassList
     }
 
-    override fun getJobclassPerGame(gameName: String): ArrayList<JobClass> {
+    override fun getJobClassByName(jobClassName: String): JobClass {
+        var jobClassResult = JobClass()
+
+        var databaseHandler: DatabaseHandler = DatabaseHandler(context)
+        val db = databaseHandler.readableDatabase
+        var cursor: Cursor? = null
+
+        val columns = arrayOf(
+            DatabaseHandler.jobclassId,
+            DatabaseHandler.jobclassName,
+            DatabaseHandler.jobClassGameName,
+            DatabaseHandler.jobclassType,
+            DatabaseHandler.jobclassMaxSkillPoints,
+            DatabaseHandler.jobclassDescription,
+            DatabaseHandler.jobclassImage
+        )
+
+        try{
+
+            cursor = db.query(
+                DatabaseHandler.tableJobclasses,
+                columns,
+                "${DatabaseHandler.jobClassGameName} = ?",
+                arrayOf(jobClassName),
+                null,
+                null,
+                DatabaseHandler.jobclassId
+            )
+
+        } catch (e: SQLiteException) {
+            db.close()
+            return jobClassResult
+        }
+
+        var jobClass = JobClass()
+        if(cursor.moveToFirst()) {
+            do {
+                jobClass.id = cursor.getInt(0)
+                jobClass.name = cursor.getString(1)
+                jobClass.gameName = cursor.getString(2)
+                jobClass.jobClassType = cursor.getString(3)
+                jobClass.maxSkillPoints = cursor.getInt(4)
+                jobClass.description = cursor.getString(5)
+                getImage(cursor!!,jobClass, 6)
+
+                jobClassResult = jobClass
+
+            }while(cursor.moveToNext())
+        }
+        cursor?.close()
+        db.close()
+        return jobClassResult
+    }
+
+    override fun getJobClassPerGame(gameName: String): ArrayList<JobClass> {
         val jobClassList: ArrayList<JobClass> = ArrayList()
 
         var databaseHandler: DatabaseHandler = DatabaseHandler(context)
@@ -98,6 +158,9 @@ class JobClassDAOSQLImpl(var context: Context): JobClassDAO {
             DatabaseHandler.jobclassId,
             DatabaseHandler.jobclassName,
             DatabaseHandler.jobClassGameName,
+            DatabaseHandler.jobclassType,
+            DatabaseHandler.jobclassMaxSkillPoints,
+            DatabaseHandler.jobclassDescription,
             DatabaseHandler.jobclassImage
         )
 
@@ -127,9 +190,10 @@ class JobClassDAOSQLImpl(var context: Context): JobClassDAO {
                 jobClass.id = cursor.getInt(0)
                 jobClass.name = cursor.getString(1)
                 jobClass.gameName = cursor.getString(2)
-
-                // calls function to get image and process it to bitmap
-                getImage(cursor!!,jobClass)
+                jobClass.jobClassType = cursor.getString(3)
+                jobClass.maxSkillPoints = cursor.getInt(4)
+                jobClass.description = cursor.getString(5)
+                getImage(cursor!!,jobClass, 6)
 
                 jobClassList.add(jobClass)
 
@@ -146,7 +210,7 @@ class JobClassDAOSQLImpl(var context: Context): JobClassDAO {
 
         val contentValues = ContentValues()
         contentValues.put(DatabaseHandler.jobclassName, jobClass.name)
-        contentValues.put(DatabaseHandler.jobclassType, jobClass.type)
+        contentValues.put(DatabaseHandler.jobclassType, jobClass.jobClassType)
 
         val values = arrayOf("$jobClassId")
         val success = db.update(
@@ -169,11 +233,11 @@ class JobClassDAOSQLImpl(var context: Context): JobClassDAO {
         db.close()
     }
 
-    override fun getImage(cursor: Cursor, jobClass: JobClass) {
+    override fun getImage(cursor: Cursor, jobClass: JobClass, columnIndex: Int) {
         var imageBitmap:Bitmap
 
         try {
-            var imageText:String = cursor.getString(3)
+            var imageText:String = cursor.getString(columnIndex)
             var imageByte:ByteArray = android.util.Base64.decode(imageText, android.util.Base64.DEFAULT)
 
             imageBitmap = imageByte.let { BitmapFactory.decodeByteArray(it, 0, it.size) }!!

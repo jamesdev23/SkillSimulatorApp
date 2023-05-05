@@ -33,12 +33,8 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
     private var skills: ArrayList<Skill> = ArrayList()
     private var skillBuild: ArrayList<Skill> = ArrayList()
     private var skillBuildText: String = ""
-    private val maxSkillPoints = 49
     private var totalSP = 0
-    private var remainingSP = 0
-
-
-
+    private var maxSkillPoints = 50
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,9 +49,12 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
             skillBuild = bundle.getParcelableArrayList<Skill>("DATA_SKILL_BUILD") as ArrayList<Skill>
         }
 
+        maxSkillPoints = selectedJobClass.maxSkillPoints
+
         Log.d("DATA GAME NAME", selectedJobClass.gameName)
         Log.d("DATA JOB CLASS NAME", selectedJobClass.name)
         Log.d("DATA SKILL BUILD", skillBuild.toString())
+        Log.d("DATA JOB MAX SP", selectedJobClass.maxSkillPoints.toString())
 
         supportActionBar?.apply {
             title = selectedJobClass.name
@@ -86,6 +85,10 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
                 setSkillBuild(skillBuild)
         }
 
+        binding.skillList.layoutManager = LinearLayoutManager(applicationContext)
+        binding.skillList.adapter = skillAdapter
+
+
         setSkillPointsLabelToDefault()
 
     }
@@ -93,8 +96,10 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
         dao = SkillDAOSQLImpl(applicationContext)
         skills = dao.getSkillPerJob(jobClass.gameName, jobClass.name)
         skillAdapter = SkillAdapter(skills, this, this)
-        binding.skillList.layoutManager = LinearLayoutManager(applicationContext)
-        binding.skillList.adapter = skillAdapter
+    }
+
+    private fun setSkillBuild(skillBuild: ArrayList<Skill>) {
+        skillAdapter = SkillAdapter(skillBuild, this, this)
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -187,12 +192,6 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
             Log.i("skill data", skill.name)
             Log.i("skill points", skill.currentLevel.toString())
         }
-    }
-
-    private fun setSkillBuild(skillBuild: ArrayList<Skill>) {
-        skillAdapter = SkillAdapter(skillBuild, this, this)
-        binding.skillList.layoutManager = LinearLayoutManager(applicationContext)
-        binding.skillList.adapter = skillAdapter
     }
 
     private fun dialogAddSkill(context: Context){

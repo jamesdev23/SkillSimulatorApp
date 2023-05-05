@@ -8,7 +8,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kodegoskillsimulatorapp.R
 import com.example.kodegoskillsimulatorapp.SelectClassActivity
@@ -133,18 +135,31 @@ class GameAdapter (var games: ArrayList<Game>, var activity: Activity, var conte
                 with(builder) {
                     setPositiveButton("Update", DialogInterface.OnClickListener { _, _ ->
                         val dao: GameDAO = GameDAOSQLImpl(it)
-                        val editGameName =
-                            dialogEditGameBinding.editGameName.text.toString()
-                        val editGameDescription =
-                            dialogEditGameBinding.editGameDescription.text.toString()
+                        val editGameName = dialogEditGameBinding.editGameName.text.toString().trim()
+                        val editGameDescription = dialogEditGameBinding.editGameDescription.text.toString().trim()
 
-                        game.name = editGameName
-                        game.description = editGameDescription
+                        val gameSearch = dao.getGameByName(editGameName)
 
-                        dao.updateGame(game.id, game)
-                        updateGame(dao.getGames())
-                        notifyItemChanged(adapterPosition)
-                        Snackbar.make(itemBinding.root, "Updated ${game.name}", Snackbar.LENGTH_SHORT).show()
+                        when {
+                            gameSearch.name.isNotEmpty() ->
+                                toast("Error: Duplicate name.", it)
+                            editGameName.isEmpty() ->
+                                toast("Error: Game name is empty.", it)
+                            editGameName.length > 200 ->
+                                toast("Error: Name exceeds 200 characters.", it)
+                            editGameDescription.length > 500 ->
+                                toast("Error: Description exceeds 500 characters.", it)
+                            else -> {
+                                game.name = editGameName
+                                game.description = editGameDescription
+
+                                dao.updateGame(game.id, game)
+                                val newGameList = dao.getGames()
+                                updateGame(newGameList)
+                                notifyItemChanged(adapterPosition)
+                                toast("Updated ${game.name}", it)
+                            }
+                        }
                     })
                     setNegativeButton("Cancel", DialogInterface.OnClickListener { _, _ ->
                         // Do something
@@ -155,7 +170,12 @@ class GameAdapter (var games: ArrayList<Game>, var activity: Activity, var conte
                 }
             }
         }
+
+        private fun toast(message: String, context: Context){
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        }
     }
+
 
 
 }

@@ -46,8 +46,8 @@
             android:layout_height="match_parent"
             android:hint="@string/game_description"
             android:text=""
-            android:inputType="text"
-            android:maxLines="1"
+            android:inputType="textMultiLine"
+            android:maxLines="2"
             />
 
 

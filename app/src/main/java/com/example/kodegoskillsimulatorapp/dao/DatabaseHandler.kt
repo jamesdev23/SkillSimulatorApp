@@ -11,12 +11,13 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context,
 ){
 
     companion object {
-        private val DATABASEVERSION = 25
+        private val DATABASEVERSION = 28
         private val DATABASENAME = "skillsimulatordatabase"
         
         val tableGames = "game_table"
         val gameId = "id"
         val gameName = "name"
+        val gameDescription = "description"
         val gameIconText = "icon_text"
 
         val tableJobclasses = "jobclass_table"
@@ -24,6 +25,7 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context,
         val jobClassGameName = "game_name"
         val jobclassName = "name"
         val jobclassType = "type"
+        val jobclassMaxSkillPoints = "max_skill_points"
         val jobclassDescription = "description"
         val jobclassImage = "image_text"
 
@@ -202,30 +204,33 @@ class DatabaseHandler (context: Context) : SQLiteOpenHelper(context,
         val CREATEGAMESTABLE = "CREATE TABLE $tableGames " +
                 "($gameId INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "$gameName TEXT, " +
+                "$gameDescription TEXT, " +
                 "$gameIconText TEXT)"
 
         db?.execSQL(CREATEGAMESTABLE)
 
-        db?.execSQL("Insert into $tableGames ($gameName, $gameIconText) values ('Ragnarok Online (iRO)', '$roGameIcon')")
-        db?.execSQL("Insert into $tableGames ($gameName, $gameIconText) values ('Custom Game 1', '$defaultGameIcon')")
-        db?.execSQL("Insert into $tableGames ($gameName, $gameIconText) values ('Custom Game 2', '$defaultGameIcon')")
+        db?.execSQL("Insert into $tableGames ($gameName, $gameDescription, $gameIconText) values ('Ragnarok Online (iRO)', 'Ragnarok Online is a massively multiplayer online role-playing game (MMORPG) that was first launched in South Korea in 2002. It features a colorful and anime-inspired 2D world, with a variety of playable classes, quests, and monster battles. Players can socialize, trade, and engage in PvP battles, and the game has since expanded with various updates and spin-offs.', '$roGameIcon')")
+        db?.execSQL("Insert into $tableGames ($gameName, $gameDescription, $gameIconText) values ('Custom Game 1', 'Custom game', '$defaultGameIcon')")
+        db?.execSQL("Insert into $tableGames ($gameName, $gameDescription, $gameIconText) values ('Custom Game 2', 'Custom game', '$defaultGameIcon')")
+        db?.execSQL("Insert into $tableGames ($gameName, $gameDescription, $gameIconText) values ('Custom Game 3', 'Custom game', '$defaultGameIcon')")
 
         val CREATEJOBCLASSESTABLE = "CREATE TABLE $tableJobclasses " +
                 "($jobclassId INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "$jobClassGameName  TEXT, " +
                 "$jobclassName TEXT, " +
                 "$jobclassType TEXT, " +
+                "$jobclassMaxSkillPoints INTEGER, " +
                 "$jobclassDescription TEXT, " +
                 "$jobclassImage TEXT)"
 
         db?.execSQL(CREATEJOBCLASSESTABLE)
 
-        db?.execSQL("Insert into $tableJobclasses ($jobClassGameName , $jobclassName, $jobclassType, $jobclassDescription, $jobclassImage) values ('Ragnarok Online (iRO)', 'Knight', '2nd Job Class', '${jobclassDescriptionText[0]}', '${jobclassImageBase64[0]}')")
-        db?.execSQL("Insert into $tableJobclasses ($jobClassGameName , $jobclassName, $jobclassType, $jobclassDescription, $jobclassImage) values ('Ragnarok Online (iRO)', 'Wizard', '2nd Job Class', '${jobclassDescriptionText[1]}', '${jobclassImageBase64[1]}')")
-        db?.execSQL("Insert into $tableJobclasses ($jobClassGameName , $jobclassName, $jobclassType, $jobclassDescription, $jobclassImage) values ('Ragnarok Online (iRO)', 'Hunter', '2nd Job Class',  '${jobclassDescriptionText[2]}', '${jobclassImageBase64[2]}')")
-        db?.execSQL("Insert into $tableJobclasses ($jobClassGameName , $jobclassName, $jobclassType, $jobclassDescription, $jobclassImage) values ('Ragnarok Online (iRO)', 'Blacksmith', '2nd Job Class',  '${jobclassDescriptionText[3]}', '${jobclassImageBase64[3]}')")
-        db?.execSQL("Insert into $tableJobclasses ($jobClassGameName , $jobclassName, $jobclassType, $jobclassDescription, $jobclassImage) values ('Ragnarok Online (iRO)', 'Assassin', '2nd Job Class', '${jobclassDescriptionText[4]}', '${jobclassImageBase64[4]}')")
-        db?.execSQL("Insert into $tableJobclasses ($jobClassGameName , $jobclassName, $jobclassType, $jobclassDescription, $jobclassImage) values ('Ragnarok Online (iRO)', 'Priest', '2nd Job Class', '${jobclassDescriptionText[5]}', '${jobclassImageBase64[5]}')")
+        db?.execSQL("Insert into $tableJobclasses ($jobClassGameName , $jobclassName, $jobclassType, $jobclassMaxSkillPoints, $jobclassDescription, $jobclassImage) values ('Ragnarok Online (iRO)', 'Knight', '2nd Job Class', 50, '${jobclassDescriptionText[0]}', '${jobclassImageBase64[0]}')")
+        db?.execSQL("Insert into $tableJobclasses ($jobClassGameName , $jobclassName, $jobclassType, $jobclassMaxSkillPoints, $jobclassDescription, $jobclassImage) values ('Ragnarok Online (iRO)', 'Wizard', '2nd Job Class', 50, '${jobclassDescriptionText[1]}', '${jobclassImageBase64[1]}')")
+        db?.execSQL("Insert into $tableJobclasses ($jobClassGameName , $jobclassName, $jobclassType, $jobclassMaxSkillPoints, $jobclassDescription, $jobclassImage) values ('Ragnarok Online (iRO)', 'Hunter', '2nd Job Class', 50, '${jobclassDescriptionText[2]}', '${jobclassImageBase64[2]}')")
+        db?.execSQL("Insert into $tableJobclasses ($jobClassGameName , $jobclassName, $jobclassType, $jobclassMaxSkillPoints, $jobclassDescription, $jobclassImage) values ('Ragnarok Online (iRO)', 'Blacksmith', '2nd Job Class', 50, '${jobclassDescriptionText[3]}', '${jobclassImageBase64[3]}')")
+        db?.execSQL("Insert into $tableJobclasses ($jobClassGameName , $jobclassName, $jobclassType, $jobclassMaxSkillPoints, $jobclassDescription, $jobclassImage) values ('Ragnarok Online (iRO)', 'Assassin', '2nd Job Class', 50, '${jobclassDescriptionText[4]}', '${jobclassImageBase64[4]}')")
+        db?.execSQL("Insert into $tableJobclasses ($jobClassGameName , $jobclassName, $jobclassType, $jobclassMaxSkillPoints, $jobclassDescription, $jobclassImage) values ('Ragnarok Online (iRO)', 'Priest', '2nd Job Class', 50, '${jobclassDescriptionText[5]}', '${jobclassImageBase64[5]}')")
 
         val CREATESKILLSTABLE = "CREATE TABLE $tableSkills " +
                 "($skillId INTEGER PRIMARY KEY AUTOINCREMENT, " +

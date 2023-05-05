@@ -63,4 +63,5 @@
     <string name="level_10">Level: 10</string>
     <string name="type_active">Type: Active</string>
     <string name="custom_skill2">Custom Skill</string>
+    <string name="max_skill_points">Max Skill Points</string>
 </resources>

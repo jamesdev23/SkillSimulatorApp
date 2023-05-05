@@ -203,16 +203,21 @@ class SkillAdapter(var skills: ArrayList<Skill>, var context: Context, var skill
             popupMenu.show()
         }
 
+        // TODO: form validation
+
         private fun dialogSkillDetails(context: Context){
             context.let {
                 val builder = AlertDialog.Builder(it)
                 val dialogSkillDetailsBinding: DialogSkillDetailsBinding =
                     DialogSkillDetailsBinding.inflate(LayoutInflater.from(it))
 
+                val setMaxLevel = "Level: ${skill.maxLevel}"
+                val setSkillType = "SKill Type: ${skill.skillType}"
+
                 with(dialogSkillDetailsBinding) {
                     skillName.text = skill.name
-                    skillMaxLevel.text = skill.maxLevel.toString()
-                    skillType.text = skill.skillType
+                    skillMaxLevel.text = setMaxLevel
+                    skillType.text = setSkillType
                     skillDescription.text = skill.description
                 }
 

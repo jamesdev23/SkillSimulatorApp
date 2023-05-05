@@ -118,16 +118,24 @@ class MainActivity : AppCompatActivity() {
 
                     Log.d("DIALOG ADD GAME", addGameName)
 
-                    if(addGameName.isNotEmpty()) {
-                        newGame.name = addGameName
-                        dao.addGame(newGame)
-                        val newGames = dao.getGames()
-                        gameAdapter.updateGame(newGames)
-                        gameAdapter.notifyDataSetChanged()
-                        toast("Added ${newGame.name}.")
-                    }else {
-                        toast("Error: Game name is empty.")
+                    val gameSearch = dao.getGameByName(addGameName)
+
+                    when {
+                        gameSearch.name.isNotEmpty() -> toast("Error: Duplicate name.")
+                        addGameName.isEmpty() -> toast("Error: Game name is empty.")
+                        addGameName.length > 200 -> toast("Error: Name exceeds 200 characters")
+                        else -> {
+                            newGame.name = addGameName
+                            newGame.description = "Custom game"
+
+                            dao.addGame(newGame)
+                            val newGameList = dao.getGames()
+                            gameAdapter.updateGame(newGameList)
+                            gameAdapter.notifyDataSetChanged()
+                            toast("Added ${newGame.name}.")
+                        }
                     }
+
                 })
                 setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, _ ->
                     dialog.cancel()

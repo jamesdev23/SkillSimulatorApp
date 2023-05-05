@@ -4,9 +4,11 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kodegoskillsimulatorapp.R
@@ -134,24 +136,46 @@ class JobClassAdapter (var jobClasses: ArrayList<JobClass>, var context: Context
 
                 with(dialogEditJobClassBinding) {
                     editJobClassName.setText(jobClass.name)
+                    editJobClassType.setText(jobClass.jobClassType)
+                    editJobClassMaxSkillPoints.setText(jobClass.maxSkillPoints)
                     editJobClassDescription.setText(jobClass.description)
                 }
 
                 with(builder) {
                     setPositiveButton("Update", DialogInterface.OnClickListener { _, _ ->
                         val dao: JobClassDAO = JobClassDAOSQLImpl(it)
-                        val editJobClassName =
-                            dialogEditJobClassBinding.editJobClassName.text.toString()
-                        val editJobClassDescription =
-                            dialogEditJobClassBinding.editJobClassDescription.text.toString()
+                        val editJobClassName = dialogEditJobClassBinding.editJobClassName.text.toString().trim()
+                        val editJobClassType = dialogEditJobClassBinding.editJobClassType.text.toString().trim()
+                        val editJobClassMaxSkillPoints = dialogEditJobClassBinding.editJobClassMaxSkillPoints.text.toString()
+                        val editJobClassDescription = dialogEditJobClassBinding.editJobClassDescription.text.toString().trim()
 
-                        jobClass.name = editJobClassName
-                        jobClass.description = editJobClassDescription
+                        val jobClassSearch = dao.getJobClassByName(editJobClassName)
 
-                        dao.updateJobClass(jobClass.id, jobClass)
-                        updateJobClass(dao.getJobclassPerGame(jobClass.gameName))
-                        notifyItemChanged(adapterPosition)
-                        Snackbar.make(itemBinding.root, "Updated ${jobClass.name}", Snackbar.LENGTH_SHORT).show()
+                        when {
+                            jobClassSearch.name.isNotEmpty() ->
+                                toast("Error: Duplicate name.", it)
+                            editJobClassName.isEmpty() ->
+                                toast("Error: Class name is empty.", it)
+                            editJobClassMaxSkillPoints.toInt() < 1 ->
+                                toast("Error: Max Skill Points must be above 0.", it)
+                            editJobClassName.length > 200 ->
+                                toast("Error: Name exceeds 200 characters", it)
+                            editJobClassDescription.length > 500 ->
+                                toast("Error: Description exceeds 500 characters", it)
+                            else -> {
+                                jobClass.name = editJobClassName
+                                jobClass.jobClassType = editJobClassType
+                                jobClass.maxSkillPoints = editJobClassMaxSkillPoints.toInt()
+                                jobClass.description = editJobClassDescription
+
+                                dao.updateJobClass(jobClass.id, jobClass)
+                                val newJobClassList = dao.getJobClassPerGame(jobClass.gameName)
+                                updateJobClass(newJobClassList)
+                                notifyItemChanged(adapterPosition)
+                                toast("Updated ${jobClass.name}", it)
+                            }
+                        }
+
                     })
                     setNegativeButton("Cancel", DialogInterface.OnClickListener { _, _ ->
                         // Do something
@@ -161,6 +185,10 @@ class JobClassAdapter (var jobClasses: ArrayList<JobClass>, var context: Context
                         .show()
                 }
             }
+        }
+
+        private fun toast(message: String, context: Context){
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
         }
 
     }

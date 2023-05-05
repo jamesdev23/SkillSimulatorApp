@@ -48,7 +48,7 @@ class SelectClassActivity : AppCompatActivity() {
         // setting up class list
 
         dao = JobClassDAOSQLImpl(applicationContext)
-        jobClasses = dao.getJobclassPerGame(selectedGame.name)
+        jobClasses = dao.getJobClassPerGame(selectedGame.name)
         jobClassAdapter = JobClassAdapter(jobClasses, this)
 //        binding.classList.layoutManager = LinearLayoutManager(applicationContext)
         binding.classList.layoutManager = GridLayoutManager(applicationContext, 2)
@@ -119,21 +119,30 @@ class SelectClassActivity : AppCompatActivity() {
 
                     Log.d("DIALOG CLASS NAME", addJobClassName)
 
-                    if(addJobClassName.isNotEmpty()){
-                        newJobClass.name = addJobClassName
-                        newJobClass.gameName = selectedGame.name
+                    val jobClassSearch = dao.getJobClassByName(addJobClassName)
 
-                        Log.i("ADD CLASS NAME", newJobClass.name)
-                        Log.i("ADD CLASS GAME NAME", newJobClass.gameName)
+                    when {
+                        jobClassSearch.name.isNotEmpty() -> toast("Error: Duplicate name.")
+                        addJobClassName.isEmpty() -> toast("Error: Class name is empty.")
+                        addJobClassName.length > 200 -> toast("Error: Name exceeds 200 characters")
+                        else -> {
+                            newJobClass.name = addJobClassName
+                            newJobClass.gameName = selectedGame.name
+                            newJobClass.jobClassType = "Not set"
+                            newJobClass.maxSkillPoints = 50
+                            newJobClass.description = "Custom class"
 
-                        dao.addJobclass(newJobClass)
-                        val newJobClasses = dao.getJobclassPerGame(selectedGame.name)
-                        jobClassAdapter.updateJobClass(newJobClasses)
-                        jobClassAdapter.notifyDataSetChanged()
-                        toast("Added ${newJobClass.name}")
-                    }else {
-                        toast("Error: Class name is empty.")
+                            Log.i("ADD CLASS NAME", newJobClass.name)
+                            Log.i("ADD CLASS GAME NAME", newJobClass.gameName)
+
+                            dao.addJobclass(newJobClass)
+                            val newJobClassList = dao.getJobClassPerGame(selectedGame.name)
+                            jobClassAdapter.updateJobClass(newJobClassList)
+                            jobClassAdapter.notifyDataSetChanged()
+                            toast("Added ${newJobClass.name}")
+                        }
                     }
+
                 })
                 setNegativeButton("Cancel", DialogInterface.OnClickListener { _, _ ->
                     // Do something when user press the positive button

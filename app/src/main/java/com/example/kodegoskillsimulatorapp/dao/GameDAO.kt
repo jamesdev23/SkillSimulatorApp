@@ -8,14 +8,16 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
 import com.example.kodegoskillsimulatorapp.model.Game
+import com.example.kodegoskillsimulatorapp.model.JobClass
 
 interface GameDAO {
     fun addGame(game: Game)
     fun getGames(): ArrayList<Game>
+    fun getGameByName(gameName: String): Game
     fun getGameId(game: Game): Int
     fun updateGame(gameId: Int, game: Game)
     fun deleteGame(gameId: Int)
-    fun getImage(cursor: Cursor, game: Game)
+    fun getIcon(cursor: Cursor, game: Game, columnIndex: Int)
 }
 
 class GameDAOSQLImpl(var context: Context): GameDAO {
@@ -28,6 +30,7 @@ class GameDAOSQLImpl(var context: Context): GameDAO {
 
         val contentValues = ContentValues()
         contentValues.put(DatabaseHandler.gameName, game.name)
+        contentValues.put(DatabaseHandler.gameDescription, game.description)
         contentValues.put(DatabaseHandler.gameIconText, defaultGameIcon)
 
         val success = db.insert(DatabaseHandler.tableGames,null,contentValues)
@@ -45,6 +48,7 @@ class GameDAOSQLImpl(var context: Context): GameDAO {
         val columns = arrayOf(
             DatabaseHandler.gameId,
             DatabaseHandler.gameName,
+            DatabaseHandler.gameDescription,
             DatabaseHandler.gameIconText
         )
 
@@ -70,8 +74,9 @@ class GameDAOSQLImpl(var context: Context): GameDAO {
                 game = Game()
                 game.id = cursor.getInt(0)
                 game.name = cursor.getString(1)
+                game.description = cursor.getString(2)
 
-                getImage(cursor,game)
+                getIcon(cursor,game, 3)
 
                 gameList.add(game)
 
@@ -80,6 +85,55 @@ class GameDAOSQLImpl(var context: Context): GameDAO {
         cursor?.close()
         db.close()
         return gameList
+    }
+
+    override fun getGameByName(gameName: String): Game {
+        var gameResult = Game()
+
+        var databaseHandler: DatabaseHandler = DatabaseHandler(context)
+        val db = databaseHandler.readableDatabase
+        var cursor: Cursor? = null
+
+        val columns = arrayOf(
+            DatabaseHandler.gameId,
+            DatabaseHandler.gameName,
+            DatabaseHandler.gameDescription,
+            DatabaseHandler.gameIconText
+        )
+
+        try{
+
+            cursor = db.query(
+                DatabaseHandler.tableGames,
+                columns,
+                "${DatabaseHandler.gameName} = ?",
+                arrayOf(gameName),
+                null,
+                null,
+                DatabaseHandler.gameId
+            )
+
+        } catch (e: SQLiteException) {
+            db.close()
+            return gameResult
+        }
+
+        var game = Game()
+        if(cursor.moveToFirst()) {
+            do {
+                game.id = cursor.getInt(0)
+                game.name = cursor.getString(1)
+                game.description = cursor.getString(2)
+
+                getIcon(cursor!!,game,3)
+
+                gameResult = game
+
+            }while(cursor.moveToNext())
+        }
+        cursor?.close()
+        db.close()
+        return gameResult
     }
 
     override fun getGameId(game: Game): Int {
@@ -151,17 +205,17 @@ class GameDAOSQLImpl(var context: Context): GameDAO {
         db.close()
     }
 
-    override fun getImage(cursor: Cursor, game: Game) {
+    override fun getIcon(cursor: Cursor, game: Game, columnIndex: Int) {
         val iconBitmap: Bitmap
 
         try {
-            val iconText:String = cursor.getString(2)
+            val iconText:String = cursor.getString(columnIndex)
             val iconByte:ByteArray = android.util.Base64.decode(iconText, android.util.Base64.DEFAULT)
 
             iconBitmap = iconByte.let { BitmapFactory.decodeByteArray(it, 0, it.size) }!!
             game.icon = iconBitmap
         }catch (e:Exception){
-            Log.e("Error", "image text is bad/empty or image bytearray is null",e)
+            Log.e("Error", "icon text is bad/empty or icon bytearray is null",e)
         }
     }
 }
