@@ -1,30 +1,25 @@
 package com.example.kodegoskillsimulatorapp
 
+import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.EditText
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kodegoskillsimulatorapp.adapter.GameAdapter
 import com.example.kodegoskillsimulatorapp.dao.GameDAO
 import com.example.kodegoskillsimulatorapp.dao.GameDAOSQLImpl
-import com.example.kodegoskillsimulatorapp.dao.JobClassDAO
-import com.example.kodegoskillsimulatorapp.dao.JobClassDAOSQLImpl
 import com.example.kodegoskillsimulatorapp.databinding.ActivityMainBinding
 import com.example.kodegoskillsimulatorapp.databinding.DialogAddGameBinding
 import com.example.kodegoskillsimulatorapp.model.Game
-import com.example.kodegoskillsimulatorapp.model.JobClass
-import com.google.android.material.snackbar.Snackbar
+import com.example.kodegoskillsimulatorapp.utils.ImageUploadUtility
 
 
 class MainActivity : AppCompatActivity() {
@@ -34,6 +29,24 @@ class MainActivity : AppCompatActivity() {
     private lateinit var gameAdapter: GameAdapter
     private lateinit var games: ArrayList<Game>
     private var backPressedTime: Long = 0
+    private var iconText: String = ""
+
+    private val pictureChosen = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if(result.resultCode == Activity.RESULT_CANCELED){
+            toast("Cancelled choosing Image")
+        }else{
+            val data = result.data
+            if(data == null){
+                toast("No Image was chosen")
+            }else{
+                val imageFileUri = result.data!!.data!!
+                iconText = ImageUploadUtility.uploadAndSaveIcon(this, imageFileUri)
+                Log.i("FILE", "URI : $imageFileUri")
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

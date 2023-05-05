@@ -64,4 +64,6 @@
     <string name="type_active">Type: Active</string>
     <string name="custom_skill2">Custom Skill</string>
     <string name="max_skill_points">Max Skill Points</string>
+    <string name="no_build_found_you_can_add_build_with_plus_sign">No build found. You can add build with plus sign.</string>
+    <string name="upload_image">Upload Image</string>
 </resources>
