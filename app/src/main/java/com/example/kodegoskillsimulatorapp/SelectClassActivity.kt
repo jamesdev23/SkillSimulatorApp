@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.kodegoskillsimulatorapp.adapter.JobClassAdapter
 import com.example.kodegoskillsimulatorapp.dao.JobClassDAO
@@ -17,7 +18,6 @@ import com.example.kodegoskillsimulatorapp.databinding.ActivitySelectClassBindin
 import com.example.kodegoskillsimulatorapp.databinding.DialogAddClassBinding
 import com.example.kodegoskillsimulatorapp.model.Game
 import com.example.kodegoskillsimulatorapp.model.JobClass
-import com.google.android.material.snackbar.Snackbar
 
 class SelectClassActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySelectClassBinding
@@ -113,23 +113,27 @@ class SelectClassActivity : AppCompatActivity() {
             with(builder) {
                 setPositiveButton("Add", DialogInterface.OnClickListener { _, _ ->
                     val dao: JobClassDAO = JobClassDAOSQLImpl(it)
-                    val jobClass = JobClass()
+                    val newJobClass = JobClass()
 
-                    val addJobClassName = dialogAddClassBinding.editClassName.text.toString()
+                    val addJobClassName = dialogAddClassBinding.editClassName.text.toString().trim()
 
-                    jobClass.gameName = selectedGame.name
-                    jobClass.name = addJobClassName
-                    Log.i("add class name", jobClass.name)
-                    Log.i("add class game id", jobClass.gameName)
+                    Log.d("DIALOG CLASS NAME", addJobClassName)
 
-                    dao.addJobclass(jobClass)
+                    if(addJobClassName.isNotEmpty()){
+                        newJobClass.name = addJobClassName
+                        newJobClass.gameName = selectedGame.name
 
-                    var newJobClass = dao.getJobclassPerGame(selectedGame.name)
-                    Log.i("class list", newJobClass.toString())
-                    jobClassAdapter.updateJobClass(newJobClass)
-                    jobClassAdapter.notifyDataSetChanged()
+                        Log.i("ADD CLASS NAME", newJobClass.name)
+                        Log.i("ADD CLASS GAME NAME", newJobClass.gameName)
 
-                    Snackbar.make(binding.root, "Added new class.", Snackbar.LENGTH_SHORT).show()
+                        dao.addJobclass(newJobClass)
+                        val newJobClasses = dao.getJobclassPerGame(selectedGame.name)
+                        jobClassAdapter.updateJobClass(newJobClasses)
+                        jobClassAdapter.notifyDataSetChanged()
+                        toast("Added ${newJobClass.name}")
+                    }else {
+                        toast("Error: Class name is empty.")
+                    }
                 })
                 setNegativeButton("Cancel", DialogInterface.OnClickListener { _, _ ->
                     // Do something when user press the positive button
@@ -139,5 +143,9 @@ class SelectClassActivity : AppCompatActivity() {
                     .show()
             }
         }
+    }
+
+    private fun toast(message: String){
+        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
     }
 }

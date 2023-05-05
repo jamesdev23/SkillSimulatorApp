@@ -111,28 +111,36 @@ class MainActivity : AppCompatActivity() {
                 DialogAddGameBinding.inflate(LayoutInflater.from(it))
 
             with(builder) {
-                setPositiveButton("Add", DialogInterface.OnClickListener { _, _ ->
+                setPositiveButton("Add", DialogInterface.OnClickListener { dialog, _ ->
                     val dao: GameDAO = GameDAOSQLImpl(it)
                     val newGame = Game()
+                    val addGameName = dialogAddGameBinding.textGameName.text.toString().trim()
 
-                    val addGameName =
-                        dialogAddGameBinding.textGameName.text.toString()
+                    Log.d("DIALOG ADD GAME", addGameName)
 
-                    newGame.name = addGameName
-
-                    dao.addGame(newGame)
-                    gameAdapter.updateGame(dao.getGames())
-                    gameAdapter.notifyDataSetChanged()
-                    Snackbar.make(binding.root, "Added new game.", Snackbar.LENGTH_SHORT).show()
+                    if(addGameName.isNotEmpty()) {
+                        newGame.name = addGameName
+                        dao.addGame(newGame)
+                        val newGames = dao.getGames()
+                        gameAdapter.updateGame(newGames)
+                        gameAdapter.notifyDataSetChanged()
+                        toast("Added ${newGame.name}.")
+                    }else {
+                        toast("Error: Game name is empty.")
+                    }
                 })
-                setNegativeButton("Cancel", DialogInterface.OnClickListener { _, _ ->
-                    // Do something when user press the positive button
+                setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, _ ->
+                    dialog.cancel()
                 })
                     .setView(dialogAddGameBinding.root)
                     .create()
                     .show()
             }
         }
+    }
+
+    private fun toast(message: String){
+        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
     }
 
 

@@ -208,28 +208,36 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
                         Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888),
                         "",10,0,0,"")
 
-                    val addSkillName = dialogAddSkillBinding.editSkillName.text.toString()
+                    val addSkillName = dialogAddSkillBinding.editSkillName.text.toString().trim()
                     val addSkillMaxLevel = dialogAddSkillBinding.editSkillMaxLevel.text.toString()
 
-                    newSkill.name = addSkillName
-                    newSkill.jobClassName = selectedJobClass.name
-                    newSkill.gameName = selectedJobClass.gameName
-                    newSkill.maxLevel = addSkillMaxLevel.toInt()
-                    newSkill.minLevel = 0
-                    newSkill.currentLevel = 0
-                    newSkill.description = "Custom Skill"
+                    if(addSkillName.isNotEmpty() && addSkillMaxLevel.toInt() > 0) {
+                        newSkill.name = addSkillName
+                        newSkill.maxLevel = addSkillMaxLevel.toInt()
+                        newSkill.jobClassName = selectedJobClass.name
+                        newSkill.gameName = selectedJobClass.gameName
+                        newSkill.minLevel = 0
+                        newSkill.currentLevel = 0
+                        newSkill.description = "Custom Skill"
 
-                    dao.addSkill(newSkill)
-                    Log.i("new class", newSkill.name)
-                    Log.i("class game id", selectedJobClass.gameName)
-                    Log.i("class id", selectedJobClass.id.toString())
-                    Log.i("new skill id", newSkill.id.toString())
+                        dao.addSkill(newSkill)
+                        Log.i("new class", newSkill.name)
+                        Log.i("class game id", selectedJobClass.gameName)
+                        Log.i("class id", selectedJobClass.id.toString())
+                        Log.i("new skill id", newSkill.id.toString())
 
-                    var newSkills = dao.getSkillPerJob(selectedJobClass.gameName, selectedJobClass.name)
-                    Log.i("skill list", newSkills.toString())
-                    skillAdapter.updateSkill(newSkills)
-                    skillAdapter.notifyItemInserted(newSkill.id)
-                    toast("Added ${newSkill.name} skill.")
+                        val newSkills = dao.getSkillPerJob(selectedJobClass.gameName, selectedJobClass.name)
+
+                        Log.i("skill list", newSkills.toString())
+
+                        skillAdapter.updateSkill(newSkills)
+                        skillAdapter.notifyItemInserted(newSkill.id)
+                        toast("Added ${newSkill.name}.")
+                    }else {
+                        toast("Error: Class Name is empty or Max Level is below 1.")
+                    }
+
+
                 })
                 setNegativeButton("Cancel", DialogInterface.OnClickListener { _, _ ->
                     // Do something when user press the positive button

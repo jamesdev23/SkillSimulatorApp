@@ -121,6 +121,13 @@ class SavedBuildsActivity : AppCompatActivity() {
 
                     val addBuildName = dialogAddBuildBinding.editBuildName.text.toString()
 
+                    when {
+                        addBuildName.isNotEmpty() ->
+                            build.name = addBuildName.trim()
+                        else ->
+                            dialogAddBuildBinding.editBuildName.error = "Build name is empty."
+                    }
+
                     build.name = addBuildName
                     build.description = "Custom Build"
                     build.gameName = "Custom Game"
