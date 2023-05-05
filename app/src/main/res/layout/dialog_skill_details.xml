@@ -54,7 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/skill_max_level"
-                android:text="Level: 10"
+                android:text="@string/level_10"
                 android:textSize="16sp"
                 />
 
@@ -62,7 +62,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/skill_type"
-                android:text="Type: Active"
+                android:text="@string/type_active"
                 android:textSize="16sp"
                 />
 
@@ -85,7 +85,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/skill_description"
-        android:text="@string/lorem_ipsum"
+        android:text="@string/custom_skill2"
         android:textSize="16sp"
         android:justificationMode="inter_word"
         android:maxLines="10"

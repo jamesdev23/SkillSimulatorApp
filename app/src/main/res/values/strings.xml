@@ -60,4 +60,7 @@
     <string name="custom_class2">Custom Class</string>
     <string name="current_level">Current Level</string>
     <string name="skill_icon">SKILL ICON</string>
+    <string name="level_10">Level: 10</string>
+    <string name="type_active">Type: Active</string>
+    <string name="custom_skill2">Custom Skill</string>
 </resources>
