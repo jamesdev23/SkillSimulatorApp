@@ -49,12 +49,12 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
             skillBuild = bundle.getParcelableArrayList<Skill>("DATA_SKILL_BUILD") as ArrayList<Skill>
         }
 
-        maxSkillPoints = selectedJobClass.maxSkillPoints
+        maxSkillPoints = selectedJobClass.getMaxSkillPoints()
 
         Log.d("DATA GAME NAME", selectedJobClass.gameName)
         Log.d("DATA JOB CLASS NAME", selectedJobClass.name)
         Log.d("DATA SKILL BUILD", skillBuild.toString())
-        Log.d("DATA JOB MAX SP", selectedJobClass.maxSkillPoints.toString())
+        Log.d("DATA JOB MAX SP", selectedJobClass.getMaxSkillPoints().toString())
 
         supportActionBar?.apply {
             title = selectedJobClass.name
@@ -105,11 +105,6 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return super.onSupportNavigateUp()
-    }
-
-    override fun onBackPressed() {
-        saveSkillData(skillBuild)
-        super.onBackPressed()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -173,14 +168,14 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
     override fun saveSkillData(skillData: ArrayList<Skill>) {
         val build = Build()
         val daoBuild: BuildDAO = BuildDAOSQLImpl(this)
-        build.name = "${selectedJobClass.name} | ${selectedJobClass.gameName}"
+        build.name = "Custom Build"
         build.jobClassName = selectedJobClass.name
         build.gameName = selectedJobClass.gameName
         build.description = "custom build from save function"
 
         val gson = Gson()
         skillBuildText = gson.toJson(skillData)
-        build.skillBuildText = skillBuildText
+        build.setBuildText(skillBuildText)
 
         daoBuild.addBuild(build)
 

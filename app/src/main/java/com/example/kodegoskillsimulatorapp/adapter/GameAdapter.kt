@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -87,7 +88,7 @@ class GameAdapter (var games: ArrayList<Game>, var activity: Activity, var conte
             val intent = Intent(view?.context, SelectClassActivity::class.java)
 
             val bundle = Bundle()
-            bundle.putString("DATA_GAME_NAME", games[position].name)
+            bundle.putString("DATA_GAME_NAME", games[adapterPosition].name)
             intent.putExtras(bundle)
 
             view?.context?.startActivity(intent)

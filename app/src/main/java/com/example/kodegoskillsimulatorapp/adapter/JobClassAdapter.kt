@@ -3,6 +3,7 @@ package com.example.kodegoskillsimulatorapp.adapter
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -74,7 +75,7 @@ class JobClassAdapter (var jobClasses: ArrayList<JobClass>, var context: Context
             this.jobClass = jobClass
 
             itemBinding.jobclassName.text = "${jobClass.name}"
-            itemBinding.jobclassPicture.setImageBitmap(jobClass.img)
+            itemBinding.jobclassPicture.setImageBitmap(jobClass.icon)
 
             itemBinding.btnOptionsRow.setOnClickListener {
                 popupMenu()
@@ -85,8 +86,8 @@ class JobClassAdapter (var jobClasses: ArrayList<JobClass>, var context: Context
             val intent = Intent(view?.context, SkillListActivity::class.java)
 
             val bundle = Bundle()
-            bundle.putString("DATA_GAME_NAME", jobClasses[position].gameName)
-            bundle.putString("DATA_JOB_CLASS_NAME", jobClasses[position].name)
+            bundle.putString("DATA_GAME_NAME", jobClasses[adapterPosition].gameName)
+            bundle.putString("DATA_JOB_CLASS_NAME", jobClasses[adapterPosition].name)
             intent.putExtras(bundle)
 
             view?.context?.startActivity(intent)
@@ -137,7 +138,7 @@ class JobClassAdapter (var jobClasses: ArrayList<JobClass>, var context: Context
                 with(dialogEditJobClassBinding) {
                     editJobClassName.setText(jobClass.name)
                     editJobClassType.setText(jobClass.jobClassType)
-                    editJobClassMaxSkillPoints.setText(jobClass.maxSkillPoints)
+                    editJobClassMaxSkillPoints.setText(jobClass.getMaxSkillPoints())
                     editJobClassDescription.setText(jobClass.description)
                 }
 
@@ -165,7 +166,7 @@ class JobClassAdapter (var jobClasses: ArrayList<JobClass>, var context: Context
                             else -> {
                                 jobClass.name = editJobClassName
                                 jobClass.jobClassType = editJobClassType
-                                jobClass.maxSkillPoints = editJobClassMaxSkillPoints.toInt()
+                                jobClass.setMaxSkillPoints(editJobClassMaxSkillPoints.toInt())
                                 jobClass.description = editJobClassDescription
 
                                 dao.updateJobClass(jobClass.id, jobClass)

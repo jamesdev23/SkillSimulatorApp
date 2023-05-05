@@ -2,6 +2,7 @@ package com.example.kodegoskillsimulatorapp.adapter
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -81,12 +82,14 @@ class BuildAdapter (var builds: ArrayList<Build>, var activity: Activity)
         fun bindBuild(build: Build) {
             this.build = build
             val buildId = "ID: ${build.id}"
+            val buildGameName = "Game: ${build.gameName}"
+            val buildJobClassName = "Class: ${build.jobClassName}"
 
             itemBinding.buildName.text = build.name
             itemBinding.buildId.text = buildId
-            itemBinding.gameName.text = build.gameName
-            itemBinding.jobclassName.text = build.jobClassName
-            itemBinding.buildImage.setImageBitmap(build.img)
+            itemBinding.gameName.text = buildGameName
+            itemBinding.jobclassName.text = buildJobClassName
+            itemBinding.buildImage.setImageBitmap(build.icon)
 
             itemBinding.btnOptionsRow.setOnClickListener {
                 Snackbar.make(
@@ -111,9 +114,13 @@ class BuildAdapter (var builds: ArrayList<Build>, var activity: Activity)
         private fun convertSkillTextToSkillBuild(){
             val gson = Gson()
             val type = object : TypeToken<ArrayList<Skill>>() {}.type
-            build.skillBuild = gson.fromJson(build.skillBuildText, type)
+            val skillBuildText = build.getBuildText()
 
-            Log.d("SKILL BUILD FROM JSON", build.skillBuildText)
+            if(skillBuildText.isNotEmpty()){
+                build.skillBuild = gson.fromJson(skillBuildText, type)
+            }
+
+            Log.d("SKILL BUILD FROM JSON", build.getBuildText())
         }
     }
 }

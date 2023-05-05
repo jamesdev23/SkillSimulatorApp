@@ -3,7 +3,6 @@ package com.example.kodegoskillsimulatorapp.model
 import android.graphics.Bitmap
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-
 @Parcelize
 data class Skill(
     var id: Int,
@@ -16,4 +15,4 @@ data class Skill(
     var minLevel: Int,
     var currentLevel: Int,
     var skillType: String
-): Parcelable
+) : Parcelable

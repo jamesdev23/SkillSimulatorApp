@@ -37,7 +37,7 @@ class BuildDAOSQLImpl(var context: Context): BuildDAO {
         contentValues.put(DatabaseHandler.buildGameName, build.gameName)
         contentValues.put(DatabaseHandler.buildName, build.name)
         contentValues.put(DatabaseHandler.buildDescription, build.description)
-        contentValues.put(DatabaseHandler.buildDataText, build.skillBuildText)
+        contentValues.put(DatabaseHandler.buildDataText, build.getBuildText())
         contentValues.put(DatabaseHandler.buildImage, defaultBuildIcon)
 
         val success = db.insert(DatabaseHandler.tableBuilds,null,contentValues)
@@ -48,6 +48,7 @@ class BuildDAOSQLImpl(var context: Context): BuildDAO {
         val databaseHandler: DatabaseHandler = DatabaseHandler(context)
         val db = databaseHandler.readableDatabase
         var cursor: Cursor? = null
+        var buildResult = Build()
 
         val columns = arrayOf(
             DatabaseHandler.buildId,
@@ -89,6 +90,8 @@ class BuildDAOSQLImpl(var context: Context): BuildDAO {
                 getBuildData(cursor,5, build)
                 getIcon(cursor,6, build)
 
+                buildResult = build
+
             }while(cursor.moveToNext())
         }
 
@@ -96,7 +99,7 @@ class BuildDAOSQLImpl(var context: Context): BuildDAO {
         cursor?.close()
         db.close()
         Log.i("getBuildByName", build.name)
-        return build
+        return buildResult
     }
 
 
@@ -177,7 +180,7 @@ class BuildDAOSQLImpl(var context: Context): BuildDAO {
             val iconByte:ByteArray = android.util.Base64.decode(iconText, android.util.Base64.DEFAULT)
 
             iconBitmap = iconByte.let { BitmapFactory.decodeByteArray(it, 0, it.size) }!!
-            build.img = iconBitmap
+            build.icon = iconBitmap
         }catch (e:Exception){
             Log.e("Error", "image text is bad/empty or image bytearray is null",e)
         }
@@ -193,7 +196,7 @@ class BuildDAOSQLImpl(var context: Context): BuildDAO {
 
     override fun getBuildData(cursor: Cursor, columnIndex: Int, build: Build) {
         try {
-            build.skillBuildText = cursor.getString(columnIndex)
+            build.setBuildText(cursor.getString(columnIndex))
         }catch (e:Exception){
             Log.e("Error", "image text is bad/empty or image bytearray is null",e)
         }

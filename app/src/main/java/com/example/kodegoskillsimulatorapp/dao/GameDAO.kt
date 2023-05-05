@@ -39,7 +39,7 @@ class GameDAOSQLImpl(var context: Context): GameDAO {
 
 
     override fun getGames(): ArrayList<Game> {
-        val gameList: ArrayList<Game> = ArrayList()
+        val gameListResult: ArrayList<Game> = ArrayList()
 
         val databaseHandler: DatabaseHandler = DatabaseHandler(context)
         val db = databaseHandler.readableDatabase
@@ -78,13 +78,18 @@ class GameDAOSQLImpl(var context: Context): GameDAO {
 
                 getIcon(cursor,game, 3)
 
-                gameList.add(game)
+                gameListResult.add(game)
+
+                Log.d("GAME FROM ADAPTER",game.name)
+                for(games in gameListResult){
+                    Log.d("GAME NAMES", games.name)
+                }
 
             }while(cursor.moveToNext())
         }
         cursor?.close()
         db.close()
-        return gameList
+        return gameListResult
     }
 
     override fun getGameByName(gameName: String): Game {
@@ -115,7 +120,7 @@ class GameDAOSQLImpl(var context: Context): GameDAO {
 
         } catch (e: SQLiteException) {
             db.close()
-            return gameResult
+            return Game()
         }
 
         var game = Game()
@@ -164,7 +169,6 @@ class GameDAOSQLImpl(var context: Context): GameDAO {
         var game = Game()
         if (cursor.moveToFirst()) {
             do {
-                game = Game()
                 game.id= cursor.getInt(0)
 
                 gameId = game.id

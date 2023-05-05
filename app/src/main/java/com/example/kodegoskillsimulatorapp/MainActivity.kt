@@ -3,6 +3,7 @@ package com.example.kodegoskillsimulatorapp
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -52,6 +53,8 @@ class MainActivity : AppCompatActivity() {
 //        binding.gameList.layoutManager = LinearLayoutManager(applicationContext)
         binding.gameList.layoutManager = GridLayoutManager(applicationContext, 2)
         binding.gameList.adapter = gameAdapter
+
+
 
 
         binding.bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
