@@ -138,7 +138,7 @@ class JobClassAdapter (var jobClasses: ArrayList<JobClass>, var context: Context
                 with(dialogEditJobClassBinding) {
                     editJobClassName.setText(jobClass.name)
                     editJobClassType.setText(jobClass.jobClassType)
-                    editJobClassMaxSkillPoints.setText(jobClass.getMaxSkillPoints())
+                    editJobClassMaxSkillPoints.setText(jobClass.maxSkillPoints.toString())
                     editJobClassDescription.setText(jobClass.description)
                 }
 
@@ -166,7 +166,7 @@ class JobClassAdapter (var jobClasses: ArrayList<JobClass>, var context: Context
                             else -> {
                                 jobClass.name = editJobClassName
                                 jobClass.jobClassType = editJobClassType
-                                jobClass.setMaxSkillPoints(editJobClassMaxSkillPoints.toInt())
+                                jobClass.maxSkillPoints = editJobClassMaxSkillPoints.toInt()
                                 jobClass.description = editJobClassDescription
 
                                 dao.updateJobClass(jobClass.id, jobClass)

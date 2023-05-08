@@ -9,13 +9,5 @@ class JobClass {
     var icon: Bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
     var gameName: String = ""
     var jobClassType: String = ""
-    private var maxSkillPoints: Int = 50
-
-    fun setMaxSkillPoints(skillPoints: Int){
-        maxSkillPoints = skillPoints
-    }
-
-    fun getMaxSkillPoints(): Int{
-        return maxSkillPoints
-    }
+    var maxSkillPoints: Int = 50
 }

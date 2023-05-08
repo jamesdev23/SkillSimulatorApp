@@ -17,6 +17,7 @@ import com.example.kodegoskillsimulatorapp.adapter.GameAdapter
 import com.example.kodegoskillsimulatorapp.dao.GameDAO
 import com.example.kodegoskillsimulatorapp.dao.GameDAOSQLImpl
 import com.example.kodegoskillsimulatorapp.databinding.ActivityMainBinding
+import com.example.kodegoskillsimulatorapp.databinding.DialogAboutBinding
 import com.example.kodegoskillsimulatorapp.databinding.DialogAddGameBinding
 import com.example.kodegoskillsimulatorapp.model.Game
 import com.example.kodegoskillsimulatorapp.utils.ImageUploadUtility
@@ -30,23 +31,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var games: ArrayList<Game>
     private var backPressedTime: Long = 0
     private var iconText: String = ""
-
-    private val pictureChosen = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if(result.resultCode == Activity.RESULT_CANCELED){
-            toast("Cancelled choosing Image")
-        }else{
-            val data = result.data
-            if(data == null){
-                toast("No Image was chosen")
-            }else{
-                val imageFileUri = result.data!!.data!!
-                iconText = ImageUploadUtility.uploadAndSaveIcon(this, imageFileUri)
-                Log.i("FILE", "URI : $imageFileUri")
-            }
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -111,9 +95,8 @@ class MainActivity : AppCompatActivity() {
                 dialogAddGame(this)
                 return true
             }
-            R.id.action_saved_builds -> {
-                val goToSavedBuilds = Intent(this, SavedBuildsActivity::class.java)
-                startActivity(goToSavedBuilds)
+            R.id.action_about -> {
+                dialogAbout(this)
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
@@ -157,6 +140,23 @@ class MainActivity : AppCompatActivity() {
                     dialog.cancel()
                 })
                     .setView(dialogAddGameBinding.root)
+                    .create()
+                    .show()
+            }
+        }
+    }
+
+    private fun dialogAbout(context: Context){
+        context.let {
+            val builder = android.app.AlertDialog.Builder(it)
+            val dialogAboutBinding: DialogAboutBinding =
+                DialogAboutBinding.inflate(LayoutInflater.from(it))
+
+            with(builder) {
+                setPositiveButton("OK", DialogInterface.OnClickListener { dialog, _ ->
+                    dialog.dismiss()
+                })
+                    .setView(dialogAboutBinding.root)
                     .create()
                     .show()
             }

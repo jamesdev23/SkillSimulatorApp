@@ -32,7 +32,7 @@ class JobClassDAOSQLImpl(var context: Context): JobClassDAO {
         contentValues.put(DatabaseHandler.jobclassName, jobClass.name)
         contentValues.put(DatabaseHandler.jobClassGameName, jobClass.gameName)
         contentValues.put(DatabaseHandler.jobclassType, jobClass.jobClassType)
-        contentValues.put(DatabaseHandler.jobclassMaxSkillPoints, jobClass.getMaxSkillPoints())
+        contentValues.put(DatabaseHandler.jobclassMaxSkillPoints, jobClass.maxSkillPoints)
         contentValues.put(DatabaseHandler.jobclassDescription, jobClass.description)
         contentValues.put(DatabaseHandler.jobclassImage, defaultClassImage)
 
@@ -80,7 +80,7 @@ class JobClassDAOSQLImpl(var context: Context): JobClassDAO {
                 jobClass.name = cursor.getString(1)
                 jobClass.gameName = cursor.getString(2)
                 jobClass.jobClassType = cursor.getString(3)
-                jobClass.setMaxSkillPoints(cursor.getInt(4))
+                jobClass.maxSkillPoints = cursor.getInt(4)
                 jobClass.description = cursor.getString(5)
                 getImage(cursor!!,jobClass, 6)
 
@@ -134,7 +134,7 @@ class JobClassDAOSQLImpl(var context: Context): JobClassDAO {
                 jobClass.name = cursor.getString(1)
                 jobClass.gameName = cursor.getString(2)
                 jobClass.jobClassType = cursor.getString(3)
-                jobClass.setMaxSkillPoints(cursor.getInt(4))
+                jobClass.maxSkillPoints = cursor.getInt(4)
                 jobClass.description = cursor.getString(5)
                 getImage(cursor!!,jobClass, 6)
 
@@ -191,7 +191,7 @@ class JobClassDAOSQLImpl(var context: Context): JobClassDAO {
                 jobClass.name = cursor.getString(1)
                 jobClass.gameName = cursor.getString(2)
                 jobClass.jobClassType = cursor.getString(3)
-                jobClass.setMaxSkillPoints(cursor.getInt(4))
+                jobClass.maxSkillPoints = cursor.getInt(4)
                 jobClass.description = cursor.getString(5)
                 getImage(cursor!!,jobClass, 6)
 

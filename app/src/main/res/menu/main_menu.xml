@@ -8,9 +8,9 @@
         app:showAsAction="always">
     </item>
     <item
-        android:id="@+id/action_saved_builds"
+        android:id="@+id/action_about"
         android:icon="@drawable/baseline_more_vert_24"
-        android:title="Saved Builds"
+        android:title="About"
         app:showAsAction="never">
     </item>
 </menu>

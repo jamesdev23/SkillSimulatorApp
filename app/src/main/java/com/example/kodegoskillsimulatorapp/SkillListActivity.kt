@@ -50,12 +50,12 @@ class SkillListActivity : AppCompatActivity(), SkillBarObserver, SkillDataObserv
             skillBuild = bundle.getParcelableArrayList<Skill>("DATA_SKILL_BUILD") as ArrayList<Skill>
         }
 
-        maxSkillPoints = selectedJobClass.getMaxSkillPoints()
+        maxSkillPoints = selectedJobClass.maxSkillPoints
 
         Log.d("DATA GAME NAME", selectedJobClass.gameName)
         Log.d("DATA JOB CLASS NAME", selectedJobClass.name)
         Log.d("DATA SKILL BUILD", skillBuild.toString())
-        Log.d("DATA JOB MAX SP", selectedJobClass.getMaxSkillPoints().toString())
+        Log.d("DATA JOB MAX SP", selectedJobClass.maxSkillPoints.toString())
 
         supportActionBar?.apply {
             title = selectedJobClass.name

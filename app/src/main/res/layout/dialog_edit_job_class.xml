@@ -62,7 +62,7 @@
             android:id="@+id/edit_job_class_max_skill_points"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="@string/max_skill_points"
+            android:hint="Max Skill Points"
             android:text=""
             android:inputType="number"
             android:maxLines="1"

@@ -130,7 +130,7 @@ class SelectClassActivity : AppCompatActivity() {
                             newJobClass.name = addJobClassName
                             newJobClass.gameName = selectedGame.name
                             newJobClass.jobClassType = "Not set"
-                            newJobClass.setMaxSkillPoints(50)
+                            newJobClass.maxSkillPoints = 50
                             newJobClass.description = "Custom class"
 
                             Log.i("ADD CLASS NAME", newJobClass.name)
